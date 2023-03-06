@@ -6,6 +6,8 @@ from rest_framework.response import Response
 from .serializers import TaskSerializer
 
 from .models import Task
+
+
 # Create your views here.
 
 @api_view(['GET'])
@@ -59,6 +61,7 @@ def taskDelete(request, pk):
 	task.delete()
 
 	return Response('Item succsesfully delete!')
+
 
 
 
