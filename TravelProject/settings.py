@@ -78,14 +78,27 @@ WSGI_APPLICATION = 'TravelProject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#     'ENGINE': 'django.db.backends.mysql',
+#     'NAME': 'database', #here is import
+#     'USER': 'root',
+#     'PASSWORD': 'aabb3210$',
+#     'HOST': 'localhost',
+#     'PORT': '3306',
+#     }
+# }
+
+
+#能靖的資料庫
 DATABASES = {
     'default': {
-    'ENGINE': 'django.db.backends.mysql',
-    'NAME': 'database', #here is import
-    'USER': 'root',
-    'PASSWORD': 'aabb3210$',
-    'HOST': 'localhost',
-    'PORT': '3306',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'mydatabase',
+        'USER':'root',
+        'PASSWORD':'m714620K',
+        'HOST':'localhost',
+        'PORT':3306,
     }
 }
 
