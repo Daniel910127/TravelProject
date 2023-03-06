@@ -8,3 +8,13 @@ class Task(models.Model):
       
   def __str__(self):
     return self.title
+  
+class Account(models.Model):
+  a_Account = models.CharField(max_length=20, null=False)
+  a_Password = models.CharField(max_length=20, null=False)
+  a_Level = models.IntegerField(null=False )
+
+  def __str__(self):
+    return self.a_Id
+
+  

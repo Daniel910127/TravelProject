@@ -19,4 +19,6 @@ class Migration(migrations.Migration):
                 ('completed', models.BooleanField(blank=True, default=False, null=True)),
             ],
         ),
+
     ]
+
