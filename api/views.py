@@ -3,9 +3,9 @@ from django.http import JsonResponse
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .serializers import TaskSerializer,AccountSerializer
+from .serializers import TaskSerializer,AccountSerializer,SpotSerializer,MemberSerializer,s_InterestSerializer,FoodSerializer,Travel_ListSerializer,Travel_List_DetailSerializer,QuestionSerializer,s_PictureSerializer,m_PictureSerializer
 
-from .models import Task,Account
+from .models import Task,Account,Spot,Member,s_Interest,Food,Travel_List,Travel_List_Detail,Question,s_Picture,m_Picture
 
 
 # Create your views here.
@@ -27,12 +27,6 @@ def apiOverview(request):
 def taskList(request):
 	tasks = Task.objects.all().order_by('-id')
 	serializer = TaskSerializer(tasks, many=True)
-	return Response(serializer.data)
-
-@api_view(['GET'])
-def accountList(request):
-	accounts = Account.objects.all().order_by('-id')
-	serializer = AccountSerializer(accounts, many=True)
 	return Response(serializer.data)
 
 @api_view(['GET'])
@@ -70,5 +64,15 @@ def taskDelete(request, pk):
 	return Response('Item succsesfully delete!')
 
 
+@api_view(['GET'])
+def accountList(request):
+	accounts = Account.objects.all().order_by('-id')
+	serializer = AccountSerializer(accounts, many=True)
+	return Response(serializer.data)
 
 
+@api_view(['GET'])
+def spotList(request):
+	spots = Spot.objects.all().order_by('-id')
+	serializer = SpotSerializer(spots, many=True)
+	return Response(serializer.data)
