@@ -104,6 +104,19 @@ DATABASES = {
 }
 '''
 
+#上鋒的資料庫
+""" DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'djangodb3',
+        'USER': 'root',
+        'PASSWORD': 'Apple910407.',
+        'HOST': '127.0.0.1',
+        'PORT': 3306,
+        
+    }
+} """
+
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
