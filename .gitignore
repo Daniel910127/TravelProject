@@ -23,3 +23,10 @@
 /frontend/yarn-error.log*
 
 /media/images/spot/*
+
+# Django #
+*.log
+*.pot
+*.pyc
+__pycache__
+
