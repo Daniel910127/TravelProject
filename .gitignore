@@ -23,6 +23,7 @@
 /frontend/yarn-error.log*
 
 /media/images/spot/*
+
 __pycache__/
 *.py[cod]
 *.pyc
