@@ -22,6 +22,8 @@ def apiOverview(request):
 		'Account List':'/account-list/',
   
     'Spot List':'/spot-list/',
+    'Spot With Image List':'spot-image-list/',
+    
   	'Init Spot Data':'/init-spotData/',
     'Init s_Picture Data':'/init-spotPictureData/',
 		}

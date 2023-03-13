@@ -15,6 +15,8 @@ urlpatterns = [
 	path('account-list/', account.accountList, name="account-list"),
 
   path('spot-list/', spot.spotList, name="spot-list"),
+  path('spot-image-list/', spot.spotWithPictureList, name="spot-image-list"),
+  
   
   path('init-spotData/', init_data.spotInit, name="init-spotData"),
   path('init-spotPictureData/', init_data.spotPictureInit, name="init-spotPictureData"),

@@ -106,7 +106,7 @@ class Food(models.Model):
 #s_Picture database model
 class  s_Picture(models.Model):
   sp_Id = models.AutoField( primary_key=True) 
-  s_Id = models.IntegerField( null=False) 
+  s_Id = models.ForeignKey(to="Spot", on_delete=models.CASCADE) 
   sp_URL = models.ImageField(upload_to='images/spot/', default=None)
 
   def __str__(self):
