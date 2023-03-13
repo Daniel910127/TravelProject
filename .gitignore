@@ -25,8 +25,7 @@
 /media/images/spot/*
 
 # Django #
-*.log
-*.pot
+__pycache__/
+*.py[cod]
 *.pyc
-__pycache__
 
