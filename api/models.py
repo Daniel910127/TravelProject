@@ -25,12 +25,12 @@ class Spot(models.Model):
   s_Id = models.AutoField( primary_key=True) 
   s_Lang = models.CharField(max_length=10, null=False)
   s_Name = models.CharField(max_length=50, null=False)
-  s_Summary =  models.CharField(max_length=400, null=False)
-  s_Introduction =  models.TextField(max_length=400, null=False)
+  s_Summary =  models.CharField(max_length=2000, null=False)
+  s_Introduction =  models.TextField(max_length=2000, null=False)
   s_OpenTime = models.CharField(max_length=2000, null=False)
   s_District = models.CharField(max_length=50, null=False)
   s_Address = models.CharField(max_length=100, null=False)
-  s_Tel = models.CharField(max_length=20, null=False)
+  s_Tel = models.CharField(max_length=50, null=False)
   s_Fax = models.CharField(max_length=50, null=False)
   s_Latitude = models.FloatField(max_length=10, null=False)
   s_Longtitude = models.FloatField(max_length=10, null=False)
@@ -63,7 +63,7 @@ class Travel_List(models.Model):
   t_Views =  models.IntegerField(null=False) 
   t_Likes =  models.IntegerField(null=False) 
   t_StarLocation = models.CharField(max_length=50, null=False) 
- 
+
   def __str__(self):
     return self.t_Name
   
@@ -107,7 +107,7 @@ class Food(models.Model):
 class  s_Picture(models.Model):
   sp_Id = models.AutoField( primary_key=True) 
   s_Id = models.IntegerField( null=False) 
-  sp_URL = models.CharField(max_length=100, null=False)
+  sp_URL = models.ImageField(upload_to='images/spot/', default=None)
 
   def __str__(self):
     return self.sp_URL
@@ -116,7 +116,7 @@ class  s_Picture(models.Model):
 class  m_Picture(models.Model):
   mp_Id = models.AutoField( primary_key=True) 
   m_Id = models.IntegerField( null=False) 
-  mp_URL = models.CharField(max_length=100, null=False)
+  mp_URL = models.ImageField(upload_to='images/member/', default=None)
 
   def __str__(self):
     return self.mp_URL

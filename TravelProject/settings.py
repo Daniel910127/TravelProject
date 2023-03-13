@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'TravelProject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {
+""" DATABASES = {
      'default': {
      'ENGINE': 'django.db.backends.mysql',
      'NAME': 'database', #here is import
@@ -88,7 +88,7 @@ DATABASES = {
      'PORT': '3306',
      }
  }
-
+ """
 
 #能靖的資料庫
 '''
@@ -105,17 +105,18 @@ DATABASES = {
 '''
 
 #上鋒的資料庫
-""" DATABASES = {
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'djangodb3',
+        'NAME': 'djangodb4',
         'USER': 'root',
         'PASSWORD': 'Apple910407.',
-        'HOST': '127.0.0.1',
+        'HOST': 'localhost',
         'PORT': 3306,
+        'OPTIONS':{'charset':'utf8mb4'}
         
     }
-} """
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -154,3 +155,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT=os.path.join(BASE_DIR,"media/")
