@@ -78,7 +78,9 @@ WSGI_APPLICATION = 'TravelProject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-""" DATABASES = {
+#能靖的資料庫
+
+DATABASES = {
      'default': {
      'ENGINE': 'django.db.backends.mysql',
      'NAME': 'database', #here is import
@@ -88,7 +90,7 @@ WSGI_APPLICATION = 'TravelProject.wsgi.application'
      'PORT': '3306',
      }
  }
- """
+
 
 #能靖的資料庫
 '''
@@ -103,7 +105,7 @@ DATABASES = {
     }
 }
 '''
-
+"""
 #上鋒的資料庫
 DATABASES = {
     'default': {
@@ -117,6 +119,7 @@ DATABASES = {
         
     }
 }
+"""
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
