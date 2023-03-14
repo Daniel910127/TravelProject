@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Task, Account, Spot, Member, s_Interest, Food, Travel_List, Travel_List_Detail, Question, s_Picture, m_Picture
+from .models import Task, Account, Spot, Member, s_Interest, Food, Travel_List, Travel_List_Detail, Question, s_Picture,f_Picture, m_Picture,Hotel,h_Picture
 
 
 class TaskSerializer(serializers.ModelSerializer):
@@ -37,6 +37,11 @@ class FoodSerializer(serializers.ModelSerializer):
         model = Food
         fields = '__all__'
 
+class HotelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Hotel
+        fields = '__all__'
+
 
 class Travel_ListSerializer(serializers.ModelSerializer):
     class Meta:
@@ -61,12 +66,21 @@ class s_PictureSerializer(serializers.ModelSerializer):
         model = s_Picture
         fields = '__all__'
 
+class f_PictureSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = f_Picture
+        fields = '__all__'
+
 
 class m_PictureSerializer(serializers.ModelSerializer):
     class Meta:
         model = m_Picture
         fields = '__all__'
 
+class h_PictureSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = h_Picture
+        fields = '__all__'
 
 class spotWithPictureURLSerializer(serializers.ModelSerializer):
     s_picture = s_PictureSerializer(many=True, source='s_picture_set')
@@ -76,3 +90,18 @@ class spotWithPictureURLSerializer(serializers.ModelSerializer):
         model = Spot
         fields = '__all__'
 
+class foodWithPictureURLSerializer(serializers.ModelSerializer):
+    f_picture = f_PictureSerializer(many=True, source='f_picture_set')
+    queryset = Food.objects.prefetch_related('f_Id').all()
+
+    class Meta:
+        model = Food
+        fields = '__all__'
+
+class hotelWithPictureURLSerializer(serializers.ModelSerializer):
+    h_picture = h_PictureSerializer(many=True, source='h_picture_set')
+    queryset = Hotel.objects.prefetch_related('h_Id').all()
+
+    class Meta:
+        model = Hotel
+        fields = '__all__'

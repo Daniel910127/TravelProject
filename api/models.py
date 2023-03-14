@@ -112,7 +112,16 @@ class  s_Picture(models.Model):
   def __str__(self):
     return self.sp_URL
 
-#s_Picture database model
+#f_Picture database model
+class  f_Picture(models.Model):
+  fp_Id = models.AutoField( primary_key=True) 
+  f_Id = models.ForeignKey(to="Food", on_delete=models.CASCADE) 
+  fp_URL = models.ImageField(upload_to='images/food /', default=None)
+
+  def __str__(self):
+    return self.fp_URL
+
+#m_Picture database model
 class  m_Picture(models.Model):
   mp_Id = models.AutoField( primary_key=True) 
   m_Id = models.IntegerField( null=False) 
@@ -121,6 +130,15 @@ class  m_Picture(models.Model):
   def __str__(self):
     return self.mp_URL
 
+#h_Picture database model
+class  h_Picture(models.Model):
+  hp_Id = models.AutoField( primary_key=True) 
+  h_Id = models.IntegerField( null=False) 
+  hp_URL = models.ImageField(upload_to='images/hotel/', default=None)
+
+  def __str__(self):
+    return self.hp_URL
+  
 #Question database model
 class Question(models.Model):
   q_Id = models.AutoField( primary_key=True) 
@@ -135,18 +153,17 @@ class Question(models.Model):
 #Hotel database model
 class Hotel(models.Model):
   h_Id = models.AutoField( primary_key=True)  
-  h_Lang = models.CharField(max_length=10, null=False)
   h_Name = models.CharField(max_length=50, null=False)
-  h_Summary =  models.CharField(max_length=400, null=False)
-  h_Introduction =  models.TextField(max_length=400, null=False)
-  h_OpenTime = models.CharField(max_length=2000, null=False)
-  h_District = models.CharField(max_length=50, null=False)
+  h_Summary =  models.CharField(max_length=400, null=True)
+  h_Introduction =  models.TextField(max_length=400, null=True)
+  h_OpenTime = models.CharField(max_length=2000, null=True)
+  h_District = models.CharField(max_length=50, null=True)
   h_Address = models.CharField(max_length=100, null=False)
-  h_Tel = models.CharField(max_length=20, null=False)
-  h_Fax = models.CharField(max_length=50, null=False)
+  h_Tel = models.CharField(max_length=20, null=True)
+  h_Fax = models.CharField(max_length=50, null=True)
   h_Latitude = models.FloatField(max_length=10, null=False)
   h_Longtitude = models.FloatField(max_length=10, null=False)
-  h_Services =models.CharField(max_length=100, null=False)
+  h_Services =models.CharField(max_length=100, null=True)
   h_Category = models.CharField(max_length=100, null=False)
   h_UpdateTime =models.CharField(max_length=50, null=False)
 

@@ -2,3 +2,13 @@
 
 pip install selenium==4.8.2    爬蟲用
 
+pip install djangorestframework  框架要用的
+pip install markdown
+pip install django-filter
+
+python manage.py makemigrations 資料庫同步
+python manage.py migrate
+
+
+pip install Pillow
+pip install requests

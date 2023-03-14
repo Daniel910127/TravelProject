@@ -23,6 +23,8 @@
 /frontend/yarn-error.log*
 
 /media/images/spot/*
+/media/images/food/*
+/media/images/hotel/*
 
 # Django #
 __pycache__/
