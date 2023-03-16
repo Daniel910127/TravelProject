@@ -23,6 +23,9 @@
 /frontend/yarn-error.log*
 
 /media/images/spot/*
+/media/images/food/*
+/media/images/hotel/*
+/media/images/food/*
 
 __pycache__/
 *.py[cod]

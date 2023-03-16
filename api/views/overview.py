@@ -3,10 +3,10 @@ from django.http import JsonResponse,HttpResponse
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from ..serializers import TaskSerializer,AccountSerializer,SpotSerializer,MemberSerializer,s_InterestSerializer,FoodSerializer,Travel_ListSerializer,Travel_List_DetailSerializer,QuestionSerializer,s_PictureSerializer,m_PictureSerializer
+from ..serializers import TaskSerializer,AccountSerializer,SpotSerializer,MemberSerializer,s_InterestSerializer,FoodSerializer,Travel_ListSerializer,Travel_List_DetailSerializer,QuestionSerializer,s_PictureSerializer,m_PictureSerializer,f_PictureSerializer,h_PictureSerializer
 
-from ..models import Task,Account,Spot,Member,s_Interest,Food,Travel_List,Travel_List_Detail,Question,s_Picture,m_Picture
-from ..utils import spot_data
+from ..models import Task,Account,Spot,Hotel,Member,s_Interest,Food,Travel_List,Travel_List_Detail,Question,s_Picture,m_Picture,h_Picture
+from ..utils import spot_data,food_data
 
 # Create your views here.
 
@@ -22,8 +22,23 @@ def apiOverview(request):
 		'Account List':'/account-list/',
   
     'Spot List':'/spot-list/',
+    'Spot With Image List':'spot-image-list/',
+    
+    'Food List':'/food-list/',
+    'Food With Image List':'spot-image-list/',  
+    
+	'Hotel List':'/hotel-list/',    
+	'Hotel With Image List':'hotel-image-list/',  
+
   	'Init Spot Data':'/init-spotData/',
     'Init s_Picture Data':'/init-spotPictureData/',
+   
+	'Init Food Data':'/init-foodData/',
+    'Init f_Picture Data':'/init-foodPictureData/',
+    
+	'Init Hotel Data':'/init-hotelData/',
+	'Init h_Picture Data':'/init-hotelPictureData/',
+    
 		}
 	return Response(api_urls)
 
