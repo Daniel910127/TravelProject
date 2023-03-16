@@ -11,7 +11,7 @@ from ..models import Task,Account,Spot,Member,s_Interest,Food,Travel_List,Travel
 
 @api_view(['GET'])
 def foodList(request):
-	foods = Food.objects.all().order_by('-s_Id')
+	foods = Food.objects.all().order_by('-f_Id')
 	serializer = FoodSerializer(foods, many=True)
 	return Response(serializer.data)
 

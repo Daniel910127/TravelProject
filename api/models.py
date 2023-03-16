@@ -86,7 +86,7 @@ class Food(models.Model):
   f_Id = models.AutoField( primary_key=True) 
   f_Lang = models.CharField(max_length=10, null=False)
   f_Name = models.CharField(max_length=50, null=False)
-  f_Summary =  models.CharField(max_length=400, null=False)
+  f_Summary =  models.CharField(max_length=2000, null=False)
   f_Introduction =  models.TextField(max_length=400, null=False)
   f_OpenTime = models.CharField(max_length=2000, null=False)
   f_District = models.CharField(max_length=50, null=False)
@@ -154,7 +154,7 @@ class Question(models.Model):
 class Hotel(models.Model):
   h_Id = models.AutoField( primary_key=True)  
   h_Name = models.CharField(max_length=50, null=False)
-  h_Summary =  models.CharField(max_length=400, null=True)
+  h_Summary =  models.CharField(max_length=2000, null=True)
   h_Introduction =  models.TextField(max_length=400, null=True)
   h_OpenTime = models.CharField(max_length=2000, null=True)
   h_District = models.CharField(max_length=50, null=True)
