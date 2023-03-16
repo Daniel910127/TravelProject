@@ -25,6 +25,7 @@
 /media/images/spot/*
 /media/images/food/*
 /media/images/hotel/*
+/media/images/food/*
 
 # Django #
 __pycache__/
