@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import task,overview,spot,init_data,account,food
+from .views import task,overview,spot,init_data,account,food,hotel
 
 
 urlpatterns = [
@@ -19,6 +19,9 @@ urlpatterns = [
 
     path('food-list/', food.foodList, name="food-list"),
     path('food-image-list/', food.foodWithPictureList, name="food-image-list"),
+    
+	path('hotel-list/', hotel.hotelList, name="hotel-list"),
+    path('hotel-image-list/', hotel.hotelWithPictureList, name="hotel-image-list"),
   
   
     path('init-spotData/', init_data.spotInit, name="init-spotData"),
