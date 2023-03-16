@@ -1,0 +1,25 @@
+.SpotView {
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+}
+
+.spotCard{
+  position: absolute;
+  margin-top: 2rem;
+  margin-left: 2rem;
+  z-index: 999;
+}
+
+.spotMap{
+  position: relative;
+  height: 100%;
+  width: 100%;
+  
+}
+
+.leaflet-container {
+  width: 100%;
+  height: 100vh;
+  
+  }

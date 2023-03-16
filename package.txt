@@ -2,3 +2,4 @@
 
 pip install selenium==4.8.2    爬蟲用
 
+pip install django-cors-headers==3.14.0    跨域請求用

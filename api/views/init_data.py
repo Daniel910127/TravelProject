@@ -23,7 +23,7 @@ def spotPictureInit(request):
   driver = crawl_spot_image.init_browser()
   #print(spot_list)
 
-  for i in range(512,len(spot_list)):
+  for i in range(0,len(spot_list)):
     keyword = spot_list[i]['name']
     crawl_list = crawl_spot_image.crawler(keyword,driver)
     #print(crawl_list)
