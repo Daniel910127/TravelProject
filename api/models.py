@@ -145,8 +145,8 @@ class Question(models.Model):
   s_Id = models.IntegerField( null=False) 
   q_question =models.CharField(max_length=100, null=False)
   q_answer = models.CharField(max_length=100, null=False)
-  q_type = models.CharField(max_length=50)
-  q_solution =models.CharField(max_length=100)
+  q_type = models.CharField(max_length=50, null=False)
+  q_solution =models.CharField(max_length=100, null=False)
 
   def __str__(self):
     return self.q_question
