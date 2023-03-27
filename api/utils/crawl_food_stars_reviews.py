@@ -16,7 +16,7 @@ from selenium import webdriver
 import re
 
 img_url_dic = {}
-local_path = 'imgs'
+local_path = 'strs'
 
 def get_food_list():
     
@@ -45,15 +45,14 @@ def crawler(keyword,driver):
     # 存圖位置
     
     #return list
-    img_list = []
+    str_list = []
     
     # 紀錄下載過的圖片網址，避免重複下載
     
     # 瀏覽器打開爬取頁面
     driver.get(url)
-##islrg > div.islrc > div:nth-child(2) > a.wXeWr.islib.nfEiy > div.bRMDJf.islir > img
     elements = driver.find_elements(
-        By.CSS_SELECTOR, "#islrg > div.islrc > div > a.wXeWr.islib.nfEiy > div.bRMDJf.islir > img")
+        By.CSS_SELECTOR, "#QA0Szd > div > div > div.w6VYqd > div.bJzME.tTVLSc > div > div.e07Vkf.kA9KIf > div > div > div.TIHn2 > div > div.lMbq3e > div.LBgpqf > div > div.fontBodyMedium.dmRWX > div.F7nice.mmu3tf > span:nth-child(1) > span:nth-child(1)")
     nowImg = -1
     i = 0
     while i < 3:
