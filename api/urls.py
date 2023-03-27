@@ -29,6 +29,7 @@ urlpatterns = [
     
 	path('init-foodData/', init_data.foodInit, name="init-foodData"),
     path('init-foodPictureData/', init_data.foodPictureInit, name="init-foodPictureData"),
+    path('init-foodStrsData/', init_data.foodStrsInit, name="init-foodStrsData"),
     
 	path('init-hotelData/', init_data.hotelInit, name="init-hotelData"),
     path('init-hotelPictureData/', init_data.hotelPictureInit, name="init-hotelPictureData"),

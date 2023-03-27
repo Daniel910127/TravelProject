@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from ..serializers import TaskSerializer, AccountSerializer, SpotSerializer, MemberSerializer, s_InterestSerializer, FoodSerializer, Travel_ListSerializer, Travel_List_DetailSerializer, QuestionSerializer, s_PictureSerializer, m_PictureSerializer, h_PictureSerializer
 
 from ..models import Task, Account, Spot, Member, s_Interest,Hotel, Food, Travel_List, Travel_List_Detail, Question, s_Picture, m_Picture,f_Picture,h_Picture
-from ..utils import spot_data,food_data,hotel_data,crawl_spot_image,crawl_food_image,crawl_hotel_image
+from ..utils import spot_data,food_data,hotel_data,crawl_spot_image,crawl_food_image,crawl_hotel_image,crawl_food_stars_reviews
 
 # Create your views here.
 
@@ -96,4 +96,15 @@ def hotelPictureInit(request):
 
   return HttpResponse('successfully hotel image add')
 
-	
+@api_view(['GET'])
+def foodStrsInit(request):
+  food_list = crawl_food_image.get_food_list()
+  driver = crawl_food_image.init_browser()
+  #print(food_list)
+
+  for i in range(0,len(food_list)):
+    keyword = food_list[i]['name']
+    address = food_list[i]['address']
+    crawl_food_stars_reviews.crawler(keyword,address,driver)
+
+  return HttpResponse('successfully food image add')

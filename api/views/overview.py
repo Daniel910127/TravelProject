@@ -35,6 +35,7 @@ def apiOverview(request):
    
 	'Init Food Data':'/init-foodData/',
     'Init f_Picture Data':'/init-foodPictureData/',
+    'Init f_Strs Data':'/init-foodStrsData/',
     
 	'Init Hotel Data':'/init-hotelData/',
 	'Init h_Picture Data':'/init-hotelPictureData/',

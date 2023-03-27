@@ -14,9 +14,10 @@ from selenium import webdriver
 # driver = webdriver.Chrome('chromedriver', options=options)
 # driver.implicitly_wait(10)
 import re
+from ..models import Task, Account, Spot, Member, s_Interest,Hotel, Food, Travel_List, Travel_List_Detail, Question, s_Picture, m_Picture,f_Picture,h_Picture
 
 img_url_dic = {}
-local_path = 'strs'
+local_path = 'stre'
 
 def get_food_list():
     
@@ -40,63 +41,27 @@ def init_browser():
     
 
 
-def crawler(keyword,driver):
-    url = 'https://www.google.com/search?q='+keyword+'&tbm=isch'
+def crawler(keyword,address,driver):
+    url = 'https://www.google.com/maps?q='+'台南 '+keyword+' '+address+'&tbm=isch'
     # 存圖位置
     
     #return list
-    str_list = []
+    stre_list = []
     
     # 紀錄下載過的圖片網址，避免重複下載
     
     # 瀏覽器打開爬取頁面
     driver.get(url)
-    elements = driver.find_elements(
-        By.CSS_SELECTOR, "#QA0Szd > div > div > div.w6VYqd > div.bJzME.tTVLSc > div > div.e07Vkf.kA9KIf > div > div > div.TIHn2 > div > div.lMbq3e > div.LBgpqf > div > div.fontBodyMedium.dmRWX > div.F7nice.mmu3tf > span:nth-child(1) > span:nth-child(1)")
-    nowImg = -1
-    i = 0
-    while i < 3:
-        nowImg += 1
-        try:
-            elements[nowImg].click()
-            # img_url = element.get_attribute('src')
-            time.sleep(1)
+    stars = driver.find_element(
+        By.CSS_SELECTOR, "#QA0Szd > div > div > div.w6VYqd > div.bJzME.tTVLSc > div > div.e07Vkf.kA9KIf > div > div > div.TIHn2 > div > div.lMbq3e > div.LBgpqf > div > div.fontBodyMedium.dmRWX > div.F7nice > span:nth-child(1) > span:nth-child(1)").text
 
-            img_element = driver.find_element(
-                By.CSS_SELECTOR, "#Sva75c > div.DyeYj > div > div.dFMRD > div.pxAole > div.tvh9oe.BIB1wf > c-wiz > div > div.OUZ5W > div.zjoqD > div.qdnLaf.isv-id.b0vFpe > div > a > img")
-            img_url = img_element.get_attribute('src')
-            #print(img_url)
-            # 保存圖片到指定路徑
-            if img_url != None and img_url.lower().endswith(".jpg")  and not img_url in img_url_dic:
-                img_url_dic[img_url] = ''
-                filename = keyword + str(i) +'.jpeg' 
-                filename = re.sub(r'[\\/:*?"<>|]', '',filename)
-                #print(img_list)
-                print(filename,img_url)
-                urllib.request.urlretrieve(
-                    img_url, os.path.join('media/images/food', filename))
-                
-                img_list.append({
-                    'name': keyword,
-                    'img_url': 'images/food/'+keyword+str(i)+'.jpeg'
-                })
-                #print(img_list)
-                #保存圖片
-                #print(os.listdir())
-                
-
-                print('saved')
-                i = i+1
-
-        except OSError:
-            print(OSError)
-            print('發生OSError!')
-            # continue
-
-        except:
-            print("發生錯誤")
-    print(img_list)
-    return img_list
+    # stars = str(ar.find(class_ = "fontBodyMedium dmRWX").get('aria-label').strip().strip("顆星")
+   
+    Food.objects.filter(f_Name = keyword).update(f_Summary=stars)
+    reviews = driver.find_element(
+        By.CSS_SELECTOR, "#QA0Szd > div > div > div.w6VYqd > div.bJzME.tTVLSc > div > div.e07Vkf.kA9KIf > div > div > div.TIHn2 > div > div.lMbq3e > div.LBgpqf > div > div.fontBodyMedium.dmRWX > div.F7nice > span:nth-child(2) > span > span").text
+    Food.objects.filter(f_Name = keyword).update(f_Introduction=reviews)
+    return 0
 
 
 
