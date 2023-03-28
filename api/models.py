@@ -37,6 +37,8 @@ class Spot(models.Model):
   s_Services =models.CharField(max_length=100, null=False)
   s_Category = models.CharField(max_length=100, null=False)
   s_UpdateTime =models.CharField(max_length=50, null=False)
+  s_Stars = models.FloatField(max_length=10, null=True, default=None)  
+  s_Reviews = models.FloatField(max_length=10, null=True, default=None)
 
   def __str__(self):
     return self.s_Name
@@ -99,8 +101,8 @@ class Food(models.Model):
   f_Category = models.CharField(max_length=100, null=False)
   f_Consume = models.CharField(max_length=20, null=False)
   f_UpdateTime =models.CharField(max_length=50, null=False)
-  f_Stars = models.FloatField(max_length=10, null=False, default=None)  
-  f_Reviews = models.FloatField(max_length=10, null=False, default=None)
+  f_Stars = models.FloatField(max_length=10, null=True, default=None)  
+  f_Reviews = models.FloatField(max_length=10, null=True, default=None)
 
   def __str__(self):
     return self.f_Name
@@ -170,6 +172,8 @@ class Hotel(models.Model):
   h_Services =models.CharField(max_length=100, null=True)
   h_Category = models.CharField(max_length=100, null=False)
   h_UpdateTime =models.CharField(max_length=50, null=False)
+  h_Stars = models.FloatField(max_length=10, null=True, default=None)  
+  h_Reviews = models.FloatField(max_length=10, null=True, default=None)
 
   def __str__(self):
     return self.h_Name
