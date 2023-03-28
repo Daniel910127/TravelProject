@@ -76,7 +76,7 @@ def crawler(keyword,address,driver):
     
         
     reviews = reviews.replace("(", "").replace(",", "").replace(")", "")
-    Spot.objects.filter(s_Name = keyword).update(s_Reviews=float(reviews))
+    Spot.objects.filter(s_Name = keyword).update(s_Reviews=int(reviews))
     return 0
 
 
