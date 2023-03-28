@@ -35,10 +35,11 @@ def apiOverview(request):
    
 	'Init Food Data':'/init-foodData/',
     'Init f_Picture Data':'/init-foodPictureData/',
-    'Init f_Strs Data':'/init-foodStrsData/',
+    'Init f_Stre Data':'/init-foodStreData/',
     
 	'Init Hotel Data':'/init-hotelData/',
 	'Init h_Picture Data':'/init-hotelPictureData/',
+	'Init h_Stre Data':'/init-hotelStreData/',
     
 		}
 	return Response(api_urls)
