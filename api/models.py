@@ -100,7 +100,7 @@ class Food(models.Model):
   f_Consume = models.CharField(max_length=20, null=False)
   f_UpdateTime =models.CharField(max_length=50, null=False)
   f_Stars = models.FloatField(max_length=10, null=False, default=None)  
-  f_Reviews = models.CharField(max_length=10, null=False, default=None)
+  f_Reviews = models.FloatField(max_length=10, null=False, default=None)
 
   def __str__(self):
     return self.f_Name
