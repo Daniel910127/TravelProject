@@ -26,6 +26,7 @@ urlpatterns = [
   
     path('init-spotData/', init_data.spotInit, name="init-spotData"),
     path('init-spotPictureData/', init_data.spotPictureInit, name="init-spotPictureData"),
+    path('init-spotStreData/', init_data.spotStreInit, name="init-spotlStreData"),
     
 	path('init-foodData/', init_data.foodInit, name="init-foodData"),
     path('init-foodPictureData/', init_data.foodPictureInit, name="init-foodPictureData"),

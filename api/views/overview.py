@@ -32,6 +32,7 @@ def apiOverview(request):
 
   	'Init Spot Data':'/init-spotData/',
     'Init s_Picture Data':'/init-spotPictureData/',
+    'Init s_Stre Data':'/init-spotStreData/',
    
 	'Init Food Data':'/init-foodData/',
     'Init f_Picture Data':'/init-foodPictureData/',
