@@ -57,11 +57,11 @@ def crawler(keyword,address,driver):
 
     # stars = str(ar.find(class_ = "fontBodyMedium dmRWX").get('aria-label').strip().strip("顆星")
    
-    Food.objects.filter(f_Name = keyword).update(f_Summary=float(stars))
+    Food.objects.filter(f_Name = keyword).update(f_Stars=float(stars))
     reviews = driver.find_element(
         By.CSS_SELECTOR, "#QA0Szd > div > div > div.w6VYqd > div.bJzME.tTVLSc > div > div.e07Vkf.kA9KIf > div > div > div.TIHn2 > div > div.lMbq3e > div.LBgpqf > div > div.fontBodyMedium.dmRWX > div.F7nice > span:nth-child(2) > span > span").text
     reviews = reviews.replace("(", "").replace(",", "").replace(")", "")
-    Food.objects.filter(f_Name = keyword).update(f_Introduction=float(reviews))
+    Food.objects.filter(f_Name = keyword).update(f_Reviews=float(reviews))
     return 0
 
 
