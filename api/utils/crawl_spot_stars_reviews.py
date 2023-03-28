@@ -42,7 +42,7 @@ local_path = 'stre'
 
 
 def crawler(keyword,address,driver):
-    url = 'https://www.google.com/maps?q='+address+' '+keyword+'&tbm=isch'
+    url = 'https://www.google.com/maps?q='+keyword+'&tbm=isch'
     # 存圖位置
     
     #return list
@@ -55,11 +55,11 @@ def crawler(keyword,address,driver):
     stars = driver.find_element(
         By.CSS_SELECTOR, "#QA0Szd > div > div > div.w6VYqd > div.bJzME.tTVLSc > div > div.e07Vkf.kA9KIf > div > div > div.TIHn2 > div > div.lMbq3e > div.LBgpqf > div > div.fontBodyMedium.dmRWX > div.F7nice > span:nth-child(1) > span:nth-child(1)").text
    
-    Spot.objects.filter(s_Name = keyword).update(s_Summary=float(stars))
+    Spot.objects.filter(s_Name = keyword).update(s_Stars=float(stars))
     reviews = driver.find_element(
         By.CSS_SELECTOR, "#QA0Szd > div > div > div.w6VYqd > div.bJzME.tTVLSc > div > div.e07Vkf.kA9KIf > div > div > div.TIHn2 > div > div.lMbq3e > div.LBgpqf > div > div.fontBodyMedium.dmRWX > div.F7nice > span:nth-child(2) > span > span").text
     reviews = reviews.replace("(", "").replace(",", "").replace(")", "")
-    Spot.objects.filter(s_Name = keyword).update(s_Introduction=float(reviews))
+    Spot.objects.filter(s_Name = keyword).update(s_Reviews=float(reviews))
     return 0
 
 
