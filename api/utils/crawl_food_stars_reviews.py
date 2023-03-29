@@ -42,7 +42,7 @@ def init_browser():
 
 
 def crawler(keyword,address,driver):
-    url = 'https://www.google.com/maps?q='+' '+address+keyword+'&tbm=isch'
+    url = 'https://www.google.com/maps?q='+address+keyword+'&tbm=isch'
     # 存圖位置
     
     #return list
@@ -52,16 +52,31 @@ def crawler(keyword,address,driver):
     
     # 瀏覽器打開爬取頁面
     driver.get(url)
-    stars = driver.find_element(
+    time.sleep(1.5)
+    try:
+        stars = driver.find_element(
         By.CSS_SELECTOR, "#QA0Szd > div > div > div.w6VYqd > div.bJzME.tTVLSc > div > div.e07Vkf.kA9KIf > div > div > div.TIHn2 > div > div.lMbq3e > div.LBgpqf > div > div.fontBodyMedium.dmRWX > div.F7nice > span:nth-child(1) > span:nth-child(1)").text
-
-    # stars = str(ar.find(class_ = "fontBodyMedium dmRWX").get('aria-label').strip().strip("顆星")
-   
+    except:
+        try:
+            stars = driver.find_element(
+            By.CSS_SELECTOR, "#QA0Szd > div > div > div.w6VYqd > div.bJzME.tTVLSc > div > div.e07Vkf.kA9KIf > div > div > div.m6QErb.DxyBCb.kA9KIf.dS8AEf.ecceSd > div.m6QErb.DxyBCb.kA9KIf.dS8AEf.ecceSd > div:nth-child(3) > div > div > div.lI9IFe > div.y7PRA > div > div > div.UaQhfb.fontBodyMedium > div:nth-child(3) > div > span.fontBodyMedium > span > span.MW4etd").text
+        except:
+            stars = 0
+       
     Food.objects.filter(f_Name = keyword).update(f_Stars=float(stars))
-    reviews = driver.find_element(
-        By.CSS_SELECTOR, "#QA0Szd > div > div > div.w6VYqd > div.bJzME.tTVLSc > div > div.e07Vkf.kA9KIf > div > div > div.TIHn2 > div > div.lMbq3e > div.LBgpqf > div > div.fontBodyMedium.dmRWX > div.F7nice > span:nth-child(2) > span > span").text
+    try:
+        reviews = driver.find_element(
+            By.CSS_SELECTOR, "#QA0Szd > div > div > div.w6VYqd > div.bJzME.tTVLSc > div > div.e07Vkf.kA9KIf > div > div > div.TIHn2 > div > div.lMbq3e > div.LBgpqf > div > div.fontBodyMedium.dmRWX > div.F7nice > span:nth-child(2) > span > span").text
+    except:
+        try:
+            reviews = driver.find_element(
+            By.CSS_SELECTOR, "#QA0Szd > div > div > div.w6VYqd > div.bJzME.tTVLSc > div > div.e07Vkf.kA9KIf > div > div > div.m6QErb.DxyBCb.kA9KIf.dS8AEf.ecceSd > div.m6QErb.DxyBCb.kA9KIf.dS8AEf.ecceSd > div:nth-child(3) > div > div > div.lI9IFe > div.y7PRA > div > div > div.UaQhfb.fontBodyMedium > div:nth-child(3) > div > span.fontBodyMedium > span > span.UY7F9").text
+        except:
+            reviews = '0'
+    
+        
     reviews = reviews.replace("(", "").replace(",", "").replace(")", "")
-    Food.objects.filter(f_Name = keyword).update(f_Reviews=float(reviews))
+    Food.objects.filter(f_Name = keyword).update(f_Reviews=int(reviews))
     return 0
 
 
