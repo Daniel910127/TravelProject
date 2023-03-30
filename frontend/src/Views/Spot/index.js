@@ -3,27 +3,39 @@ import axios from "axios";
 import { useEffect, useState, useRef } from "react";
 import SpotCard from "../../Components/SpotCard";
 import SpotMap from "../../Components/SpotMap";
-import './style.css'
+import "./style.css";
+import { useNavigate } from "react-router-dom";
+import NotFound from "../../Views/NotFound";
 
 export default function Spot() {
-  const [spot_list, setSpotList] = useState([]);
+  const [spot, setSpot] = useState();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
+    console.log("get spot data");
     axios({
-      url: "http://127.0.0.1:8000/api/spot-image-list/",
+      url: "http://127.0.0.1:8000/api/spot/七股鹽山/",
       method: "GET",
     })
       .then((response) => {
-        //console.log(response);
-        setSpotList(response.data);
+        console.log(response);
+        setSpot(response.data);
       })
-      .catch((err) => console.err(err));
-  }, []);
+      .catch((err) => {
+        setError(err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  },[]);
 
   return (
     <div className="SpotView">
-      {spot_list.length > 0 && <SpotCard {...spot_list[0]} /> }
-      {spot_list.length >0 && <SpotMap {...spot_list[0]}/>}
+      {loading && <p>Loading...</p>}
+      {spot && <SpotCard spot={spot} />}
+      {spot && <SpotMap spot={spot} />}
+      {error && <NotFound></NotFound>}
     </div>
   );
 }

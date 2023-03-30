@@ -22,7 +22,8 @@ def apiOverview(request):
 		'Account List':'/account-list/',
   
     'Spot List':'/spot-list/',
-    'Spot With Image List':'spot-image-list/',
+    'Spot List With img':'spot/',
+    'Spot Detail':'spot/<str:s_Name>/',
     
     'Food List':'/food-list/',
     'Food With Image List':'spot-image-list/',  

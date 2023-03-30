@@ -5,7 +5,8 @@ import {iconLocation} from './icon'
 import './style.css'
 import MarkerTitle from "./MarkerTitle";
 function SpotMap(props) {
-  const position = [props.s_Latitude, props.s_Longtitude];
+
+  const position = [props.spot.s_Latitude, props.spot.s_Longtitude];
   return (
     <div className="spotMap">
       {/* <MapContainer center={position} zoom={13} scrollWheelZoom={false} style={{height:'100px'}}>
@@ -29,7 +30,7 @@ function SpotMap(props) {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <Marker position={position} icon={iconLocation(props.s_Name)}>
+        <Marker position={position} icon={iconLocation(props.spot.s_Name)}>
         </Marker>
         <ZoomControl position="bottomright" />
       </MapContainer>

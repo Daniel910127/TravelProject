@@ -5,7 +5,7 @@ import "./style.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Tag } from "antd";
 export default function SpotCard(props) {
-  //console.log(props);
+  console.log(props);
   const {
     s_Name,
     s_picture,
@@ -14,7 +14,7 @@ export default function SpotCard(props) {
     s_Tel,
     s_Address,
     s_Category,
-  } = props;
+  } = props.spot;
   const tel_link = useRef();
   useEffect(() => {
     tel_link.current.href = `tel:${s_Tel}`;
