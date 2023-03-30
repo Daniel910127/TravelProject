@@ -33,12 +33,15 @@ def apiOverview(request):
 
   	'Init Spot Data':'/init-spotData/',
     'Init s_Picture Data':'/init-spotPictureData/',
+    'Init s_Stre Data':'/init-spotStreData/',
    
 	'Init Food Data':'/init-foodData/',
     'Init f_Picture Data':'/init-foodPictureData/',
+    'Init f_Stre Data':'/init-foodStreData/',
     
 	'Init Hotel Data':'/init-hotelData/',
 	'Init h_Picture Data':'/init-hotelPictureData/',
+	'Init h_Stre Data':'/init-hotelStreData/',
     
 		}
 	return Response(api_urls)

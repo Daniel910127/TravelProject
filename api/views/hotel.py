@@ -11,7 +11,7 @@ from ..models import Task,Account,Spot,Member,s_Interest,Food,Travel_List,Travel
 
 @api_view(['GET'])
 def hotelList(request):
-	hotels = Hotel.objects.all().order_by('-s_Id')
+	hotels = Hotel.objects.all().order_by('-h_Id')
 	serializer = HotelSerializer(hotels, many=True)
 	return Response(serializer.data)
 

@@ -51,7 +51,7 @@ def crawler(keyword,driver):
     
     # 瀏覽器打開爬取頁面
     driver.get(url)
-
+##islrg > div.islrc > div:nth-child(2) > a.wXeWr.islib.nfEiy > div.bRMDJf.islir > img
     elements = driver.find_elements(
         By.CSS_SELECTOR, "#islrg > div.islrc > div > a.wXeWr.islib.nfEiy > div.bRMDJf.islir > img")
     nowImg = -1
