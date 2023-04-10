@@ -65,6 +65,7 @@ class Travel_List(models.Model):
   t_Views =  models.IntegerField(null=False) 
   t_Likes =  models.IntegerField(null=False) 
   t_StarLocation = models.CharField(max_length=50, null=False) 
+  t_score = models.IntegerField(max_length=100,null=False,default=0)
 
   def __str__(self):
     return self.t_Name
@@ -72,7 +73,7 @@ class Travel_List(models.Model):
 #Travel_List_detail database model
 class Travel_List_Detail(models.Model):
   tl_Id = models.AutoField( primary_key=True) 
-  t_Id =  models.IntegerField(null=False) 
+  t_Id = models.ForeignKey(to="Travel_List", on_delete=models.CASCADE)  
   s_Id =  models.IntegerField(null=False) 
   f_Id =  models.IntegerField(null=False) 
   tl_Transport = models.CharField(max_length=20, null=False)
@@ -128,7 +129,7 @@ class  f_Picture(models.Model):
 #m_Picture database model
 class  m_Picture(models.Model):
   mp_Id = models.AutoField( primary_key=True) 
-  m_Id = models.IntegerField( null=False) 
+  m_Id = models.ForeignKey(to="Member", on_delete=models.CASCADE)  
   mp_URL = models.ImageField(upload_to='images/member/', default=None)
 
   def __str__(self):
@@ -137,7 +138,7 @@ class  m_Picture(models.Model):
 #h_Picture database model
 class  h_Picture(models.Model):
   hp_Id = models.AutoField( primary_key=True) 
-  h_Id = models.IntegerField( null=False) 
+  h_Id =  models.ForeignKey(to="Hotel", on_delete=models.CASCADE) 
   hp_URL = models.ImageField(upload_to='images/hotel/', default=None)
 
   def __str__(self):
@@ -146,11 +147,13 @@ class  h_Picture(models.Model):
 #Question database model
 class Question(models.Model):
   q_Id = models.AutoField( primary_key=True) 
-  s_Id = models.IntegerField( null=False, default=None) 
+  s_Id = models.CharField(max_length=100, null=True)
   q_question =models.CharField(max_length=100, null=False, default=None)
   q_answer = models.CharField(max_length=100, null=False, default=None)
   q_type = models.CharField(max_length=50, null=False, default=None)
   q_solution =models.CharField(max_length=100, null=False, default=None)
+  q_right=models.IntegerField( max_length=100,null=False,default=0) 
+  q_false=models.IntegerField( max_length=100,null=False,default=0) 
 
   def __str__(self):
     return self.q_question
@@ -182,7 +185,7 @@ class Hotel(models.Model):
 #s_Interest database model
 class s_Interest(models.Model):
   si_Id = models.AutoField( primary_key=True) 
-  m_Id = models.IntegerField( null=False) 
+  m_Id = models.ForeignKey(to="Member", on_delete=models.CASCADE)   
   si_pg = models.IntegerField( null=False) #公園綠地
   si_os = models.IntegerField( null=False) #戶外運動
   si_tp = models.IntegerField( null=False) #主題園區、風景區
@@ -200,8 +203,6 @@ class s_Interest(models.Model):
   def __str__(self):
     return self.m_Id
   
-
-
 
 
 
