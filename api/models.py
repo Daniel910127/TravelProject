@@ -60,11 +60,15 @@ class Travel_List(models.Model):
   t_Id = models.AutoField( primary_key=True) 
   m_Id = models.IntegerField(null=False) 
   t_Name = models.CharField(max_length=10, null=False)
+  t_Description = models.CharField(max_length=10, null=False)
   t_FormTime = models.DateTimeField(auto_now=True)
+  t_StartTime = models.CharField(max_length=100,null=False)
+  t_EndTime = models.CharField(max_length=100,null=False)
+  t_StayDay = models.IntegerField(null=False, default='1')
   t_Privacy = models.CharField(max_length=2, null=False, default='n') 
   t_Views =  models.IntegerField(null=False) 
   t_Likes =  models.IntegerField(null=False) 
-  t_StarLocation = models.CharField(max_length=50, null=False) 
+  t_StartLocation = models.CharField(max_length=50, null=False) 
   t_score = models.IntegerField(max_length=100,null=False,default=0)
 
   def __str__(self):
