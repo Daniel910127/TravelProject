@@ -78,9 +78,9 @@ class Travel_List(models.Model):
 class Travel_List_Detail(models.Model):
   tl_Id = models.AutoField( primary_key=True) 
   t_Id = models.ForeignKey(to="Travel_List", on_delete=models.CASCADE)  
-  s_Id =  models.IntegerField(null=False) 
-  f_Id =  models.IntegerField(null=False) 
-  h_Id =  models.IntegerField(null=False) 
+  s_Id =  models.ForeignKey(to="Spot", on_delete=models.CASCADE)  
+  f_Id =  models.ForeignKey(to="Food", on_delete=models.CASCADE)  
+  h_Id =  models.ForeignKey(to="Hotel", on_delete=models.CASCADE)  
   tl_Transport = models.CharField(max_length=20, null=False)
   tl_StayTime =  models.CharField(max_length=10, null=False,default='2:00')
   tl_Order = models.IntegerField(null=False)
@@ -152,7 +152,7 @@ class  h_Picture(models.Model):
 #Question database model
 class Question(models.Model):
   q_Id = models.AutoField( primary_key=True) 
-  s_Id = models.CharField(max_length=100, null=True)
+  s_Id = models.ForeignKey(to="Spot", on_delete=models.CASCADE)   
   q_question =models.CharField(max_length=100, null=False, default=None)
   q_answer = models.CharField(max_length=100, null=False, default=None)
   q_type = models.CharField(max_length=50, null=False, default=None)
