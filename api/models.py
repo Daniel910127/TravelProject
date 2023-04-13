@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 
 class Task(models.Model):
-  title = models.CharField(max_length=200)
+  title = models.CharField(primary_key=True,max_length=200)
   completed = models.BooleanField(default=False, blank=True, null=True)
       
   def __str__(self):
@@ -38,7 +38,7 @@ class Spot(models.Model):
   s_Category = models.CharField(max_length=100, null=False)
   s_UpdateTime =models.CharField(max_length=50, null=False)
   s_Stars = models.FloatField(max_length=10, null=True, default=None)  
-  s_Reviews = models.IntegerField(max_length=10, null=True, default=None)
+  s_Reviews = models.IntegerField( null=True, default=None)
 
   def __str__(self):
     return self.s_Name
@@ -69,7 +69,7 @@ class Travel_List(models.Model):
   t_Views =  models.IntegerField(null=False) 
   t_Likes =  models.IntegerField(null=False) 
   t_StartLocation = models.CharField(max_length=50, null=False) 
-  t_score = models.IntegerField(max_length=100,null=False,default=0)
+  t_score = models.IntegerField(null=False,default=0)
 
   def __str__(self):
     return self.t_Name
@@ -108,7 +108,7 @@ class Food(models.Model):
   f_Consume = models.CharField(max_length=20, null=False)
   f_UpdateTime =models.CharField(max_length=50, null=False)
   f_Stars = models.FloatField(max_length=10, null=True, default=None)  
-  f_Reviews = models.IntegerField(max_length=10, null=True, default=None)
+  f_Reviews = models.IntegerField( null=True, default=None)
 
   def __str__(self):
     return self.f_Name
@@ -157,8 +157,8 @@ class Question(models.Model):
   q_answer = models.CharField(max_length=100, null=False, default=None)
   q_type = models.CharField(max_length=50, null=False, default=None)
   q_solution =models.CharField(max_length=100, null=False, default=None)
-  q_right=models.IntegerField( max_length=100,null=False,default=0) 
-  q_false=models.IntegerField( max_length=100,null=False,default=0) 
+  q_right=models.IntegerField(null=False,default=0) 
+  q_false=models.IntegerField(null=False,default=0) 
 
   def __str__(self):
     return self.q_question
@@ -181,7 +181,7 @@ class Hotel(models.Model):
   h_Category = models.CharField(max_length=100, null=False)
   h_UpdateTime =models.CharField(max_length=50, null=False)
   h_Stars = models.FloatField(max_length=10, null=True, default=None)  
-  h_Reviews = models.IntegerField(max_length=10, null=True, default=None)
+  h_Reviews = models.IntegerField(null=True, default=None)
 
   def __str__(self):
     return self.h_Name
