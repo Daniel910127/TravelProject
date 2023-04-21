@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 
 class Task(models.Model):
-  title = models.CharField(max_length=200)
+  title = models.CharField(primary_key=True,max_length=200)
   completed = models.BooleanField(default=False, blank=True, null=True)
       
   def __str__(self):
@@ -38,7 +38,7 @@ class Spot(models.Model):
   s_Category = models.CharField(max_length=100, null=False)
   s_UpdateTime =models.CharField(max_length=50, null=False)
   s_Stars = models.FloatField(max_length=10, null=True, default=None)  
-  s_Reviews = models.IntegerField(max_length=10, null=True, default=None)
+  s_Reviews = models.IntegerField( null=True, default=None)
 
   def __str__(self):
     return self.s_Name
@@ -60,11 +60,16 @@ class Travel_List(models.Model):
   t_Id = models.AutoField( primary_key=True) 
   m_Id = models.IntegerField(null=False) 
   t_Name = models.CharField(max_length=10, null=False)
+  t_Description = models.CharField(max_length=10, null=False)
   t_FormTime = models.DateTimeField(auto_now=True)
+  t_StartTime = models.CharField(max_length=100,null=False)
+  t_EndTime = models.CharField(max_length=100,null=False)
+  t_StayDay = models.IntegerField(null=False, default='1')
   t_Privacy = models.CharField(max_length=2, null=False, default='n') 
   t_Views =  models.IntegerField(null=False) 
   t_Likes =  models.IntegerField(null=False) 
-  t_StarLocation = models.CharField(max_length=50, null=False) 
+  t_StartLocation = models.CharField(max_length=50, null=False) 
+  t_score = models.IntegerField(null=False,default=0)
 
   def __str__(self):
     return self.t_Name
@@ -72,9 +77,10 @@ class Travel_List(models.Model):
 #Travel_List_detail database model
 class Travel_List_Detail(models.Model):
   tl_Id = models.AutoField( primary_key=True) 
-  t_Id =  models.IntegerField(null=False) 
-  s_Id =  models.IntegerField(null=False) 
-  f_Id =  models.IntegerField(null=False) 
+  t_Id = models.ForeignKey(to="Travel_List", on_delete=models.CASCADE)  
+  s_Id =  models.ForeignKey(to="Spot", on_delete=models.CASCADE)  
+  f_Id =  models.ForeignKey(to="Food", on_delete=models.CASCADE)  
+  h_Id =  models.ForeignKey(to="Hotel", on_delete=models.CASCADE)  
   tl_Transport = models.CharField(max_length=20, null=False)
   tl_StayTime =  models.CharField(max_length=10, null=False,default='2:00')
   tl_Order = models.IntegerField(null=False)
@@ -102,7 +108,7 @@ class Food(models.Model):
   f_Consume = models.CharField(max_length=20, null=False)
   f_UpdateTime =models.CharField(max_length=50, null=False)
   f_Stars = models.FloatField(max_length=10, null=True, default=None)  
-  f_Reviews = models.IntegerField(max_length=10, null=True, default=None)
+  f_Reviews = models.IntegerField( null=True, default=None)
 
   def __str__(self):
     return self.f_Name
@@ -128,7 +134,7 @@ class  f_Picture(models.Model):
 #m_Picture database model
 class  m_Picture(models.Model):
   mp_Id = models.AutoField( primary_key=True) 
-  m_Id = models.IntegerField( null=False) 
+  m_Id = models.ForeignKey(to="Member", on_delete=models.CASCADE)  
   mp_URL = models.ImageField(upload_to='images/member/', default=None)
 
   def __str__(self):
@@ -137,7 +143,7 @@ class  m_Picture(models.Model):
 #h_Picture database model
 class  h_Picture(models.Model):
   hp_Id = models.AutoField( primary_key=True) 
-  h_Id = models.IntegerField( null=False) 
+  h_Id =  models.ForeignKey(to="Hotel", on_delete=models.CASCADE) 
   hp_URL = models.ImageField(upload_to='images/hotel/', default=None)
 
   def __str__(self):
@@ -146,11 +152,13 @@ class  h_Picture(models.Model):
 #Question database model
 class Question(models.Model):
   q_Id = models.AutoField( primary_key=True) 
-  s_Id = models.IntegerField( null=False, default=None) 
+  s_Id = models.ForeignKey(to="Spot", on_delete=models.CASCADE)   
   q_question =models.CharField(max_length=100, null=False, default=None)
   q_answer = models.CharField(max_length=100, null=False, default=None)
   q_type = models.CharField(max_length=50, null=False, default=None)
   q_solution =models.CharField(max_length=100, null=False, default=None)
+  q_right=models.IntegerField(null=False,default=0) 
+  q_false=models.IntegerField(null=False,default=0) 
 
   def __str__(self):
     return self.q_question
@@ -173,7 +181,7 @@ class Hotel(models.Model):
   h_Category = models.CharField(max_length=100, null=False)
   h_UpdateTime =models.CharField(max_length=50, null=False)
   h_Stars = models.FloatField(max_length=10, null=True, default=None)  
-  h_Reviews = models.IntegerField(max_length=10, null=True, default=None)
+  h_Reviews = models.IntegerField(null=True, default=None)
 
   def __str__(self):
     return self.h_Name
@@ -182,7 +190,7 @@ class Hotel(models.Model):
 #s_Interest database model
 class s_Interest(models.Model):
   si_Id = models.AutoField( primary_key=True) 
-  m_Id = models.IntegerField( null=False) 
+  m_Id = models.ForeignKey(to="Member", on_delete=models.CASCADE)   
   si_pg = models.IntegerField( null=False) #公園綠地
   si_os = models.IntegerField( null=False) #戶外運動
   si_tp = models.IntegerField( null=False) #主題園區、風景區
@@ -200,8 +208,6 @@ class s_Interest(models.Model):
   def __str__(self):
     return self.m_Id
   
-
-
 
 
 
