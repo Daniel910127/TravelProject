@@ -15,17 +15,21 @@ import ShareIcon from "@mui/icons-material/Share";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { CardActionArea } from "@mui/material";
-
+import StarIcon from "@mui/icons-material/Star";
+import Box from "@mui/material/Box";
 const ImageCardWrapper = styled("div")(({ theme }) => ({
-  height: "100%",
   overflow: "hidden",
 }));
 
-export default function RecipeReviewCard() {
+export default function RecipeReviewCard(props) {
+  const { s_Id, s_Name, s_Pictures, s_District } = props;
+  // console.log(s_Pictures);
   return (
     <Card
       sx={{
-        maxWidth: 300,
+        height: "100%",
+        flexGrow: 1,
+        position: "relative",
         "&:hover .MuiCardMedia-img": {
           transform: "scale(1.1)", // 通过将图像放大10%来放大图像
           transition: "transform 0.2s ease-in-out", // 为过渡效果添加0.2秒的动画效果
@@ -36,54 +40,57 @@ export default function RecipeReviewCard() {
         },
       }}
     >
-      <CardActionArea component="a">
-        <ImageCardWrapper>
-          <CardMedia
-            component="img"
-            height="194"
-            image="https://picsum.photos/200/300"
-            alt="Paella dish"
-            sx={{}}
-          />
-        </ImageCardWrapper>
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
-            Lizard
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            This impressive paella is a perfect party dish and a fun meal to
-            cook together with your guests. Add 1 cup of frozen peas along with
-            the mussels, if you like.
-          </Typography>
-        </CardContent>
-        <CardActions
-          disableSpacing
-          sx={{ display: "flex", justifyContent: "end" }}
+      <ImageCardWrapper>
+        <CardMedia
+          component="img"
+          height="140"
+          image={`http://localhost:8000${s_Pictures[0].sp_URL}`}
+          alt="Paella dish"
+        />
+      </ImageCardWrapper>
+      <CardContent sx={{ marginBottom: 2 }}>
+        <Typography
+          gutterBottom
+          sx={{
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            display: "-webkit-box",
+            WebkitLineClamp: "2",
+            WebkitBoxOrient: "vertical",
+            fontSize: "1.2rem",
+          }}
         >
-          <IconButton
-            aria-label="add to favorites"
-            onMouseDown={(event) => event.stopPropagation()}
-            onClick={(event) => {
-              event.stopPropagation();
-              event.preventDefault();
-              console.log("Button clicked");
-            }}
-          >
-            <FavoriteIcon />
-          </IconButton>
-          <IconButton
-            aria-label="share"
-            onMouseDown={(event) => event.stopPropagation()}
-            onClick={(event) => {
-              event.stopPropagation();
-              event.preventDefault();
-              console.log("Button clicked");
-            }}
-          >
-            <ShareIcon />
-          </IconButton>
-        </CardActions>
-      </CardActionArea>
+          {s_Name}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          {s_District}
+        </Typography>
+      </CardContent>
+
+      <Box sx={{ position: "absolute", right: 0, bottom: 0 }}>
+        <IconButton
+          aria-label="add to favorites"
+          onMouseDown={(event) => event.stopPropagation()}
+          onClick={(event) => {
+            event.stopPropagation();
+            event.preventDefault();
+            console.log("Button clicked");
+          }}
+        >
+          <FavoriteIcon />
+        </IconButton>
+        <IconButton
+          aria-label="share"
+          onMouseDown={(event) => event.stopPropagation()}
+          onClick={(event) => {
+            event.stopPropagation();
+            event.preventDefault();
+            console.log("Button clicked");
+          }}
+        >
+          <ShareIcon />
+        </IconButton>
+      </Box>
     </Card>
   );
 }

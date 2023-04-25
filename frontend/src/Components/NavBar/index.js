@@ -16,9 +16,9 @@ import AdbIcon from "@mui/icons-material/Adb";
 import { styled, alpha } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
 import InputBase from "@mui/material/InputBase";
-import ModeOfTravelIcon from '@mui/icons-material/ModeOfTravel';
-
-const Search = styled("div")(({ theme }) => ({
+import ModeOfTravelIcon from "@mui/icons-material/ModeOfTravel";
+import { NavLink } from "react-router-dom";
+/* const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
   backgroundColor: alpha(theme.palette.common.white, 0.15),
@@ -31,7 +31,7 @@ const Search = styled("div")(({ theme }) => ({
     marginLeft: theme.spacing(1),
     width: "auto",
   },
-}));
+})); */
 
 const SearchIconWrapper = styled("div")(({ theme }) => ({
   padding: theme.spacing(0, 2),
@@ -62,7 +62,12 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const pages = ["Products", "Pricing", "Blog"];
+const pages = [
+  { linkName: "景點探索", linkURL: "/searchSpot" },
+  { linkName: "找美食", linkURL: "/searchFood" },
+  { linkName: "找住宿", linkURL: "/searchHotel" },
+  { linkName: "規劃行程", linkURL: "/規劃" },
+];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function NavBar() {
@@ -88,7 +93,9 @@ function NavBar() {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <ModeOfTravelIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+          <ModeOfTravelIcon
+            sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+          />
           <Typography
             variant="h6"
             noWrap
@@ -104,7 +111,7 @@ function NavBar() {
               textDecoration: "none",
             }}
           >
-            AI旅遊
+            台南走透透
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -137,13 +144,17 @@ function NavBar() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+                <MenuItem key={page.linkURL} onClick={handleCloseNavMenu}>
+                  <NavLink>
+                    <Typography textAlign="center">{page.linkName}</Typography>
+                  </NavLink>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
-          <ModeOfTravelIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+          <ModeOfTravelIcon
+            sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
+          />
           <Typography
             variant="h5"
             noWrap
@@ -164,17 +175,30 @@ function NavBar() {
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
-              <Button
-                key={page}
+              <NavLink
+                key={page.linkURL}
+                to={page.linkURL}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
+                style={{
+                  textDecoration: "none",
+                  color: "white",
+                  marginRight: "1rem",
+                }}
               >
-                {page}
-              </Button>
+                <Typography textAlign="center">{page.linkName}</Typography>
+
+                {/* <Button
+                  
+                  
+                  sx={{ my: 2, color: "white", display: "block" }}
+                >
+                  {page}
+                </Button> */}
+              </NavLink>
             ))}
           </Box>
 
-          <Box sx={{ display: { md: "block", xs: "none" }, mr: 2 }}>
+          {/* <Box sx={{ display: { md: "block", xs: "none" }, mr: 2 }}>
             <Search>
               <SearchIconWrapper>
                 <SearchIcon />
@@ -184,15 +208,18 @@ function NavBar() {
                 inputProps={{ "aria-label": "search" }}
               />
             </Search>
-          </Box>
+          </Box> */}
 
           {/* <Box sx={{ display: { md: "none", xs: "block" }, mr: 2 }}>
            
           </Box> */}
 
-          <Box sx={{ flexGrow: 0,display: 'flex' }}>
-
-          <IconButton size="large" color="inherit" sx={{ display: { md: "none", xs: "block" } }}>
+          <Box sx={{ flexGrow: 0, display: "flex" }}>
+            <IconButton
+              size="large"
+              color="inherit"
+              sx={{ display: { md: "none", xs: "block" } }}
+            >
               <SearchIcon />
             </IconButton>
 

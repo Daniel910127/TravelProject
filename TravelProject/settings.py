@@ -112,7 +112,7 @@ DATABASES = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'djangodb4',
+        'NAME': 'traveldb2',
         'USER': 'root',
         'PASSWORD': 'Apple910407.',
         'HOST': 'localhost',
