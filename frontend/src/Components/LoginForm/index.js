@@ -1,35 +1,58 @@
-import React, { useState } from 'react';
+import React, { useState,useContext } from 'react';
 import axios from 'axios';
+import { Navigate} from 'react-router-dom';
+
+
 
 function Login() {
-  const [account, setAccount] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
+  const [redirect, setRedirect] = useState(false);
+  const [user, setUser] = useState(null);
 
-  const handleSubmit = (event) => {
+
+  const handleUsernameChange = (event) => {
+    setUsername(event.target.value);
+  };
+
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-
-    axios.post('../api/views/login/', { account, password })
-      .then(response => {
-        localStorage.setItem('token', response.data.token);
-        window.location.href = '/';
+    const response = await axios.post('http://127.0.0.1:8000/api/account-login/', { username, password })
+    .then(res => {
+        console.log(res.message);
+        console.log('登入成功');
+        setRedirect(true);
       })
-      .catch(error => console.log(error));
+      .catch(err => {
+        console.error(err.message);
+        setMessage('登入失敗，請檢查帳號密碼是否正確');
+      });
+  };
+
+  if(redirect){
+   return (
+        <Navigate to='/home' />
+    );
   }
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>account:</label>
-          <input type="text" value={account} onChange={(event) => setAccount(event.target.value)} />
-        </div>
-        <div>
-          <label>password:</label>
-          <input type="password" value={password} onChange={(event) => setPassword(event.target.value)} />
-        </div>
+    <form onSubmit={handleSubmit}>
+      <label>
+        帳號：
+        <input type="text" value={username} onChange={handleUsernameChange} />
+      </label>
+      <br />
+      <label>
+        密碼：
+        <input type="password" value={password} onChange={handlePasswordChange}/>
+      </label>
         <button type="submit">Login</button>
       </form>
-    </div>
   );
 }
 
