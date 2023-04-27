@@ -24,7 +24,7 @@ urlpatterns = [
     path('food-list/', food.foodList, name="food-list"),
     path('food-image-list/', food.foodWithPictureList, name="food-image-list"),
     
-	path('hotel-list/', hotel.hotelList, name="hotel-list"),
+    path('hotel-list/', hotel.hotelList, name="hotel-list"),
     path('hotel-image-list/', hotel.hotelWithPictureList, name="hotel-image-list"),
   
   
@@ -42,6 +42,7 @@ urlpatterns = [
     path('init-hotelPictureData/', init_data.hotelPictureInit,
          name="init-hotelPictureData"),
     path('init-hotelStreData/', init_data.hotelStreInit, name="init-hotelStreData"),
+    path('high_rating_spots/', spot.high_rating_spots, name="high_rating_spots"),
 
 
 ]
