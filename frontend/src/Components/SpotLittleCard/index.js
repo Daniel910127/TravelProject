@@ -44,7 +44,7 @@ export default function RecipeReviewCard(props) {
         <CardMedia
           component="img"
           height="140"
-          image={`http://localhost:8000${s_Pictures[0].sp_URL}`}
+          image={s_Pictures[0] ?  `http://localhost:8000${s_Pictures[0].sp_URL}`: ''}
           alt="Paella dish"
         />
       </ImageCardWrapper>

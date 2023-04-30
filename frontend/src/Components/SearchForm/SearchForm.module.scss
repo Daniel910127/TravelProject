@@ -1,8 +1,10 @@
 .searchBox {
+  position: relative;
   max-width: 600px;
 }
 
 .searchInput {
+  position: relative;
   display: flex;
   background: #bbb;
   height: 40px;
@@ -13,6 +15,7 @@
   border-radius: 20px;
   justify-content: space-between;
   border: 2px solid transparent;
+  z-index: 10;
   &:focus-within {
     border: 2px solid #1976d2;
   }
@@ -42,9 +45,25 @@
   }
 }
 
-
 .searchDetail {
+  position: absolute;
   width: 100%;
-  height: 400px;
+  top: 0;
   background: #c67c7c;
+  padding-top: 60px;
+  
+  & :global(.detail) {
+    
+  }
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  button {
+
+  }
+
 }
