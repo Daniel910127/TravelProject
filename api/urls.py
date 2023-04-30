@@ -13,6 +13,8 @@ urlpatterns = [
     path('task-delete/<str:pk>/', task.taskDelete, name="task-delete"),
 
     path('account-list/', account.accountList, name="account-list"),
+    path('account-create/', account.create_account, name="account-create"),
+    path('account-login/', account.login_account, name="account-login"),
 
     path('spot-list/', spot.spotList, name="spot-list"),
     path('spot/', spot.spotWithPictureList, name="spot-image-list"),
@@ -24,7 +26,7 @@ urlpatterns = [
     path('food-list/', food.foodList, name="food-list"),
     path('food-image-list/', food.foodWithPictureList, name="food-image-list"),
     
-	path('hotel-list/', hotel.hotelList, name="hotel-list"),
+    path('hotel-list/', hotel.hotelList, name="hotel-list"),
     path('hotel-image-list/', hotel.hotelWithPictureList, name="hotel-image-list"),
   
   
@@ -42,6 +44,7 @@ urlpatterns = [
     path('init-hotelPictureData/', init_data.hotelPictureInit,
          name="init-hotelPictureData"),
     path('init-hotelStreData/', init_data.hotelStreInit, name="init-hotelStreData"),
+    path('high_rating_spots/', spot.high_rating_spots, name="high_rating_spots"),
 
 
 ]

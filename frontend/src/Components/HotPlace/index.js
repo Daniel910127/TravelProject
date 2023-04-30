@@ -24,7 +24,8 @@ export default function HotPlace() {
     if (loading) return;
     setLoading(true);
     console.log(pageNumber);
-    fetch(`http://localhost:3000/hot-place?_limit=10&_page=${pageNumber}`)
+    //http://localhost:3000/hot-place?_limit=10&_page=${pageNumber}
+    fetch(`http://127.0.0.1:8000/api/high_rating_spots/`)
       .then((response) => response.json())
       .then((data) => {
         setItems((prevItems) => [...prevItems, ...data]);

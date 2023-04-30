@@ -27,6 +27,12 @@ def spotWithPictureList(request):
     serializer = spotWithPictureURLSerializer(queryset, many=True)
     return Response(serializer.data)
 
+@api_view(['GET'])
+def high_rating_spots(request):
+    high_rating_spots = Spot.objects.filter( s_Reviews__gte=1000,s_Stars__gte=4.0).order_by( '-s_Reviews','-s_Stars')[:50]
+    serializer = spotWithPictureURLSerializer(high_rating_spots, many=True)
+    return Response(serializer.data)
+
 
 """ @api_view(['GET'])  
 def spot_detail(request, s_Name):
