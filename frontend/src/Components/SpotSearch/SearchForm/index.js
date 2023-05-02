@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import produce from "immer";
 import DetailButton from "./DetailButton";
@@ -7,10 +7,18 @@ import ClickAwayListener from "@mui/base/ClickAwayListener";
 import style from "./SearchForm.module.scss";
 import { useSearchParams } from "react-router-dom";
 import zIndex from "@mui/material/styles/zIndex";
+import { SearchStateContext } from "../SearchContext";
 
 export default function SearchForm() {
-  let [searchParams, setSearchParams] = useSearchParams();
-
+  // let [searchParams, setSearchParams] = useSearchParams();
+  const {
+    searchParams,
+    setSearchParams,
+    spotFilter,
+    filterSpots,
+    setFilterSpots,
+    spots,
+  } = useContext(SearchStateContext);
   const [isOpen, setIsOpen] = useState(false);
 
   const [category, setCategory] = useState([
@@ -33,23 +41,7 @@ export default function SearchForm() {
     { title: "風景區", isChecked: false },
   ]);
 
-  /* const initCategory = () => {
-    console.log(searchParams.getAll("category"));
-
-    const updateIndexs = searchParams.getAll("category").map((param) => {
-      let updateIndex = category.findIndex((item) => item.title === param);
-      return updateIndex;
-    });
-
-    let updateCategory = produce(category, (draft) => {
-      console.log(updateIndexs);
-      updateIndexs.forEach((updateIndex) => {
-        draft[updateIndex].isChecked = true;
-      });
-    });
-
-    setCategory(updateCategory);
-  }; */
+  
 
   const resetCategory = () => {
     let updateCategory = produce(category, (draft) => {
@@ -69,6 +61,14 @@ export default function SearchForm() {
   useEffect(() => {
     resetCategory();
   }, []);
+
+  useEffect(() => {
+    const checkedCategoryTitles = category
+      .filter((item) => item.isChecked)
+      .map((item) => item.title);
+
+    setFilterSpots(spotFilter(checkedCategoryTitles));
+  }, [category]);
 
   return (
     <ClickAwayListener
@@ -139,10 +139,14 @@ export default function SearchForm() {
                   .map((item) => item.title);
                 let params = { category: checkedTitles };
                 setSearchParams(params);
-                console.log(searchParams.getAll("category"));
+                //console.log(searchParams.getAll("category"));
               }}
             >
-              搜尋
+              共有
+              {category.some((item) => item.isChecked === true)
+                ? filterSpots.length
+                : spots.length}
+              個結果
             </button>
           </div>
         ) : (

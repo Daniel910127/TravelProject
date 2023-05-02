@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { useSearchParams } from "react-router-dom";
+
 import NavBar from "../../Components/NavBar";
 import HotPlace from "../../Components/HotPlace";
 import Container from "@mui/material/Container";
@@ -6,7 +8,10 @@ import Banner from "../../Components/Banner";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
-import SearchForm from "../../Components/SearchForm";
+import SpotSearch from "../../Components/SpotSearch";
+
+import axios from "axios";
+
 export default function SearchSpot() {
   return (
     <>
@@ -25,7 +30,8 @@ export default function SearchSpot() {
             margin: "4px auto 20px auto",
           }}
         ></span>
-        <SearchForm></SearchForm>
+
+        <SpotSearch></SpotSearch>
       </Container>
     </>
   );
