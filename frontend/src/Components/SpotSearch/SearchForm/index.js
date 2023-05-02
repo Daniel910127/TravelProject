@@ -8,6 +8,7 @@ import style from "./SearchForm.module.scss";
 import { useSearchParams } from "react-router-dom";
 import zIndex from "@mui/material/styles/zIndex";
 import { SearchStateContext } from "../SearchContext";
+import { set } from "react-hook-form";
 
 export default function SearchForm() {
   // let [searchParams, setSearchParams] = useSearchParams();
@@ -41,9 +42,52 @@ export default function SearchForm() {
     { title: "風景區", isChecked: false },
   ]);
 
-  
+  const [regions, setRegions] = useState([
+    { region: "中西區", isChecked: false },
+    { region: "東區", isChecked: false },
+    { region: "南區", isChecked: false },
+    { region: "北區", isChecked: false },
+    { region: "安平區", isChecked: false },
+    { region: "安南區", isChecked: false },
+    { region: "永康區", isChecked: false },
+    { region: "歸仁區", isChecked: false },
+    { region: "新化區", isChecked: false },
+    { region: "左鎮區", isChecked: false },
+    { region: "玉井區", isChecked: false },
+    { region: "楠西區", isChecked: false },
+    { region: "南化區", isChecked: false },
+    { region: "仁德區", isChecked: false },
+    { region: "關廟區", isChecked: false },
+    { region: "龍崎區", isChecked: false },
+    { region: "官田區", isChecked: false },
+    { region: "麻豆區", isChecked: false },
+    { region: "佳里區", isChecked: false },
+    { region: "西港區", isChecked: false },
+    { region: "七股區", isChecked: false },
+    { region: "將軍區", isChecked: false },
+    { region: "學甲區", isChecked: false },
+    { region: "北門區", isChecked: false },
+    { region: "新營區", isChecked: false },
+    { region: "後壁區", isChecked: false },
+    { region: "白河區", isChecked: false },
+    { region: "東山區", isChecked: false },
+    { region: "六甲區", isChecked: false },
+    { region: "下營區", isChecked: false },
+    { region: "柳營區", isChecked: false },
+    { region: "鹽水區", isChecked: false },
+    { region: "善化區", isChecked: false },
+    { region: "大內區", isChecked: false },
+    { region: "山上區", isChecked: false },
+    { region: "新市區", isChecked: false },
+    { region: "安定區", isChecked: false },
+  ]);
 
-  const resetCategory = () => {
+  const [keyword, setKeyword] = useState("");
+  const [inputKeyword, setInputKeyword] = useState("");
+  let isOnComposition = false;
+  // const [isOnComposition, setIsOnComposition] = useState(false);
+
+  const initCheck = () => {
     let updateCategory = produce(category, (draft) => {
       category.forEach((item, index) => {
         if (searchParams.getAll("category").includes(item.title)) {
@@ -54,12 +98,36 @@ export default function SearchForm() {
       });
     });
 
-    // console.log(updateCategory);
+    let updateRegions = produce(regions, (draft) => {
+      regions.forEach((item, index) => {
+        if (searchParams.getAll("region").includes(item.region)) {
+          draft[index].isChecked = true;
+        } else {
+          draft[index].isChecked = false;
+        }
+      });
+    });
+    let updateKeyword = searchParams.get("keyword");
     setCategory(updateCategory);
+    setRegions(updateRegions);
+    setKeyword(updateKeyword);
+    setInputKeyword(updateKeyword)
+  };
+
+  const handleCompositionStart = (e) => {
+    //composition進行中，代表正在輸入中文
+
+    isOnComposition = true;
+  };
+
+  const handleCompositionEnd = (e) => {
+    isOnComposition = false;
+    setKeyword(e.target.value);
   };
 
   useEffect(() => {
-    resetCategory();
+    initCheck();
+    
   }, []);
 
   useEffect(() => {
@@ -67,14 +135,20 @@ export default function SearchForm() {
       .filter((item) => item.isChecked)
       .map((item) => item.title);
 
-    setFilterSpots(spotFilter(checkedCategoryTitles));
-  }, [category]);
+    const checkedRegionsTitles = regions
+      .filter((item) => item.isChecked)
+      .map((item) => item.region);
+
+    setFilterSpots(
+      spotFilter(checkedCategoryTitles, checkedRegionsTitles, keyword)
+    );
+  }, [category, regions, keyword]);
 
   return (
     <ClickAwayListener
       onClickAway={() => {
         console.log("clickaway");
-        resetCategory();
+        initCheck();
         setIsOpen(false);
       }}
     >
@@ -84,15 +158,75 @@ export default function SearchForm() {
             <SearchIcon />
             <input
               type="text"
+              value={inputKeyword}
               onFocus={() => {
                 setIsOpen(true);
               }}
+              onCompositionStart={handleCompositionStart}
+              onCompositionEnd={handleCompositionEnd}
+              onChange={(e) => {
+                console.log("not set keyword");
+                setInputKeyword(e.target.value);
+                if (!isOnComposition) {
+                  console.log("setkeyord");
+                  setKeyword(inputKeyword);
+                }
+              }}
             />
           </div>
-          <button>進階搜尋</button>
+
+          {isOpen ? (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                padding: "0 12px",
+                color: "#666",
+              }}
+            >
+              共
+              {category.some((item) => item.isChecked === true) ||
+              regions.some((item) => item.isChecked === true) ||
+              keyword.length > 0
+                ? filterSpots.length
+                : spots.length}
+              個結果
+            </div>
+          ) : (
+            <button
+              style={{
+                padding: "6px 12px",
+                borderRadius: "16px",
+                border: "none",
+                backgroundColor: "#1976d2",
+                color: "white",
+                cursor: "pointer",
+              }}
+              onClick={(e) => {
+                e.preventDefault();
+                setIsOpen(!isOpen);
+                const checkedRegions = regions
+                  .filter((item) => item.isChecked)
+                  .map((item) => item.region);
+
+                const checkedCategory = category
+                  .filter((item) => item.isChecked)
+                  .map((item) => item.title);
+                let params = {
+                  region: checkedRegions,
+                  category: checkedCategory,
+                  keyword: keyword,
+                };
+                setSearchParams(params);
+                //console.log(searchParams.getAll("category"));
+              }}
+            >
+              進階搜尋
+            </button>
+          )}
         </div>
 
-        {isOpen ? (
+        {isOpen && (
           <div className={style.searchDetail}>
             <div className="detail">
               <h4>主題類型</h4>
@@ -120,37 +254,102 @@ export default function SearchForm() {
             </div>
             <div className="detail">
               <h4>行政區域</h4>
-              <ul className="zipcode"></ul>
+              <ul className="region">
+                {regions.map((regionItem, index) => {
+                  return (
+                    <li
+                      key={index}
+                      onClick={(e) => {
+                        // e.stopPropagation();
+                        const updateRegions = produce(regions, (draft) => {
+                          draft[index].isChecked = !regionItem.isChecked;
+                        });
+                        setRegions(updateRegions);
+                      }}
+                    >
+                      <DetailButton
+                        title={regionItem.region}
+                        isChecked={regionItem.isChecked}
+                      />
+                    </li>
+                  );
+                })}
+              </ul>
             </div>
 
-            <button
+            <div
               style={{
-                padding: "6px 12px",
-                borderRadius: "10px",
-                border: "none",
-                backgroundColor: "#1976d2",
-                color: "white",
-              }}
-              onClick={(e) => {
-                e.preventDefault();
-                setIsOpen(false);
-                const checkedTitles = category
-                  .filter((item) => item.isChecked)
-                  .map((item) => item.title);
-                let params = { category: checkedTitles };
-                setSearchParams(params);
-                //console.log(searchParams.getAll("category"));
+                display: "flex",
+                justifyContent: "space-between",
+                padding: "10px 0 0 0",
+                borderTop: "1px solid #bbb",
               }}
             >
-              共有
-              {category.some((item) => item.isChecked === true)
-                ? filterSpots.length
-                : spots.length}
-              個結果
-            </button>
+              <button
+                style={{
+                  padding: "6px 12px",
+                  borderRadius: "10px",
+                  border: "none",
+                  backgroundColor: "transparent",
+                  color: "#666",
+                  cursor: "pointer",
+                }}
+                onClick={(e) => {
+                  // e.stopPropagation();
+                  e.preventDefault();
+                  const updateRegions = produce(regions, (draft) => {
+                    draft.forEach((item) => {
+                      item.isChecked = false;
+                    });
+                  });
+                  const updateCategory = produce(category, (draft) => {
+                    draft.forEach((item) => {
+                      item.isChecked = false;
+                    });
+                  });
+                  setRegions(updateRegions);
+                  setCategory(updateCategory);
+                }}
+              >
+                清除
+              </button>
+              <button
+                style={{
+                  padding: "6px 12px",
+                  borderRadius: "10px",
+                  border: "none",
+                  backgroundColor: "#1976d2",
+                  color: "white",
+                  cursor: "pointer",
+                }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setIsOpen(false);
+                  const checkedRegions = regions
+                    .filter((item) => item.isChecked)
+                    .map((item) => item.region);
+                  const checkedCategory = category
+                    .filter((item) => item.isChecked)
+                    .map((item) => item.title);
+                  let params = {
+                    region: checkedRegions,
+                    category: checkedCategory,
+                    keyword: keyword,
+                  };
+                  setSearchParams(params);
+                  //console.log(searchParams.getAll("category"));
+                }}
+              >
+                共有
+                {category.some((item) => item.isChecked === true) ||
+                regions.some((item) => item.isChecked === true) ||
+                keyword.length > 0
+                  ? filterSpots.length
+                  : spots.length}
+                個結果
+              </button>
+            </div>
           </div>
-        ) : (
-          <></>
         )}
       </form>
     </ClickAwayListener>

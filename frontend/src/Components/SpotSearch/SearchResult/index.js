@@ -3,6 +3,7 @@ import axios from "axios";
 import Grid from "@mui/material/Unstable_Grid2";
 import SpotLittleCard from "../../SpotLittleCard";
 import Typography from "@mui/material/Typography";
+
 import { SearchStateContext } from "../SearchContext";
 export default function SearchResult() {
   const { resultSpots } = useContext(SearchStateContext);
@@ -62,22 +63,6 @@ export default function SearchResult() {
 
   return (
     <>
-      <Typography
-        variant="h4"
-        color={"#444"}
-        sx={{ textAlign: "center", mt: "200px" }}
-      >
-        過濾景點
-      </Typography>
-      <span
-        style={{
-          backgroundColor: "#1976d2",
-          display: "block",
-          height: "4px",
-          width: "100px",
-          margin: "4px auto 20px auto",
-        }}
-      ></span>
       <Grid
         container
         spacing={{ xs: 2, md: 3 }}

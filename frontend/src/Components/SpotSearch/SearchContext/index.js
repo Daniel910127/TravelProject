@@ -12,10 +12,31 @@ export default function SearchContext(props) {
 
   const [filterSpots, setFilterSpots] = useState([]);
   const [resultSpots, setResultSpots] = useState([]);
-  const spotFilter = (checkedCategoryTitles,) => {
-    const newFilterSpots = spots.filter((spot) =>
-      checkedCategoryTitles.some((title) => spot.s_Category.includes(title))
-    );
+  const spotFilter = (
+    checkedCategoryTitles = [],
+    checkedRegionsTitles = [],
+    keyword = ""
+  ) => {
+    const newFilterSpots = spots.filter((spot) => {
+      const isCategoryMatch =
+        checkedCategoryTitles.length === 0
+          ? true
+          : checkedCategoryTitles.some((title) =>
+              spot.s_Category.includes(title)
+            );
+      // console.log('checkedRegionsTitles',checkedRegionsTitles)
+      const isRegionMatch =
+        checkedRegionsTitles.length === 0
+          ? true
+          : checkedRegionsTitles.some((region) =>
+              spot.s_District.includes(region)
+            );
+
+      const isKeywordMatch =
+        keyword.length === 0 ? true : spot.s_Name.includes(keyword);
+      return isCategoryMatch && isRegionMatch && isKeywordMatch;
+    });
+
     return newFilterSpots;
   };
 
@@ -30,16 +51,26 @@ export default function SearchContext(props) {
   }, []);
 
   useEffect(() => {
-    if (searchParams.getAll("category").length === 0) {
-      //有query
+    if (
+      searchParams.getAll("category").length === 0 &&
+      searchParams.getAll("region").length === 0 &&
+      searchParams.getAll("keyword").length === 0
+    ) {
+      //無query
       setFilterSpots(spots);
       setResultSpots(spots);
     } else {
-      const newFilterSpots = spotFilter(searchParams.getAll("category"));
+      const newFilterSpots = spotFilter(
+        searchParams.getAll("category"),
+        searchParams.getAll("region"),
+        searchParams.get("keyword")
+      );
+
+      console.log('newFilterSpots',newFilterSpots);
       setFilterSpots(newFilterSpots);
       setResultSpots(newFilterSpots);
     }
-  }, [spots,searchParams]);
+  }, [spots, searchParams]);
 
   /*---------------------------------------------------------------- */
 
