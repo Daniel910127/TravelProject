@@ -66,7 +66,7 @@ export default function SearchContext(props) {
         searchParams.get("keyword")
       );
 
-      console.log('newFilterSpots',newFilterSpots);
+      // console.log('newFilterSpots',newFilterSpots);
       setFilterSpots(newFilterSpots);
       setResultSpots(newFilterSpots);
     }

@@ -11,9 +11,9 @@ export default function SearchResult() {
   // const [loading, setLoading] = useState(false);
   const [pageNumber, setPageNumber] = useState(0);
   // let init = false;
-  console.log("result", resultSpots);
+  // console.log("result", resultSpots);
   useEffect(() => {
-    console.log("setitems");
+    // console.log("setitems");
     setItems([]);
     setPageNumber(0);
   }, [resultSpots]);

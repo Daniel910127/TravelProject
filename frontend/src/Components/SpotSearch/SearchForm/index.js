@@ -98,6 +98,8 @@ export default function SearchForm() {
       });
     });
 
+    // console.log("@@", keyword);
+
     let updateRegions = produce(regions, (draft) => {
       regions.forEach((item, index) => {
         if (searchParams.getAll("region").includes(item.region)) {
@@ -107,11 +109,14 @@ export default function SearchForm() {
         }
       });
     });
-    let updateKeyword = searchParams.get("keyword");
+    let updateKeyword = searchParams.get("keyword")
+      ? searchParams.get("keyword")
+      : "";
+
     setCategory(updateCategory);
     setRegions(updateRegions);
     setKeyword(updateKeyword);
-    setInputKeyword(updateKeyword)
+    setInputKeyword(updateKeyword);
   };
 
   const handleCompositionStart = (e) => {
@@ -127,7 +132,6 @@ export default function SearchForm() {
 
   useEffect(() => {
     initCheck();
-    
   }, []);
 
   useEffect(() => {
@@ -147,7 +151,7 @@ export default function SearchForm() {
   return (
     <ClickAwayListener
       onClickAway={() => {
-        console.log("clickaway");
+        // console.log("clickaway");
         initCheck();
         setIsOpen(false);
       }}
@@ -165,10 +169,10 @@ export default function SearchForm() {
               onCompositionStart={handleCompositionStart}
               onCompositionEnd={handleCompositionEnd}
               onChange={(e) => {
-                console.log("not set keyword");
+                // console.log("not set keyword");
                 setInputKeyword(e.target.value);
                 if (!isOnComposition) {
-                  console.log("setkeyord");
+                  // console.log("setkeyord");
                   setKeyword(inputKeyword);
                 }
               }}
