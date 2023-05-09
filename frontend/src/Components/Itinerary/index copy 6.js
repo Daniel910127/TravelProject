@@ -93,23 +93,8 @@ function Itinerary() {
         order: 5,
         day: 2,
       },
-      {
-        content: "台南景點F",
-        id: `666`,
-        order: 6,
-        day: 3,
-      },
-      {
-        content: "台南景點G",
-        id: `777`,
-        order: 7,
-        day: 3,
-      },
     ]);
   }, []);
-
-
-
 
   // 將數據按 day 分組
 
@@ -128,20 +113,13 @@ function Itinerary() {
     const { source, destination, draggableId } = event;
     console.log(event);
 
-    let items = Array.from(travelList);
+    const items = Array.from(travelList);
 
     if (!destination) {
       return;
     }
 
-    const sourceDay = parseInt(source.droppableId);
-    const destDay = parseInt(destination.droppableId);
-    const sourceIndex = source.index;
-    const destIndex = destination.index;
-
-    // const sourcetIndex = items.findIndex(item=>item.id=== destination.draggableId)
-
-    // const destinationIndex = 
+    // const destIndex = items destination.draggableId
 
     if (source.droppableId === destination.droppableId) {
       // If the item was moved within the same Droppable,
@@ -158,58 +136,18 @@ function Itinerary() {
     } else {
       // If the item was moved to a different Droppable,
       // update its day value and the travelList state.
-      // const sourceDroppableIndex = Number(source.droppableId);
-      // const destinationDroppableIndex = Number(destination.droppableId);
-      // // const items = Array.from(travelList);
-      // const [removed] = items.splice(source.index, 1);
-      // removed.day = destinationDroppableIndex;
-      // items.splice(destination.index, 0, removed);
-      // Move item to a different day
-      const sourceItems = Array.from(travelList).filter(
-        (item) => item.day === sourceDay
-      );
-      const [removed] = sourceItems.splice(sourceIndex, 1);
-      const destItems = Array.from(travelList).filter(
-        (item) => item.day === destDay
-      );
-      destItems.splice(destIndex, 0, removed);
-
-      // Update order of items in the source day
-      sourceItems.forEach((item, index) => {
-        item.day = sourceDay;
-
-      });
-
-      // Update order of items in the destination day
-      destItems.forEach((item, index) => {
-        item.day = destDay;
-
-      });
-
-      const newTravelList = travelList.filter(
-        (item) => item.day !== sourceDay && item.day !== destDay
-      );
-
-
-      console.log(newTravelList, sourceItems, destItems)
-
-      let tempItems = [...newTravelList, ...sourceItems, ...destItems];
-
-      let days = new Set(items.map(item => item.day));
-
-
-      items = [];
-
-      days.forEach(day => {
-        let dayArray = tempItems.filter(item => item.day === day);
-        items.push(...dayArray);
-      });
-      console.log('@@@@@', items);
+      const sourceDroppableIndex = Number(source.droppableId);
+      const destinationDroppableIndex = Number(destination.droppableId);
+      // const items = Array.from(travelList);
+      const [removed] = items.splice(source.index, 1);
+      removed.day = destinationDroppableIndex;
+      items.splice(destination.index, 0, removed);
+      // console.log(items);
     }
 
     // console.log("@itemdest", items[itemDestinationIndex]);
 
-
+    console.log("@preitems", items);
 
     const itemIndex = items.findIndex((item) => item.id === draggableId);
 
@@ -230,7 +168,7 @@ function Itinerary() {
 
     console.log("@items", items);
     items.sort((a, b) => a.order - b.order);
-
+    
     setTravelList(items);
   };
 
