@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import overview,spot,init_data,account,food,hotel
+from .views import overview,spot,init_data,account,food,hotel,travel_list
 
 
 urlpatterns = [
@@ -15,15 +15,15 @@ urlpatterns = [
     path('spot/', spot.spotWithPictureList, name="spot-image-list"),
     path('spot/<str:s_Name>/', spot.spot_detail_view, name="spot-detail"),
 
-
-
-
     path('food-list/', food.foodList, name="food-list"),
     path('food-image-list/', food.foodWithPictureList, name="food-image-list"),
     
     path('hotel-list/', hotel.hotelList, name="hotel-list"),
     path('hotel-image-list/', hotel.hotelWithPictureList, name="hotel-image-list"),
   
+    path('travel-list/', travel_list.travel_List, name="travel-list"),
+    path('travel-list-total/', travel_list.travel_List_Total, name="travel-list-total"),
+
   
     path('init-spotData/', init_data.spotInit, name="init-spotData"),
     path('init-spotPictureData/', init_data.spotPictureInit,

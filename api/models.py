@@ -47,9 +47,9 @@ class Travel_List(models.Model):
 class Travel_List_Detail(models.Model):
   tl_Id = models.AutoField( primary_key=True) 
   t_Id = models.ForeignKey(to="Travel_List", on_delete=models.CASCADE)  
-  s_Id =  models.ForeignKey(to="Spot", on_delete=models.CASCADE)  
-  f_Id =  models.ForeignKey(to="Food", on_delete=models.CASCADE)  
-  h_Id =  models.ForeignKey(to="Hotel", on_delete=models.CASCADE)  
+  s_Id =  models.ForeignKey(to="Spot",null=True,on_delete=models.CASCADE)  
+  f_Id =  models.ForeignKey(to="Food",null=True, on_delete=models.CASCADE)  
+  h_Id =  models.ForeignKey(to="Hotel",null=True, on_delete=models.CASCADE)  
   tl_Transport = models.CharField(max_length=20, null=False)#到該景點交通工具
   tl_StartTime = models.CharField(max_length=10, null=False,default='08:00')#景點起始時間
   tl_StayTime =  models.IntegerField(max_length=10, null=False,default=2)#停留時間
@@ -209,10 +209,10 @@ class s_Interest(models.Model):
 class Like_Record(models.Model):
   r_Id = models.AutoField( primary_key=True) 
   m_Id = models.ForeignKey(to="Member", on_delete=models.CASCADE) 
-  t_Id = models.ForeignKey(to="Travel_List", on_delete=models.CASCADE)  
-  s_Id =  models.ForeignKey(to="Spot", on_delete=models.CASCADE)  
-  f_Id =  models.ForeignKey(to="Food", on_delete=models.CASCADE)  
-  h_Id =  models.ForeignKey(to="Hotel", on_delete=models.CASCADE) 
+  t_Id = models.ForeignKey(to="Travel_List",null=True, on_delete=models.CASCADE)  
+  s_Id =  models.ForeignKey(to="Spot",null=True, on_delete=models.CASCADE)  
+  f_Id =  models.ForeignKey(to="Food",null=True, on_delete=models.CASCADE)  
+  h_Id =  models.ForeignKey(to="Hotel",null=True, on_delete=models.CASCADE) 
   r_LikeOrDisLike =models.IntegerField( null=False,default=0)
 
 

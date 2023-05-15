@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Account, Spot, Member, s_Interest, Food, Travel_List, Travel_List_Detail, Question, s_Picture,f_Picture, m_Picture,Hotel,h_Picture,Like_Record
+from .models import  Account, Spot, Member, s_Interest, Food, Travel_List, Travel_List_Detail, Question, s_Picture,f_Picture, m_Picture,Hotel,h_Picture,Like_Record
 
 
 class AccountSerializer(serializers.ModelSerializer):
@@ -99,6 +99,15 @@ class hotelWithPictureURLSerializer(serializers.ModelSerializer):
     class Meta:
         model = Hotel
         fields = '__all__'
+
+class Travel_List_TotalSerializer(serializers.ModelSerializer):
+    travel_list_detail = Travel_List_DetailSerializer(many=True, source='travel_list_detail_set')
+    queryset = Travel_List.objects.prefetch_related('t_Id').all()
+
+    class Meta:
+        model = Travel_List
+        fields = '__all__'
+
 
 class Like_RecordSerializer(serializers.ModelSerializer):
     class Meta:
