@@ -1,11 +1,5 @@
 from rest_framework import serializers
-from .models import Task, Account, Spot, Member, s_Interest, Food, Travel_List, Travel_List_Detail, Question, s_Picture,f_Picture, m_Picture,Hotel,h_Picture
-
-
-class TaskSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Task
-        fields = '__all__'
+from .models import Account, Spot, Member, s_Interest, Food, Travel_List, Travel_List_Detail, Question, s_Picture,f_Picture, m_Picture,Hotel,h_Picture,Like_Record
 
 
 class AccountSerializer(serializers.ModelSerializer):
@@ -104,4 +98,9 @@ class hotelWithPictureURLSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Hotel
+        fields = '__all__'
+
+class Like_RecordSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Like_Record
         fields = '__all__'

@@ -14,7 +14,7 @@ from selenium import webdriver
 # driver = webdriver.Chrome('chromedriver', options=options)
 # driver.implicitly_wait(10)
 import re
-from ..models import Task, Account, Spot, Member, s_Interest,Hotel, Food, Travel_List, Travel_List_Detail, Question, s_Picture, m_Picture,f_Picture,h_Picture
+from ..models import  Account, Spot, Member, s_Interest,Hotel, Food, Travel_List, Travel_List_Detail, Question, s_Picture, m_Picture,f_Picture,h_Picture
 
 img_url_dic = {}
 local_path = 'stre'
