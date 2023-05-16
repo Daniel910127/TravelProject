@@ -31,8 +31,8 @@ class Travel_List(models.Model):
   t_Name = models.CharField(max_length=10, null=False)#行程表名稱
   t_Description = models.CharField(max_length=10, null=False)#行程表簡介
   t_FormTime = models.DateTimeField(auto_now=True)#行程表建立時間
-  t_StartTime = models.CharField(max_length=100,null=False)#旅行開始日期
-  t_EndTime = models.CharField(max_length=100,null=False)#旅行結束日期
+  t_StartDate = models.CharField(max_length=100,null=False)#旅行開始日期
+  t_EndDate = models.CharField(max_length=100,null=False)#旅行結束日期
   t_StayDay = models.IntegerField(null=False, default='1')#旅行停留時間
   t_Privacy = models.CharField(max_length=2, null=False, default='n')#行程表公開與否
   t_Views =  models.IntegerField(null=False)#行程表瀏覽次數
@@ -50,7 +50,8 @@ class Travel_List_Detail(models.Model):
   s_Id =  models.ForeignKey(to="Spot",null=True,on_delete=models.CASCADE)  
   f_Id =  models.ForeignKey(to="Food",null=True, on_delete=models.CASCADE)  
   h_Id =  models.ForeignKey(to="Hotel",null=True, on_delete=models.CASCADE)  
-  tl_Transport = models.CharField(max_length=20, null=False)#到該景點交通工具
+  tl_TransportMode = models.CharField(max_length=20, null=False)#到該景點交通工具
+  tl_TransportTime = models.IntegerField(null=False) #交通工具移動時間
   tl_StartTime = models.CharField(max_length=10, null=False,default='08:00')#景點起始時間
   tl_StayTime =  models.IntegerField(max_length=10, null=False,default=2)#停留時間
   tl_Day = models.IntegerField(null=False,default=1)#該景點屬於第幾天
