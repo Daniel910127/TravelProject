@@ -25,7 +25,7 @@ SECRET_KEY = '-c1cg^-j%2l-e_-(0+ey030&yvz@^k$x@%w0pwgm#of%)qrqe+'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -43,6 +43,11 @@ INSTALLED_APPS = [
     
     'rest_framework',
     'corsheaders',
+    'base',
+    'userauths',
+    'taggit',
+    'crispy_forms',
+    'django_social_share'
 ]
 
 MIDDLEWARE = [
@@ -81,7 +86,7 @@ WSGI_APPLICATION = 'TravelProject.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 #凱皓的資料庫
-"""
+
 DATABASES = {
      'default': {
      'ENGINE': 'django.db.backends.mysql',
@@ -92,7 +97,7 @@ DATABASES = {
      'PORT': '3306',
      }
  }
-"""
+
 
 #能靖的資料庫
 '''
@@ -106,7 +111,7 @@ DATABASES = {
         'PORT':3306,
     }
 }
-'''
+
 
 #上鋒的資料庫
 DATABASES = {
@@ -121,7 +126,7 @@ DATABASES = {
         
     }
 }
-
+'''
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -161,12 +166,17 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+
+
+
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:3001",
     "http://127.0.0.1:3001",
     "http://127.0.0.1:3000",
 ]
+
+
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT=os.path.join(BASE_DIR,"media/")
