@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'TravelProject.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-
+'''
 #凱皓的資料庫
 
 DATABASES = {
@@ -96,7 +96,7 @@ DATABASES = {
 
 
 #能靖的資料庫
-'''
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -123,7 +123,18 @@ DATABASES = {
     }
 }
 '''
-
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'railway',
+        'USER': 'root',
+        'PASSWORD': 'Ha0aIJNVhR0IkHlHoVSe',
+        'HOST': 'containers-us-west-200.railway.app',
+        'PORT': 7921,
+        
+        
+    }
+}
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
