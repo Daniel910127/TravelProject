@@ -6,6 +6,7 @@ import Card from "./Card";
 import { nanoid } from "nanoid";
 import styled from "styled-components";
 import { useEffect } from "react";
+import usePrevious from "../../util/usePrevious";
 
 const DropContextWrapper = styled.div`
   font-family: sans-serif;
@@ -41,93 +42,138 @@ const WarningText = styled.p`
 `;
 
 function Itinerary() {
-  const [travelList, setTravelList] = useState([]);
-  // const [dayCount, setDayCount] = useState();
-  /* {
-    day1: {
-      items: [
-        {
-          content: "台南景點A",
-          id: nanoid(),
-          order: 1,
-        },
-        { content: "台南景點B", id: nanoid(), order: 2 },
-        { content: "台南景點C", id: nanoid(), order: 3 },
-        {
-          content: "台南景點D",
-          id: nanoid(),
-          order: 4,
-        },
-      ],
-    },
-    day2: {
-      items: [
-        {
-          content: "台南景點E",
-          id: nanoid(),
-          order: 5,
-        },
-      ],
-    },
-  } */
+  const [travelInfo, setTravelInfo] = useState({ travelList: [], startDate: Date.now(), dayCount: 0, startTime: {} });
+  // const prevTravelInfo = usePrevious(travelInfo)
+  const [days, setDays] = useState(['8/11', '8/12', '8/13']);
+
+  const [spotStartTime,setSpotStartTime] = useState()
+  // const [dayCount, setDayCount] = useState(3)
+
+  //每日開始時間startTime:{1:'28800'} (秒)
+  //旅遊開始日期startDate:'2023/5/12'
+
+
+
+  //  travelList:[
+  //    {
+  //      name: "台南景點A",
+  //      location:{lng:121.41666,lat:31.21666},
+  //      address:'台南xx路xx號'
+  //      id: `s_001`,
+  //      order: 1,
+  //      day: 1,
+  //      stayTime: 3600, (秒)
+  //      TransportMode: 1,
+  //      TransportTime:3600,  (秒)
+  //      photo:'imgurl'
+  //      
+  //    },]
+  //    
+
 
   useEffect(() => {
-    setTravelList([
+    setTravelInfo(
       {
-        content: "台南景點A",
-        id: `111`,
-        order: 1,
-        day: 1,
-      },
-      { content: "台南景點B", id: `222`, order: 2, day: 1 },
-      { content: "台南景點C", id: `333`, order: 3, day: 1 },
-      {
-        content: "台南景點D",
-        id: `444`,
-        order: 4,
-        day: 1,
-      },
-      {
-        content: "台南景點E",
-        id: `555`,
-        order: 5,
-        day: 2,
-      },
-      {
-        content: "台南景點F",
-        id: `666`,
-        order: 6,
-        day: 3,
-      },
-      {
-        content: "台南景點G",
-        id: `777`,
-        order: 7,
-        day: 3,
-      },
-    ]);
+        travelList: [
+          {
+            name: "台南景點A",
+            location: { lng: 121.41666, lat: 31.21666 },
+            address: '台南xx路xx號',
+            id: `s_001`,
+            order: 1,
+            day: 1, stayTime: 3600,
+            transportMode: 1,
+            transportTime: 1600,
+            photo: 'imgurl',
+            note: 'xxxxxxxxxxx'
+          },
+          {
+            name: "台南景點B", location: { lng: 121.41666, lat: 31.21666 }, address: '台南xx路xx號', id: `s_567`, order: 2, day: 1, stayTime: 3600,
+            transportMode: 1,
+            transportTime: 3600,
+            photo: 'imgurl',
+            note: 'xxxxxxxxxxx'
+          },
+          {
+            name: "台南景點C", location: { lng: 121.41666, lat: 31.21666 }, address: '台南xx路xx號', id: `s_111`, order: 3, day: 1, stayTime: 3600,
+            transportMode: 1,
+            transportTime: 3600,
+            photo: 'imgurl',
+            note: 'xxxxxxxxxxx'
+          },
+          {
+            name: "台南景點D", location: { lng: 121.41666, lat: 31.21666 }, address: '台南xx路xx號',
+            id: `s_346`,
+            order: 4,
+            day: 1, stayTime: 3600,
+            transportMode: 1,
+            transportTime: 3600,
+            photo: 'imgurl',
+            note: 'xxxxxxxxxxx'
+          },
+          {
+            name: "台南景點E", location: { lng: 121.41666, lat: 31.21666 }, address: '台南xx路xx號',
+            id: `s_235`,
+            order: 5,
+            day: 1, stayTime: 3600,
+            transportMode: 1,
+            transportTime: 3600,
+            photo: 'imgurl',
+            note: 'xxxxxxxxxxx'
+          },
+          {
+            name: "台南景點F", location: { lng: 121.41666, lat: 31.21666 }, address: '台南xx路xx號',
+            id: `s_136`,
+            order: 6,
+            day: 2, stayTime: 3600,
+            transportMode: 1,
+            transportTime: 3600,
+            photo: 'imgurl',
+            note: 'xxxxxxxxxxx'
+          },
+          {
+            name: "台南景點G", location: { lng: 121.41666, lat: 31.21666 }, address: '台南xx路xx號',
+            id: `s_777`,
+            order: 7,
+            day: 2, stayTime: 3600,
+            transportMode: 1,
+            transportTime: 3600,
+            photo: 'imgurl',
+            note: 'xxxxxxxxxxx'
+          },
+        ],
+        startDate: '2023/05/16',
+        dayCount: 4,
+        startTime: { 1: 28800, 2: 28800, 3: 28800, 4: 28800 },
+      }
+
+    );
+
   }, []);
 
 
 
+  const { travelList, dayCount, startTime ,startDate} = travelInfo;
 
-  // 將數據按 day 分組
 
-  // useEffect(travelList)
+  useEffect(() => {
+    const startDate = new Date(travelInfo.startDate);
+    // console.log(currentDate.getDate() + 1)
+    const updatedDays = [];
+    startDate.setDate(startDate.getDate() - 1);
+    for (let i = 1; i <= travelInfo.dayCount; i++) {
+      startDate.setDate(startDate.getDate() + 1);
+      updatedDays.push(`${startDate.getMonth() + 1}/${startDate.getDate()}`);
+    }
 
-  // const groupedData = travelList.reduce((acc, item) => {
-  //   const { day, ...rest } = item;
-  //   acc[day] = [...(acc[day] || []), rest];
-  //   return acc;
-  // }, {});
 
-  // console.log(groupedData);
-  // // const [totalScoreSum, setTotalScoreSum] = useState(0);
+    setDays(updatedDays);
+  }, [travelInfo.dayCount]);
+
 
   const onDragEnd = (event) => {
     const { source, destination, draggableId } = event;
-    console.log(event);
-
+    // console.log(event);
     let items = Array.from(travelList);
 
     if (!destination) {
@@ -139,32 +185,34 @@ function Itinerary() {
     const sourceIndex = source.index;
     const destIndex = destination.index;
 
-    // const sourcetIndex = items.findIndex(item=>item.id=== destination.draggableId)
 
-    // const destinationIndex = 
+
+    if (sourceDay === destDay && sourceIndex === destIndex) {
+      return;
+    }
 
     if (source.droppableId === destination.droppableId) {
-      // If the item was moved within the same Droppable,
-      // update the travelList state accordingly.
-      const droppableIndex = Number(source.droppableId);
 
-      const [removed] = items.splice(source.index, 1);
+      const destItems = Array.from(travelList).filter(
+        (item) => item.day === destDay
+      );
+      const [removed] = destItems.splice(sourceIndex, 1);
 
-      items.splice(destination.index, 0, removed);
+      destItems.splice(destIndex, 0, removed);
 
-      console.log(items);
-
-      // setTravelList(items);
+      const newTravelList = travelList.filter(
+        (item) => item.day !== destDay
+      );
+      // console.log(newTravelList, destItems)
+      let tempItems = [...newTravelList, ...destItems];
+      //day排序
+      items = [];
+      for (let day = 1; day <= dayCount; day++) {
+        let dayArray = tempItems.filter(item => item.day === day);
+        items.push(...dayArray);
+      }
     } else {
-      // If the item was moved to a different Droppable,
-      // update its day value and the travelList state.
-      // const sourceDroppableIndex = Number(source.droppableId);
-      // const destinationDroppableIndex = Number(destination.droppableId);
-      // // const items = Array.from(travelList);
-      // const [removed] = items.splice(source.index, 1);
-      // removed.day = destinationDroppableIndex;
-      // items.splice(destination.index, 0, removed);
-      // Move item to a different day
+
       const sourceItems = Array.from(travelList).filter(
         (item) => item.day === sourceDay
       );
@@ -177,7 +225,6 @@ function Itinerary() {
       // Update order of items in the source day
       sourceItems.forEach((item, index) => {
         item.day = sourceDay;
-
       });
 
       // Update order of items in the destination day
@@ -190,24 +237,14 @@ function Itinerary() {
         (item) => item.day !== sourceDay && item.day !== destDay
       );
 
-
-      console.log(newTravelList, sourceItems, destItems)
-
       let tempItems = [...newTravelList, ...sourceItems, ...destItems];
 
-      let days = new Set(items.map(item => item.day));
-
-
       items = [];
-
-      days.forEach(day => {
+      for (let day = 1; day <= dayCount; day++) {
         let dayArray = tempItems.filter(item => item.day === day);
         items.push(...dayArray);
-      });
-      console.log('@@@@@', items);
+      }
     }
-
-    // console.log("@itemdest", items[itemDestinationIndex]);
 
 
 
@@ -216,7 +253,7 @@ function Itinerary() {
     const preOrder = items[itemIndex - 1] ? items[itemIndex - 1].order : false;
 
     const nextOrder = items[itemIndex + 1] ? items[itemIndex + 1].order : false;
-    console.log(preOrder, nextOrder);
+    // console.log(preOrder, nextOrder);
     let updateOrder;
     if (!preOrder) {
       updateOrder = (0 + items[1].order) / 2;
@@ -228,34 +265,71 @@ function Itinerary() {
 
     items[itemIndex].order = updateOrder;
 
-    console.log("@items", items);
     items.sort((a, b) => a.order - b.order);
+    // console.log(items)
+    setTravelInfo({ ...travelInfo, travelList: items });
 
-    setTravelList(items);
+    //dropend ajax
+    const data = items.filter(item => item.id === draggableId)[0]
+    console.log('axiosData', data)
   };
 
-  const days = Array.from(new Set(travelList.map((item) => item.day))).sort();
-  // console.log("@days", days);
+
+
+
   return (
+
     <>
       <DragDropContext onDragEnd={onDragEnd}>
         <DropContextWrapper>
-          {days.map((day) => {
+          {days.map((day, dayIndex) => {
+
+            console.log(day)
+            const currTime = new Date(startDate)
+            
+            currTime.setDate(currTime.getDate() + dayIndex - 1)
+            
+            currTime.setTime(currTime.getTime() + startTime[dayIndex+1] * 1000)
+
+            const DroppableItems =  
+              travelList.filter((item) => item.day === dayIndex + 1)
+                .map((item, index) => {
+                  const startTime = new Date(currTime.getTime())
+                  
+                  console.log('starttime',item,startTime)
+
+                  currTime.setTime(currTime.getTime() + item.transportTime * 1000 + item.stayTime * 1000)
+                  return (
+                    <Card item={item} startTime={startTime} index={index} key={item.id} />
+                  )
+                })
+
             return (
               <SectionWrapper key={day}>
                 <h2>{day}</h2>
 
-                <StrictModeDroppable droppableId={`${day}`}>
+                <StrictModeDroppable droppableId={`${dayIndex + 1}`}>
                   {(provided, snapshot) => (
                     <DroppableContainer
                       ref={provided.innerRef}
                       {...provided.droppableProps}
                     >
-                      {travelList
-                        .filter((item) => item.day === day)
-                        .map((item, index) => (
-                          <Card item={item} index={index} key={item.id} />
-                        ))}
+
+                     {DroppableItems}
+                      {/* {
+                        travelList.filter((item) => item.day === dayIndex + 1)
+                          .map((item, index) => {
+                            const startTime = new Date(currTime.getTime())
+                            
+                            console.log('starttime',item,startTime)
+
+                            // const tempTime = currTime.getTime()
+
+                            currTime.setTime(currTime.getTime() + item.transportTime * 1000 + item.stayTime * 1000)
+                            return (
+                              <Card item={item} startTime={startTime} index={index} key={item.id} />
+                            )
+                          })} */}
                       {provided.placeholder}
                     </DroppableContainer>
                   )}

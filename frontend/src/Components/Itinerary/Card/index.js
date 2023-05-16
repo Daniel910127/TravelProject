@@ -27,7 +27,12 @@ const DragItem = styled.div`
 //   top: -20%;
 // `;
 
-const Card = ({ item, index }) => {
+const Card = ({ item , startTime, index ,count}) => {
+
+  const { name, order} = item
+  console.log(startTime)
+
+
   return (
     <Draggable draggableId={item.id} index={index}>
       {(provided, snapshot) => {
@@ -38,8 +43,13 @@ const Card = ({ item, index }) => {
             {...provided.draggableProps}
             {...provided.dragHandleProps}
           >
-            {item.content}
-            {item.order}
+            <h4>{name}{count}</h4>
+            <span>{`${startTime.getHours() } : ${startTime.getMinutes()}`}</span>
+            
+            {/* {order} */}
+            {/* {transportTime}
+            {transportMode} */}
+
             {/* <TimeAvatar>{item.score}</TimeAvatar> */}
           </DragItem>
         );
