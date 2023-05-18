@@ -21,10 +21,12 @@ def travel_List(request):
     return Response(serializer.data)
 
 
+
 @api_view(['GET'])
 def travel_List_Total(request):
-    queryset = Travel_List.objects.all()
-    serializer = Travel_List_TotalSerializer(queryset, many=True)
+    travel_lists = Travel_List.objects.filter(travel_list_detail__s_Id__isnull=False).distinct()
+    serializer = Travel_List_TotalSerializer(travel_lists, many=True)
     return Response(serializer.data)
+
 
 

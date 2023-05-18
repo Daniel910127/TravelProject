@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import  Account, Spot, Member, s_Interest, Food, Travel_List, Travel_List_Detail, Question, s_Picture,f_Picture, m_Picture,Hotel,h_Picture,Like_Record
+from .models import  Account, Spot, Member, s_Interest, Food, Travel_List, Travel_List_Detail, Question, s_Picture,f_Picture, m_Picture,Hotel,h_Picture,Like_Record,Travel_List_StartTime
 
 
 class AccountSerializer(serializers.ModelSerializer):
@@ -34,18 +34,6 @@ class FoodSerializer(serializers.ModelSerializer):
 class HotelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Hotel
-        fields = '__all__'
-
-
-class Travel_ListSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Travel_List
-        fields = '__all__'
-
-
-class Travel_List_DetailSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Travel_List_Detail
         fields = '__all__'
 
 
@@ -100,16 +88,38 @@ class hotelWithPictureURLSerializer(serializers.ModelSerializer):
         model = Hotel
         fields = '__all__'
 
-class Travel_List_TotalSerializer(serializers.ModelSerializer):
-    travel_list_detail = Travel_List_DetailSerializer(many=True, source='travel_list_detail_set')
-    queryset = Travel_List.objects.prefetch_related('t_Id').all()
+class Like_RecordSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Like_Record
+        fields = '__all__'
+class Travel_List_StartTimeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Travel_List_StartTime
+        fields = '__all__'
+class Travel_ListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Travel_List
+        fields = '__all__'
+class Travel_List_DetailSerializer(serializers.ModelSerializer):
+    spot_info = serializers.SerializerMethodField()
 
+    def get_spot_info(self, obj):
+        spot = obj.s_Id
+        food = obj.f_Id
+        if spot is not None:
+            return spotWithPictureURLSerializer(spot).data
+        if food is not None:
+            return foodWithPictureURLSerializer(food).data
+        return None
+    class Meta:
+        model = Travel_List_Detail
+        fields = '__all__'
+        
+class Travel_List_TotalSerializer(serializers.ModelSerializer):
+    travel_list_starttime = Travel_List_StartTimeSerializer(many=True, source='travel_list_starttime_set')
+    travel_list_detail = Travel_List_DetailSerializer(many=True, source='travel_list_detail_set')
     class Meta:
         model = Travel_List
         fields = '__all__'
 
 
-class Like_RecordSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Like_Record
-        fields = '__all__'

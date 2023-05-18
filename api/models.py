@@ -50,17 +50,23 @@ class Travel_List_Detail(models.Model):
   s_Id =  models.ForeignKey(to="Spot",null=True,on_delete=models.CASCADE)  
   f_Id =  models.ForeignKey(to="Food",null=True, on_delete=models.CASCADE)  
   h_Id =  models.ForeignKey(to="Hotel",null=True, on_delete=models.CASCADE)  
-  tl_TransportMode = models.CharField(max_length=20, null=False)#到該景點交通工具
-  tl_TransportTime = models.IntegerField(null=False) #交通工具移動時間
-  tl_StartTime = models.CharField(max_length=10, null=False,default='08:00')#景點起始時間
+  tl_TransportMode = models.CharField(max_length=20, null=True)#到該景點交通工具
+  tl_TransportTime = models.IntegerField(null=True) #交通工具移動時間
   tl_StayTime =  models.IntegerField(max_length=10, null=False,default=2)#停留時間
   tl_Day = models.IntegerField(null=False,default=1)#該景點屬於第幾天
   tl_Order = models.IntegerField(null=False)#該景點順序
-  tl_Notes = models.CharField(max_length=200, null=False)#景點小筆記
+  tl_Notes = models.CharField(max_length=200, null=True)#景點小筆記
   tl_score = models.IntegerField(null=False,default=0)#景點獲得分數
   
   def __str__(self):
     return self.tl_Notes
+
+class Travel_List_StartTime(models.Model):
+  tls_Id = models.AutoField( primary_key=True) 
+  t_Id = models.ForeignKey(to="Travel_List", on_delete=models.CASCADE)  
+  tls_Day = models.IntegerField(null=False,default=1) #該景點屬於第幾天
+  tls_StartTime = models.IntegerField(null=False,default=28800)#景點起始時間
+  
 
 #Spot database model
 class Spot(models.Model):
