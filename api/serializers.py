@@ -95,28 +95,37 @@ class Like_RecordSerializer(serializers.ModelSerializer):
 class Travel_List_StartTimeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Travel_List_StartTime
-        fields = '__all__'
+        fields = ('tls_Day', 'tls_StartTime')
 class Travel_ListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Travel_List
         fields = '__all__'
 class Travel_List_DetailSerializer(serializers.ModelSerializer):
-    spot_info = serializers.SerializerMethodField()
+    other_info = serializers.SerializerMethodField()             #forkey to spot/food/hotel
 
-    def get_spot_info(self, obj):
+    def get_other_info(self, obj):
         spot = obj.s_Id
         food = obj.f_Id
+        hotel = obj.h_Id
         if spot is not None:
             return spotWithPictureURLSerializer(spot).data
         if food is not None:
             return foodWithPictureURLSerializer(food).data
+        if hotel is not None:
+            return hotelWithPictureURLSerializer(hotel).data
         return None
     class Meta:
         model = Travel_List_Detail
         fields = '__all__'
         
 class Travel_List_TotalSerializer(serializers.ModelSerializer):
-    travel_list_starttime = Travel_List_StartTimeSerializer(many=True, source='travel_list_starttime_set')
+    startTime = serializers.SerializerMethodField()
+
+    def get_startTime(self, obj):
+        start_times = {}
+        for start_time in obj.travel_list_starttime_set.all():
+            start_times[str(start_time.tls_Day)] = start_time.tls_StartTime
+        return start_times
     travel_list_detail = Travel_List_DetailSerializer(many=True, source='travel_list_detail_set')
     class Meta:
         model = Travel_List

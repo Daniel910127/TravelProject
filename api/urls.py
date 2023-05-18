@@ -21,8 +21,7 @@ urlpatterns = [
     path('hotel-list/', hotel.hotelList, name="hotel-list"),
     path('hotel-image-list/', hotel.hotelWithPictureList, name="hotel-image-list"),
   
-    path('travel-list/', travel_list.travel_List, name="travel-list"),
-    path('travel-list-total/', travel_list.travel_List_Total, name="travel-list-total"),
+    path('travel-list/', travel_list.travel_List_Total, name="travel-list"),
 
   
     path('init-spotData/', init_data.spotInit, name="init-spotData"),
