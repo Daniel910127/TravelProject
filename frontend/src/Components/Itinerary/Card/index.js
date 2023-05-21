@@ -1,5 +1,8 @@
 import styled from "styled-components";
 import { Draggable } from "react-beautiful-dnd";
+import { TravelInfoStateContext } from "../index";
+import { useState, useContext } from "react";
+import StayTime from "./stayTime";
 
 const DragItem = styled.div`
   user-select: none;
@@ -27,11 +30,22 @@ const DragItem = styled.div`
 //   top: -20%;
 // `;
 
-const Card = ({ item , startTime, index ,count}) => {
+const Card = ({ item, startTime, index, count }) => {
+  const { name, order, stayTime, transportTime } = item;
+  const {travelInfo,setTravelInfo} = useContext(TravelInfoStateContext)
+  // console.log('@@@@',travelInfo);
+  // console.log(startTime)
+  const secToClock = {
+    getHour: function (sec) {
+      const hour = Math.floor(sec / 3600); // Divide seconds by 3600 to get the number of hours
+      return hour < 10 ? "0" + hour : hour.toString();
+    },
 
-  const { name, order} = item
-  console.log(startTime)
-
+    getMin: function (sec) {
+      const min = Math.floor((sec % 3600) / 60); // Calculate the remaining seconds after getting hours, divide by 60 to get minutes
+      return min < 10 ? "0" + min : min.toString();
+    },
+  };
 
   return (
     <Draggable draggableId={item.id} index={index}>
@@ -43,9 +57,21 @@ const Card = ({ item , startTime, index ,count}) => {
             {...provided.draggableProps}
             {...provided.dragHandleProps}
           >
-            <h4>{name}{count}</h4>
-            <span>{`${startTime.getHours() } : ${startTime.getMinutes()}`}</span>
-            
+            <h4>
+              {name}
+              {count}
+            </h4>
+            <span>{`${startTime.getHours()} : ${startTime.getMinutes()}`}</span>
+            <p>
+              停留時間:{secToClock.getHour(stayTime)} :{" "}
+              {secToClock.getMin(stayTime)}
+            </p>
+            <StayTime item={item}/>
+            <p>
+              到下個景點的時間:{secToClock.getHour(transportTime)} :
+              {secToClock.getMin(transportTime)}
+            </p>
+
             {/* {order} */}
             {/* {transportTime}
             {transportMode} */}
