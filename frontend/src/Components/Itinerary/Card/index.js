@@ -3,6 +3,9 @@ import { Draggable } from "react-beautiful-dnd";
 import { TravelInfoStateContext } from "../index";
 import { useState, useContext } from "react";
 import StayTime from "./stayTime";
+import Box from "@mui/material/Box";
+
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 const DragItem = styled.div`
   user-select: none;
@@ -32,7 +35,7 @@ const DragItem = styled.div`
 
 const Card = ({ item, startTime, index, count }) => {
   const { name, order, stayTime, transportTime } = item;
-  const {travelInfo,setTravelInfo} = useContext(TravelInfoStateContext)
+  const { travelInfo, setTravelInfo } = useContext(TravelInfoStateContext)
   // console.log('@@@@',travelInfo);
   // console.log(startTime)
   const secToClock = {
@@ -57,20 +60,27 @@ const Card = ({ item, startTime, index, count }) => {
             {...provided.draggableProps}
             {...provided.dragHandleProps}
           >
-            <h4>
-              {name}
-              {count}
-            </h4>
-            <span>{`${startTime.getHours()} : ${startTime.getMinutes()}`}</span>
-            <p>
-              停留時間:{secToClock.getHour(stayTime)} :{" "}
-              {secToClock.getMin(stayTime)}
-            </p>
-            <StayTime item={item}/>
-            <p>
-              到下個景點的時間:{secToClock.getHour(transportTime)} :
-              {secToClock.getMin(transportTime)}
-            </p>
+            <Box>
+
+              <h4>
+                {name}
+                {count}
+              </h4>
+              <span>{`${startTime.getHours()} : ${startTime.getMinutes()}`}</span>
+              <p>
+                停留時間:{secToClock.getHour(stayTime)} :{" "}
+                {secToClock.getMin(stayTime)}
+              </p>
+              <StayTime item={item} startTime={startTime} />
+              <p>
+                到下個景點的時間:{secToClock.getHour(transportTime)} :
+                {secToClock.getMin(transportTime)}
+              </p>
+
+              <DeleteOutlineIcon/>
+            </Box>
+
+            <Box>111</Box>
 
             {/* {order} */}
             {/* {transportTime}

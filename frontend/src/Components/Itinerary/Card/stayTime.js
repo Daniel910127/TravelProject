@@ -9,13 +9,15 @@ import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import { Height } from "@mui/icons-material";
-import produce from "immer";
+import produce, { setAutoFreeze, setUseProxies } from "immer";
 
 import { TravelInfoStateContext } from "../index";
 import { useState, useContext } from "react";
 
 import secToClock from "../../../util/secToClock";
 
+setAutoFreeze(false);
+setUseProxies(true);
 const minutes = [
   0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
   22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
@@ -37,10 +39,13 @@ const MenuProps = {
 };
 
 export default function StayTime(props) {
-  const { item } = props;
+  const { item, startTime } = props;
   const { travelInfo, setTravelInfo } = useContext(TravelInfoStateContext);
+  const startTimer = `${startTime.getHours()} : ${startTime.getMinutes()}`
+  const endTime = new Date(startTime.getTime() + item.stayTime * 1000)
+  const endTimer = `${endTime.getHours()} : ${endTime.getMinutes()}`
 
-  console.log(travelInfo.travelList, item);
+  // console.log('@@@@@@@', travelInfo.travelList, item);
 
   // console.log(hour);
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -51,15 +56,24 @@ export default function StayTime(props) {
   };
 
   const [hour, setHour] = React.useState(
-    secToClock.getHour(travelInfo.travelList[item.order - 1].stayTime)
+    secToClock.getHour(travelInfo.travelList.find(i => {
+      // console.log(i.id, item.id)
+      return i.id === item.id
+    }).stayTime
+    )
   );
+
+
 
   const handleHourChange = (event) => {
     setHour(event.target.value);
   };
 
   const [min, setMin] = React.useState(
-    secToClock.getMin(travelInfo.travelList[item.order - 1].stayTime)
+    secToClock.getMin(travelInfo.travelList.find(i => {
+      // console.log(i.id, item.id)
+      return i.id === item.id
+    }).stayTime)
   );
 
   const handleMinChange = (event) => {
@@ -78,13 +92,25 @@ export default function StayTime(props) {
     );
   };
 
+  const handleCancelChangeStayTime = () => {
+    setMin(secToClock.getMin(travelInfo.travelList.find(i => {
+      // console.log(i.id, item.id)
+      return i.id === item.id
+    }).stayTime))
+
+    setHour(secToClock.getHour(travelInfo.travelList.find(i => {
+      // console.log(i.id, item.id)
+      return i.id === item.id
+    }).stayTime))
+  }
+
   const handleClose = () => setOpen(false);
 
   const id = open ? "simple-popper" : undefined;
 
   return (
     <Stack direction="row" spacing={1}>
-      <Chip aria-describedby={id} type="button" onClick={handleClick} />
+      <Chip label={`${startTimer} ~ ${endTimer}`} aria-describedby={id} type="button" onClick={handleClick} />
 
       <Modal
         open={open}
@@ -164,7 +190,10 @@ export default function StayTime(props) {
               justifyContent: "space-between",
             }}
           >
-            <Button color="secondary" onClick={handleClick}>
+            <Button color="secondary" onClick={() => {
+              handleClick()
+              handleCancelChangeStayTime()
+            }}>
               取消
             </Button>
             <Button
