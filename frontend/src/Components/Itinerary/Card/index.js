@@ -4,9 +4,9 @@ import { TravelInfoStateContext } from "../index";
 import { useState, useContext } from "react";
 import StayTime from "./stayTime";
 import Box from "@mui/material/Box";
-
+import IconButton from '@mui/material/IconButton';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-
+import produce, { setAutoFreeze, setUseProxies } from "immer";
 const DragItem = styled.div`
   user-select: none;
   min-height: 50px;
@@ -36,6 +36,8 @@ const DragItem = styled.div`
 const Card = ({ item, startTime, index, count }) => {
   const { name, order, stayTime, transportTime } = item;
   const { travelInfo, setTravelInfo } = useContext(TravelInfoStateContext)
+
+  const [hover, setHover] = useState(false)
   // console.log('@@@@',travelInfo);
   // console.log(startTime)
   const secToClock = {
@@ -59,6 +61,8 @@ const Card = ({ item, startTime, index, count }) => {
             snapshot={snapshot}
             {...provided.draggableProps}
             {...provided.dragHandleProps}
+            onMouseEnter={() => { setHover(true) }}
+            onMouseLeave={() => { setHover(false) }}
           >
             <Box>
 
@@ -77,7 +81,20 @@ const Card = ({ item, startTime, index, count }) => {
                 {secToClock.getMin(transportTime)}
               </p>
 
-              <DeleteOutlineIcon/>
+              <IconButton aria-label="delete" color="primary" onClick={() => {
+                console.log('kill ',item);
+                /* ajax delete travelList item  */
+                const newTravelList = produce((draft) => {
+                  const targetItemIndex = draft.travelList.findIndex((i) => i.id === item.id);
+                  draft.travelList.splice(targetItemIndex, 1);
+                }
+                )
+
+                setTravelInfo(newTravelList);
+              }} sx={{ visibility: hover ? 'visible' : 'hidden', opacity: hover ? '1' : '0', transition: 'all .2s ease-in-out' }}>
+                <DeleteOutlineIcon />
+              </IconButton>
+
             </Box>
 
             <Box>111</Box>

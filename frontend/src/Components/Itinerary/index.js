@@ -6,6 +6,7 @@ import Card from "./Card";
 import { nanoid } from "nanoid";
 import styled from "styled-components";
 import { useEffect } from "react";
+import Header from "./Header";
 
 const TravelInfoStateContext = createContext({
   setTravelInfo: () => { },
@@ -290,6 +291,9 @@ function Itinerary() {
 
   return (
     <TravelInfoStateContext.Provider value={{ travelInfo, setTravelInfo }}>
+
+      <Header />
+
       <DragDropContext onDragEnd={onDragEnd}>
         <DropContextWrapper>
           {days.map((day, dayIndex) => {
