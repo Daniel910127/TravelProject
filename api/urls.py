@@ -6,10 +6,9 @@ urlpatterns = [
     path('', overview.apiOverview, name="api-overview"),
 
 
-
     path('account-list/', account.accountList, name="account-list"),
     path('account-create/', account.create_account, name="account-create"),
-    path('account-login/', account.login_account, name="account-login"),
+    path('account-login/', account.account_login, name="account-login"),
 
     path('spot-list/', spot.spotList, name="spot-list"),
     path('spot/', spot.spotWithPictureList, name="spot-image-list"),
