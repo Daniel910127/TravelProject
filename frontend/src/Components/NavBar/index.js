@@ -12,12 +12,14 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
+import { useSession } from '../../contexts/SessionContext';
 
 import { styled, alpha } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
 import InputBase from "@mui/material/InputBase";
 import ModeOfTravelIcon from "@mui/icons-material/ModeOfTravel";
 import { NavLink } from "react-router-dom";
+
 /* const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -68,9 +70,20 @@ const pages = [
   { linkName: "找住宿", linkURL: "/searchHotel" },
   { linkName: "規劃行程", linkURL: "/規劃" },
 ];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+
+const settings = [
+  { linkName: "Profile", linkURL: "/profile", click:"#" },
+  { linkName: "Account", linkURL: "/account", click:"#" },
+  { linkName: "Dashboard", linkURL: "/dashboard", click:"#" },
+  // { linkName: "Logout", linkURL: "#" , click:"handleLogout"}
+];
+const setting1 = [
+  { linkName: "login", linkURL: "/login" },
+  { linkName: "register", linkURL: "/register" }
+];
 
 function NavBar() {
+  const { a_Id, m_Id, a_Account, a_Level,logout } = useSession();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -89,7 +102,11 @@ function NavBar() {
     setAnchorElUser(null);
   };
 
+  const handleLogout = () => {
+    logout();
+  };
   return (
+    
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
@@ -112,6 +129,7 @@ function NavBar() {
             }}
           >
             台南走透透
+            
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -185,7 +203,7 @@ function NavBar() {
                   marginRight: "1rem",
                 }}
               >
-                <Typography textAlign="center">{page.linkName}</Typography>
+                <Typography textAlign="center">{page.linkName} </Typography>
 
                 {/* <Button
                   
@@ -213,7 +231,52 @@ function NavBar() {
           {/* <Box sx={{ display: { md: "none", xs: "block" }, mr: 2 }}>
            
           </Box> */}
+          {a_Account?(
+            <Box sx={{ flexGrow: 0, display: "flex" }}>
+            <IconButton
+              size="large"
+              color="inherit"
+              sx={{ display: { md: "none", xs: "block" } }}
+            >
+              <SearchIcon />
+            </IconButton>
 
+            <Tooltip title="Open settings">
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                { (
+                <div>
+                  {a_Account}
+                </div>
+              )}
+              </IconButton>
+            </Tooltip>
+            <Menu
+              sx={{ mt: "45px" }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+              {settings.map((setting) => (
+                <MenuItem key={setting.linkURL} onClick={handleCloseUserMenu}>
+                  <Typography textAlign="center">{setting.linkName}</Typography>
+                </MenuItem>
+              ))}
+              <MenuItem onClick={handleLogout}>logout</MenuItem>
+            </Menu>
+          </Box>
+        
+          ):( 
           <Box sx={{ flexGrow: 0, display: "flex" }}>
             <IconButton
               size="large"
@@ -244,16 +307,21 @@ function NavBar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+              {setting1.map((setting) => (
+                <MenuItem key={setting.linkURL} onClick={handleCloseNavMenu}>
+                  <NavLink to={setting.linkURL}>
+                    <Typography textAlign="center">{setting.linkName}</Typography>
+                  </NavLink>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
-        </Toolbar>
+          )}
+  </Toolbar>
       </Container>
     </AppBar>
-  );
+);
 }
 export default NavBar;
+
+
