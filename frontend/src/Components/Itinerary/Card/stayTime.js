@@ -41,9 +41,9 @@ const MenuProps = {
 export default function StayTime(props) {
   const { item, startTime } = props;
   const { travelInfo, setTravelInfo } = useContext(TravelInfoStateContext);
-  const startTimer = `${startTime.getHours()} : ${startTime.getMinutes()}`
-  const endTime = new Date(startTime.getTime() + item.stayTime * 1000)
-  const endTimer = `${endTime.getHours()} : ${endTime.getMinutes()}`
+  const startTimer = `${startTime.getHours()} : ${startTime.getMinutes()}`;
+  const endTime = new Date(startTime.getTime() + item.stayTime * 1000);
+  const endTimer = `${endTime.getHours()} : ${endTime.getMinutes()}`;
 
   // console.log('@@@@@@@', travelInfo.travelList, item);
 
@@ -56,24 +56,25 @@ export default function StayTime(props) {
   };
 
   const [hour, setHour] = React.useState(
-    secToClock.getHour(travelInfo.travelList.find(i => {
-      // console.log(i.id, item.id)
-      return i.id === item.id
-    }).stayTime
+    secToClock.getHour(
+      travelInfo.travelList.find((i) => {
+        // console.log(i.id, item.id)
+        return i.id === item.id;
+      }).stayTime
     )
   );
-
-
 
   const handleHourChange = (event) => {
     setHour(event.target.value);
   };
 
   const [min, setMin] = React.useState(
-    secToClock.getMin(travelInfo.travelList.find(i => {
-      // console.log(i.id, item.id)
-      return i.id === item.id
-    }).stayTime)
+    secToClock.getMin(
+      travelInfo.travelList.find((i) => {
+        // console.log(i.id, item.id)
+        return i.id === item.id;
+      }).stayTime
+    )
   );
 
   const handleMinChange = (event) => {
@@ -93,16 +94,24 @@ export default function StayTime(props) {
   };
 
   const handleCancelChangeStayTime = () => {
-    setMin(secToClock.getMin(travelInfo.travelList.find(i => {
-      // console.log(i.id, item.id)
-      return i.id === item.id
-    }).stayTime))
+    setMin(
+      secToClock.getMin(
+        travelInfo.travelList.find((i) => {
+          // console.log(i.id, item.id)
+          return i.id === item.id;
+        }).stayTime
+      )
+    );
 
-    setHour(secToClock.getHour(travelInfo.travelList.find(i => {
-      // console.log(i.id, item.id)
-      return i.id === item.id
-    }).stayTime))
-  }
+    setHour(
+      secToClock.getHour(
+        travelInfo.travelList.find((i) => {
+          // console.log(i.id, item.id)
+          return i.id === item.id;
+        }).stayTime
+      )
+    );
+  };
 
   const handleClose = () => setOpen(false);
 
@@ -110,7 +119,12 @@ export default function StayTime(props) {
 
   return (
     <Stack direction="row" spacing={1}>
-      <Chip label={`${startTimer} ~ ${endTimer}`} aria-describedby={id} type="button" onClick={handleClick} />
+      <Chip
+        label={`${startTimer} ~ ${endTimer}`}
+        aria-describedby={id}
+        type="button"
+        onClick={handleClick}
+      />
 
       <Modal
         open={open}
@@ -190,10 +204,13 @@ export default function StayTime(props) {
               justifyContent: "space-between",
             }}
           >
-            <Button color="secondary" onClick={() => {
-              handleClick()
-              handleCancelChangeStayTime()
-            }}>
+            <Button
+              color="secondary"
+              onClick={() => {
+                handleClick();
+                handleCancelChangeStayTime();
+              }}
+            >
               取消
             </Button>
             <Button

@@ -173,7 +173,7 @@ function Itinerary() {
           note: "xxxxxxxxxxx",
         },
       ],
-      startDate: "2023/05/16",
+      startDate: "2023-05-18",
       dayCount: 4,
       startTime: { 1: 28800, 2: 28800, 3: 28800, 4: 28800 },
     });

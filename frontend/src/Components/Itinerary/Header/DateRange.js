@@ -1,30 +1,17 @@
-import React, { useState } from 'react';
-import { DatePicker } from 'antd';
+import React, { useContext, useState } from "react";
+import { DatePicker } from "antd";
+import { TravelInfoStateContext } from "..";
+import produce from "immer";
+import * as dayjs from "dayjs";
+import 'react-dates/initialize';
+import { DateRangePicker, SingleDatePicker, DayPickerRangeController } from 'react-dates';
+import 'react-dates/lib/css/_datepicker.css';
 
 const CustomRangePicker = () => {
-  const [pickerOpen, setPickerOpen] = useState(false);
-
-  const handleButtonClick = () => {
-    setPickerOpen(!pickerOpen);
-  };
-
-  const handlePickerChange = (dates, dateStrings) => {
-    // 处理选择日期的逻辑
-    console.log('Selected Dates:', dates);
-    console.log('Selected Date Strings:', dateStrings);
-    setPickerOpen(false);
-  };
+  
 
   return (
-    <>
-      <DatePicker.RangePicker
-        open={pickerOpen}
-        onChange={handlePickerChange}
-        bordered={false}
-        allowClear={false}
-      />
-      <button onClick={handleButtonClick}>Select Range</button>
-    </>
+    <DateRangePicker/>
   );
 };
 
