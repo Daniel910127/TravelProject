@@ -10,28 +10,17 @@ const DateRangePickerExample = () => {
   const { travelInfo, setTravelInfo } = useContext(TravelInfoStateContext);
 
   const { travelList, startDate, dayCount, startTime } = travelInfo;
-
-  // const nowStartDate =
-  // const nowEndDate = ;
-
-  // console.log(nowStartDate, nowEndDate);
-
-  const maxDay = travelList.reduce((max, item) => {
-    return item.day > max ? item.day : max;
-  }, 0);
-
+  console.log("@@", startDate);
   const [focusedInput, setFocusedInput] = useState(null);
 
-  const [nowDate, setNowDate] = useState({});
+  const [nowStartDate, setNowStartDate] = useState();
+
+  const [nowEndDate, setNowEndDate] = useState();
 
   useEffect(() => {
-    setNowDate({
-      nowStartDate: moment(startDate),
-      nowEndDate: moment(moment(startDate).add(dayCount, "days")),
-    });
-  }, [startDate, dayCount]);
-
-  // const [nowEndDate, setNowEndDate] = useState();
+    setNowStartDate(moment(startDate));
+    setNowEndDate(moment(startDate).add(dayCount - 1, "days"));
+  }, [startDate]);
 
   // console.log(
   //   "nowe and end",
@@ -42,15 +31,12 @@ const DateRangePickerExample = () => {
   // );
 
   const handleDatesChange = ({ startDate, endDate }) => {
-    console.log("@@@!!", startDate, endDate);
-    // setNowStartDate(null);
-    // setNowEndDate(null);
-    setNowDate({
-      nowStartDate: startDate,
-      nowEndDate: endDate,
-    });
+    // console.log(startDate, endDate);
+    setNowStartDate(startDate);
+    setNowEndDate(endDate);
 
     if (startDate && endDate) {
+      
       setTravelInfo(
         produce((draft) => {
           draft.startDate = startDate.format("YYYY-MM-DD");
@@ -66,7 +52,6 @@ const DateRangePickerExample = () => {
     //   // setNowStartDate(null);
     //   setNowEndDate(null);
     // }
-    // setFocusedInput(null);
     setFocusedInput(focusedInput);
   };
 
@@ -75,13 +60,13 @@ const DateRangePickerExample = () => {
       <DateRangePicker
         startDateId="start_date_id"
         endDateId="end_date_id"
-        startDate={nowDate.nowStartDate}
-        endDate={nowDate.nowEndDate}
+        startDate={nowStartDate}
+        endDate={nowEndDate}
         onDatesChange={handleDatesChange}
         focusedInput={focusedInput}
         onFocusChange={handleFocusChange}
-        // required
-        minimumNights={maxDay -1} // 限制日期範圍在三天或以上
+        required
+        minimumNights={5} // 限制日期範圍在三天或以上
       />
     </div>
   );

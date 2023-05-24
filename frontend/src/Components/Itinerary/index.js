@@ -294,6 +294,8 @@ function Itinerary() {
 
       <Header />
 
+      {/* <Days></Days> */}
+
       <DragDropContext onDragEnd={onDragEnd}>
         <DropContextWrapper>
           {days.map((day, dayIndex) => {
