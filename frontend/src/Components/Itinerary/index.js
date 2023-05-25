@@ -7,6 +7,7 @@ import { nanoid } from "nanoid";
 import styled from "styled-components";
 import { useEffect } from "react";
 import Header from "./Header";
+import Days from "./Days";
 
 const TravelInfoStateContext = createContext({
   setTravelInfo: () => { },
@@ -294,7 +295,7 @@ function Itinerary() {
 
       <Header />
 
-      {/* <Days></Days> */}
+      <Days></Days>
 
       <DragDropContext onDragEnd={onDragEnd}>
         <DropContextWrapper>
