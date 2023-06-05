@@ -6,9 +6,8 @@ import DateRangePickerExample from './DateRange'
 export default function Header() {
     const { travelInfo, setTravelInfo } = useContext(TravelInfoStateContext)
     return (
-        <div>Header
+        <div>
         <DateRangePickerExample/>
-
         </div>
     )
 }

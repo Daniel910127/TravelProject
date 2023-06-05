@@ -7,7 +7,7 @@ import NotFound from "../Views/NotFound";
 import Spot from "../Views/Spot";
 import Register from "../Views/Register";
 import SearchSpot from "../Views/SearchSpot";
-import Itinerary from "../Components/Itinerary";
+import Itinerary from "../Views/Itinerary";
 export default function TravelRouter() {
   return (
     <Routes>
@@ -18,10 +18,11 @@ export default function TravelRouter() {
       {/* <Route index element={<Redirect to="/film/nowplaying" />} />  */}
       {/* <Route path="/film/nowplaying" element={<NowPlaying />} />
         <Route path="comingsoon" element={<Comingsoon />} /> */}
-      <Route path="/itinerary" element={<Itinerary />} />
+      
       <Route path="/spot/:s_Name" element={<Spot />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/itinerary" element={<Itinerary />} />
 
       {/* <Route path="*" element={<Navigate to="/film"/>} /> */}
       <Route path="/" element={<Redirect to="/home" />} />

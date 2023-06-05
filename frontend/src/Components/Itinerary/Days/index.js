@@ -14,10 +14,13 @@ import {
 import { useEffect } from "react";
 
 const DaysWrapper = styled.div`
-  position: fixed;
+  width: 100px;
   height: 100vh;
 `;
 
+const DaysContainer = styled.div`
+  position: fixed;
+`;
 export default function Days() {
   const { travelInfo, setTravelInfo, days, setDays } = useContext(
     TravelInfoStateContext
@@ -39,27 +42,55 @@ export default function Days() {
     };
   }, []);
 
+  const scrollToWithContainer = () => {
+    let goToContainer = new Promise((resolve, reject) => {
+      Events.scrollEvent.register("end", () => {
+        resolve();
+        Events.scrollEvent.remove("end");
+      });
+
+      scroller.scrollTo("scroll-container", {
+        duration: 800,
+        delay: 0,
+        smooth: "easeInOutQuart",
+      });
+    });
+
+    goToContainer.then(() =>
+      scroller.scrollTo("scroll-container-second-element", {
+        duration: 800,
+        delay: 0,
+        smooth: "easeInOutQuart",
+        containerId: "scroll-container",
+      })
+    );
+  };
+
   return (
     <DaysWrapper>
-      <ul>
-        {days.map((day) => {
-          return (
-            <li key={day}>
-              <Link
-                activeClass="active"
-                className="days"
-                to={day}
-                spy={true}
-                smooth={true}
-                duration={500}
-                activeStyle={{ color: "red" }}
-              >
-                {day}
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
+      <DaysContainer>
+        <ul>
+          {days.map((day) => {
+            return (
+              <li key={day}>
+                <Link
+                  activeClass="active"
+                  className="days"
+                  to={day}
+                  spy={true}
+                  smooth={true}
+                  duration={500}
+                  offset={-100}
+                  activeStyle={{ color: "red" }}
+                  // containerId={"planScroll"}
+                >
+                  {day}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </DaysContainer>
     </DaysWrapper>
   );
 }
