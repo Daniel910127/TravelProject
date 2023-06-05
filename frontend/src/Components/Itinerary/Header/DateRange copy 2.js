@@ -42,7 +42,7 @@ const DateRangePickerExample = () => {
   // );
 
   const handleDatesChange = ({ startDate, endDate }) => {
-    // console.log("@@@!!", startDate, endDate);
+    console.log("@@@!!", startDate, endDate);
     // setNowStartDate(null);
     // setNowEndDate(null);
     setNowDate({

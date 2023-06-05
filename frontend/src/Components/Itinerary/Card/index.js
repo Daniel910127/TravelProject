@@ -19,19 +19,6 @@ const DragItem = styled.div`
   position: relative;
 `;
 
-// const TimeAvatar = styled.div`
-//   width: 24px;
-//   height: 24px;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   border-radius: 999px;
-//   background-color: #e38b29;
-//   color: black;
-//   position: absolute;
-//   right: 2%;
-//   top: -20%;
-// `;
 
 const Card = ({ item, startTime, index, count }) => {
   const { name, order, stayTime, transportTime } = item;
@@ -82,7 +69,7 @@ const Card = ({ item, startTime, index, count }) => {
               </p>
 
               <IconButton aria-label="delete" color="primary" onClick={() => {
-                console.log('kill ',item);
+                // console.log('kill ',item);
                 /* ajax delete travelList item  */
                 const newTravelList = produce((draft) => {
                   const targetItemIndex = draft.travelList.findIndex((i) => i.id === item.id);

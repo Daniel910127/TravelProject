@@ -8,16 +8,27 @@ import styled from "styled-components";
 import { useEffect } from "react";
 import Header from "./Header";
 import Days from "./Days";
-
+import {
+  Link,
+  DirectLink,
+  Element as ScrollElement,
+  Events,
+  animateScroll as scroll,
+  scrollSpy,
+  scroller,
+} from "react-scroll";
 const TravelInfoStateContext = createContext({
-  setTravelInfo: () => { },
+  setTravelInfo: () => {},
   travelInfo: {},
+  days: [],
+  setDays: () => {},
 });
 
 const DropContextWrapper = styled.div`
   font-family: sans-serif;
   display: flex;
-  align-items: stretch;
+  flex-direction: column;
+  ${"" /* align-items: stretch; */}
   justify-content: center;
   gap: 17px;
   min-height: 500px;
@@ -47,6 +58,10 @@ const WarningText = styled.p`
   color: red;
 `;
 
+const PlanWrapper = styled.div`
+  
+`
+
 function Itinerary() {
   const [travelInfo, setTravelInfo] = useState({
     travelList: [],
@@ -55,29 +70,10 @@ function Itinerary() {
     startTime: {},
   });
   // const prevTravelInfo = usePrevious(travelInfo)
-  const [days, setDays] = useState(["8/11", "8/12", "8/13"]);
+  const [days, setDays] = useState([]);
 
   const [spotStartTime, setSpotStartTime] = useState();
-  // const [dayCount, setDayCount] = useState(3)
 
-  //每日開始時間startTime:{1:'28800'} (秒)
-  //旅遊開始日期startDate:'2023/5/12'
-
-  //  travelList:[
-  //    {
-  //      name: "台南景點A",
-  //      location:{lng:121.41666,lat:31.21666},
-  //      address:'台南xx路xx號'
-  //      id: `s_001`,
-  //      order: 1,
-  //      day: 1,
-  //      stayTime: 3600, (秒)
-  //      TransportMode: 1,
-  //      TransportTime:3600,  (秒)
-  //      photo:'imgurl'
-  //
-  //    },]
-  //
 
   useEffect(() => {
     setTravelInfo({
@@ -176,7 +172,7 @@ function Itinerary() {
       ],
       startDate: "2023-05-18",
       dayCount: 4,
-      startTime: { 1: 28800, 2: 28800, 3: 28800, 4: 28800 },
+      startTime: { 1: 28800, 2: 18800, 3: 28800, 4: 28800 },
     });
   }, []);
 
@@ -242,7 +238,7 @@ function Itinerary() {
 
       // Update order of items in the source day
       sourceItems.forEach((item, index) => {
-        console.log('@', item)
+        // console.log("@", item);
         item.day = sourceDay;
       });
 
@@ -287,89 +283,70 @@ function Itinerary() {
 
     //dropend ajax
     const data = items.filter((item) => item.id === draggableId)[0];
-    console.log("axiosData", data);
+    // console.log("axiosData", data);
   };
 
   return (
-    <TravelInfoStateContext.Provider value={{ travelInfo, setTravelInfo }}>
-
+    <TravelInfoStateContext.Provider
+      value={{ travelInfo, setTravelInfo, days, setDays }}
+    >
       <Header />
 
       <Days></Days>
 
-      <DragDropContext onDragEnd={onDragEnd}>
-        <DropContextWrapper>
-          {days.map((day, dayIndex) => {
-            console.log(day);
-            const currTime = new Date(startDate);
-
-            currTime.setDate(currTime.getDate() + dayIndex - 1);
-
-            currTime.setTime(
-              currTime.getTime() + startTime[dayIndex + 1] * 1000
-            );
-
-            const DroppableItems = travelList
-              .filter((item) => item.day === dayIndex + 1)
-              .map((item, index) => {
-                const startTime = new Date(currTime.getTime());
-
-                {
-                  /* console.log('starttime',item,startTime) */
-                }
-
-                currTime.setTime(
-                  currTime.getTime() +
-                  item.transportTime * 1000 +
-                  item.stayTime * 1000
-                );
-                return (
-                  <Card
-                    item={item}
-                    startTime={startTime}
-                    index={index}
-                    key={item.id}
-                  />
-
-
-
-                );
-              });
-
-            return (
-              <SectionWrapper key={day}>
-                <h2>{day}</h2>
-
-                <StrictModeDroppable droppableId={`${dayIndex + 1}`}>
-                  {(provided, snapshot) => (
-                    <DroppableContainer
-                      ref={provided.innerRef}
-                      {...provided.droppableProps}
-                    >
-                      {DroppableItems}
-                      {/* {
-                        travelList.filter((item) => item.day === dayIndex + 1)
-                          .map((item, index) => {
-                            const startTime = new Date(currTime.getTime())
-                            
-                            console.log('starttime',item,startTime)
-
-                            // const tempTime = currTime.getTime()
-
-                            currTime.setTime(currTime.getTime() + item.transportTime * 1000 + item.stayTime * 1000)
-                            return (
-                              <Card item={item} startTime={startTime} index={index} key={item.id} />
-                            )
-                          })} */}
-                      {provided.placeholder}
-                    </DroppableContainer>
-                  )}
-                </StrictModeDroppable>
-              </SectionWrapper>
-            );
-          })}
-        </DropContextWrapper>
-      </DragDropContext>
+      <PlanWrapper>
+        <DragDropContext onDragEnd={onDragEnd}>
+          <DropContextWrapper>
+            {days.map((day, dayIndex) => {
+              const currTime = new Date(startDate);
+              currTime.setUTCHours(-8); //時區-8
+              {
+                /* console.log(day, currTime); */
+              }
+              currTime.setDate(currTime.getDate() + dayIndex - 1);
+              currTime.setTime(
+                currTime.getTime() + startTime[dayIndex + 1] * 1000
+              );
+              const DroppableItems = travelList
+                .filter((item) => item.day === dayIndex + 1)
+                .map((item, index) => {
+                  const startTime = new Date(currTime.getTime());
+                  currTime.setTime(
+                    currTime.getTime() +
+                      item.transportTime * 1000 +
+                      item.stayTime * 1000
+                  );
+                  return (
+                    <Card
+                      item={item}
+                      startTime={startTime}
+                      index={index}
+                      key={item.id}
+                    />
+                  );
+                });
+              return (
+                <SectionWrapper key={day}>
+                  <ScrollElement name={day}>
+                    <h2>{day}</h2>
+                    <StrictModeDroppable droppableId={`${dayIndex + 1}`}>
+                      {(provided, snapshot) => (
+                        <DroppableContainer
+                          ref={provided.innerRef}
+                          {...provided.droppableProps}
+                        >
+                          {DroppableItems}
+                          {provided.placeholder}
+                        </DroppableContainer>
+                      )}
+                    </StrictModeDroppable>
+                  </ScrollElement>
+                </SectionWrapper>
+              );
+            })}
+          </DropContextWrapper>
+        </DragDropContext>
+      </PlanWrapper>
     </TravelInfoStateContext.Provider>
   );
 }
