@@ -15,7 +15,6 @@ import { useEffect } from "react";
 
 const DaysWrapper = styled.div`
   width: 100px;
-  height: 100vh;
 `;
 
 const DaysContainer = styled.div`
@@ -42,24 +41,25 @@ export default function Days() {
     };
   }, []);
 
-  const scrollToWithContainer = () => {
+  const scrollToWithContainer = (day) => {
     let goToContainer = new Promise((resolve, reject) => {
       Events.scrollEvent.register("end", () => {
-        resolve();
+        resolve(day);
         Events.scrollEvent.remove("end");
       });
 
       scroller.scrollTo("scroll-container", {
-        duration: 800,
+        duration: 0,
         delay: 0,
         smooth: "easeInOutQuart",
       });
     });
 
     goToContainer.then(() =>
-      scroller.scrollTo("scroll-container-second-element", {
-        duration: 800,
+      scroller.scrollTo(day, {
+        duration: 500,
         delay: 0,
+        
         smooth: "easeInOutQuart",
         containerId: "scroll-container",
       })
@@ -73,19 +73,20 @@ export default function Days() {
           {days.map((day) => {
             return (
               <li key={day}>
-                <Link
-                  activeClass="active"
-                  className="days"
-                  to={day}
-                  spy={true}
-                  smooth={true}
-                  duration={500}
-                  offset={-100}
-                  activeStyle={{ color: "red" }}
-                  // containerId={"planScroll"}
-                >
+                <Link to={day} 
+                containerId="scroll-container"
+                activeStyle={{color:'red'}} spy={true} smooth={true} duration={500}>
                   {day}
                 </Link>
+                {/* <a
+                  className="test1"
+                  to="test1"
+                  onClick={() => {
+                    scrollToWithContainer(day);
+                  }}
+                >
+                  {day}
+                </a> */}
               </li>
             );
           })}

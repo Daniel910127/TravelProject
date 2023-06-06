@@ -29,6 +29,7 @@ const DropContextWrapper = styled.div`
 
 const DroppableContainer = styled.div`
   background-color: #f5efe6;
+  min-height: 30px;
   height: 100%;
 `;
 

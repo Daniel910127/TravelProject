@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import ItineraryHeader from "./Header";
 import Days from "./Days";
 import Plan from "./Plan";
-
+import "./style.css";
 import {
   Link,
   DirectLink,
@@ -22,28 +22,38 @@ import Map from "./Map";
 const ItineraryContainer = styled.div`
   display: flex;
   width: 100%;
+  height: calc(100vh - 64px);
   ${"" /* flex-direction: column; */}
 `;
 
 const DaysContainer = styled.div``;
 const PlanWrapper = styled.div`
-  
   display: flex;
   flex-grow: 1;
-`;
-
-const PlanContainer = styled.div`
-  width: 900px;
+  align-items: flex-start;
+  flex-direction: row-reverse;
 `;
 
 const ItineraryHeaderContainer = styled.div``;
-
-const MapContainer = styled.div`
-  
-  width: 100%;
+const PlanContainer = styled.div`
+  position: relative;
+  width: 400px;
   height: 100%;
-  
+  overflow-x:visible;
+  ${'' /* overflow-y: scroll; */}
+  z-index:99;
+`;
+const MapContainer = styled.div`
+  position: relative;
+  height: 100%;
+  width: 100%;
   background-color: #666;
+`;
+
+const MapWrapper = styled.div`
+  position: relative;
+  height: 100%;
+  flex-grow: 1;
 `;
 
 const TravelInfoStateContext = createContext({
@@ -190,16 +200,18 @@ function Itinerary() {
           <Days></Days>
         </DaysContainer>
         <PlanWrapper>
-          <PlanContainer>
+          <MapWrapper>
+            <MapContainer>
+              <Map></Map>
+            </MapContainer>
+          </MapWrapper>
+
+          <PlanContainer className="hideScrollBar" id="scroll-container">
             <ItineraryHeaderContainer>
               <ItineraryHeader />
             </ItineraryHeaderContainer>
             <Plan></Plan>
           </PlanContainer>
-
-          <MapContainer>
-            <Map></Map>
-          </MapContainer>
         </PlanWrapper>
       </ItineraryContainer>
     </TravelInfoStateContext.Provider>
