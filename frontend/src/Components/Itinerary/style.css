@@ -1,14 +1,14 @@
-.hideScrollBar::-webkit-scrollbar {
+/* .hideScrollBar::-webkit-scrollbar {
   display: none;
-}
+} */
 
 .hideScrollBar ::-moz-scrollbar {
-  display: none;
+  /* display: none; */
  
 }
 
 .hideScrollBar {
-  overflow: auto;
-  -ms-overflow-style: none;
+  /* overflow-y: hidden; */
+  /* -ms-overflow-style: none; */
   scrollbar-color: transparent transparent; /*just hides the scrollbar for firefox */
 }

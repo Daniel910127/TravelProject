@@ -20,40 +20,54 @@ import {
 import Map from "./Map";
 
 const ItineraryContainer = styled.div`
-  position: relative;
+  position:relative;
   display: flex;
   width: 100%;
   height: calc(100vh - 64px);
-  overflow-y: scroll;
-  overflow-x: hidden;
+  ${"" /* flex-direction: column; */}
 `;
 
 const DaysWrapper = styled.div`
-
+  ${'' /* background: #f1f1f1; */}
+  
+  ${'' /* overflow: auto; */}
+  ${'' /* position: fixed; */}
+  ${'' /* top: 0;
+  bottom: 0; */}
   width:50px;
+  
 `;
 const PlanWrapper = styled.div`
   width: 400px;
+  
+  ${'' /* margin-left: 100px; */}
 `;
 
 const PlanContainer = styled.div`
- 
+  ${
+    "" /* position: relative;
+  width: 400px;
+  
+  overflow-x: visible;
+  
+  z-index:999; */
+  }
   width: 100%;
   height: 100%;
- 
+  ${'' /* overflow-x: visible;
+  overflow-y: visible; */}
+  ${"" /* overflow: auto; */}
 `;
 
 const MapWrapper = styled.div`
   background: #f1f1f1;
-  position:relative;
+  
   flex-grow: 1;
-  ${'' /* overflow:hidden; */}
-  ${
-    "" /* position: fixed;
+  overflow: auto;
+  ${'' /* position: fixed;
   top: 0;
-  bottom: 0; */
-  }
-  ${"" /* right: 0; */}
+  bottom: 0; */}
+  ${'' /* right: 0; */}
 `;
 
 const ItineraryHeaderContainer = styled.div``;
@@ -61,11 +75,10 @@ const ItineraryHeaderContainer = styled.div``;
 const MapContainer = styled.div`
   ${"" /* position: relative; */}
   position:fixed;
-  height:calc(100% - 64px);
-  width: calc(100% - 450px);  
-  ${'' /* right:0; */}
-  ${'' /* overflow:hidden; */}
+  height: 100%;
+  width: 100%;
   background-color: #666;
+  overflow: auto;
 `;
 
 const TravelInfoStateContext = createContext({
@@ -91,13 +104,10 @@ function Itinerary() {
 
   useEffect(() => {
     setTravelInfo({
-      t_Name:'台南三日遊',
-      t_Description:'三天自由行',
-      
       travelList: [
         {
           name: "台南景點A",
-          location: { lng: 120.2027424, lat: 22.9927286 },
+          location: { lng: 121.41666, lat: 31.21666 },
           address: "台南xx路xx號",
           id: `s_001`,
           order: 1,
@@ -110,7 +120,7 @@ function Itinerary() {
         },
         {
           name: "台南景點B",
-          location: { lng: 120.1991239, lat: 22.9897205 },
+          location: { lng: 121.41666, lat: 31.21666 },
           address: "台南xx路xx號",
           id: `s_567`,
           order: 2,
@@ -123,7 +133,7 @@ function Itinerary() {
         },
         {
           name: "台南景點C",
-          location: { lng: 155.41666, lat: 36.21666 },
+          location: { lng: 121.41666, lat: 31.21666 },
           address: "台南xx路xx號",
           id: `s_111`,
           order: 3,
@@ -192,7 +202,19 @@ function Itinerary() {
       startTime: { 1: 28800, 2: 18800, 3: 28800, 4: 28800 },
     });
 
-    setFocusSpot(travelList[0]);
+    setFocusSpot({
+      name: "台南景點A",
+      location: { lng: 121.41666, lat: 31.21666 },
+      address: "台南xx路xx號",
+      id: `s_001`,
+      order: 1,
+      day: 1,
+      stayTime: 3600,
+      transportMode: 1,
+      transportTime: 1600,
+      photo: "imgurl",
+      note: "xxxxxxxxxxx",
+    });
   }, []);
 
   const { travelList, dayCount, startTime, startDate } = travelInfo;
@@ -210,8 +232,6 @@ function Itinerary() {
     setDays(updatedDays);
   }, [travelInfo.dayCount]);
 
-  console.log(focusSpot,'@@@@')
-
   return (
     <TravelInfoStateContext.Provider
       value={{
@@ -223,11 +243,11 @@ function Itinerary() {
         setFocusSpot,
       }}
     >
-      <ItineraryContainer id="scroll-container">
+      <ItineraryContainer>
         <DaysWrapper>
           <Days></Days>
         </DaysWrapper>
-        <PlanWrapper>
+        <PlanWrapper id="scroll-container" >
           <PlanContainer>
             <ItineraryHeaderContainer>
               <ItineraryHeader />

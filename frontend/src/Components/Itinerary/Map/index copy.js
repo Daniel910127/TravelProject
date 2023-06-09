@@ -14,13 +14,14 @@ import { iconLocation } from "./icon";
 
 function MyMap(props) {
   const map = useMap();
-  // const { x, y } = map.getSize();
+  const { x, y } = map.getSize();
 
-  // console.log(props);
-  // console.log(x, y);
+  console.log(props);
+  console.log(x, y);
 
   map.flyTo(props.mapCenter, 18, true);
-
+  // map.setZoom(23)
+  // map.setZoom(14)
   return null;
 }
 
@@ -29,32 +30,29 @@ export default function Map() {
     travelInfo: { travelList },
     days,
     focusSpot,
-    setFocusSpot,
   } = useContext(TravelInfoStateContext);
 
-  // console.log("@@@@", focusSpot);
 
-  // const [mapCenter, setMapCenter] = useState([
-  //   focusSpot.location.lat,
-  //   focusSpot.location.lng,
-  // ]);
+  console.log('@@@@',focusSpot);
 
-  const handleClickMarker = (spot) => {
-    setFocusSpot(spot);
-    // console.log(markerPosition);
-    // setMapCenter(markerPosition);
+  const [mapCenter, setMapCenter] = useState([focusSpot.location.lat, focusSpot.location.lng]);
+
+  const handleClickMarker = (markerPosition) => {
+    console.log(markerPosition);
+    setMapCenter(markerPosition);
+
   };
   const color = ["#FFBE0B", "#FB5607", "#FF006E", "#8338EC", "#3A86FF"];
   // const position = [51.505, -0.09];
 
   return (
     <MapContainer
-      center={[focusSpot.location.lat, focusSpot.location.lng]}
+      center={mapCenter}
       zoom={23}
       scrollWheelZoom={true}
       zoomControl={false}
     >
-      <MyMap mapCenter={[focusSpot.location.lat, focusSpot.location.lng]} />
+      <MyMap mapCenter={mapCenter} />
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -66,8 +64,8 @@ export default function Map() {
             icon={iconLocation(index, color[spot.day % 4])}
             eventHandlers={{
               click: (event) => {
-                // console.log(event.containerPoint);
-                handleClickMarker(spot);
+                console.log(event.containerPoint);
+                handleClickMarker([spot.location.lat, spot.location.lng]);
               }, // 在点击标记时调用事件处理程序
             }}
           ></Marker>

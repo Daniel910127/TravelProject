@@ -4,27 +4,40 @@ import { TravelInfoStateContext } from "../index";
 import { useState, useContext } from "react";
 import StayTime from "./stayTime";
 import Box from "@mui/material/Box";
-import IconButton from '@mui/material/IconButton';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import IconButton from "@mui/material/IconButton";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import produce, { setAutoFreeze, setUseProxies } from "immer";
 const DragItem = styled.div`
   user-select: none;
-  min-height: 50px;
+  ${"" /* min-height: 50px; */}
   padding: 16px;
   font-size: 1em;
   text-align: center;
-  background-color: #7895b2;
-  color: #e8dfca;
+  ${"" /* background-color: #7895b2; */}
   margin-bottom: 20px;
   position: relative;
 `;
 
+const Introduction = styled.div`
+  background-color: #f3f4f5;
+  padding: 16px;
+`;
+
+const Title = styled.h3`
+  color: #545454;
+`;
+
+const Description = styled.p`
+  color: #989898;
+`;
 
 const Card = ({ item, startTime, index, count }) => {
   const { name, order, stayTime, transportTime } = item;
-  const { travelInfo, setTravelInfo } = useContext(TravelInfoStateContext)
+  const { travelInfo, setTravelInfo, focusSpot, setFocusSpot } = useContext(
+    TravelInfoStateContext
+  );
 
-  const [hover, setHover] = useState(false)
+  const [hover, setHover] = useState(false);
   // console.log('@@@@',travelInfo);
   // console.log(startTime)
   const secToClock = {
@@ -48,15 +61,21 @@ const Card = ({ item, startTime, index, count }) => {
             snapshot={snapshot}
             {...provided.draggableProps}
             {...provided.dragHandleProps}
-            onMouseEnter={() => { setHover(true) }}
-            onMouseLeave={() => { setHover(false) }}
+            onMouseEnter={() => {
+              setHover(true);
+            }}
+            onMouseLeave={() => {
+              setHover(false);
+            }}
+            onClick={() => {
+              setFocusSpot(item);
+            }}
           >
-            <Box>
-
-              <h4>
+            <Introduction>
+              <Title>
                 {name}
                 {count}
-              </h4>
+              </Title>
               <span>{`${startTime.getHours()} : ${startTime.getMinutes()}`}</span>
               <p>
                 停留時間:{secToClock.getHour(stayTime)} :{" "}
@@ -68,21 +87,30 @@ const Card = ({ item, startTime, index, count }) => {
                 {secToClock.getMin(transportTime)}
               </p>
 
-              <IconButton aria-label="delete" color="primary" onClick={() => {
-                // console.log('kill ',item);
-                /* ajax delete travelList item  */
-                const newTravelList = produce((draft) => {
-                  const targetItemIndex = draft.travelList.findIndex((i) => i.id === item.id);
-                  draft.travelList.splice(targetItemIndex, 1);
-                }
-                )
+              <IconButton
+                aria-label="delete"
+                color="primary"
+                onClick={() => {
+                  // console.log('kill ',item);
+                  /* ajax delete travelList item  */
+                  const newTravelList = produce((draft) => {
+                    const targetItemIndex = draft.travelList.findIndex(
+                      (i) => i.id === item.id
+                    );
+                    draft.travelList.splice(targetItemIndex, 1);
+                  });
 
-                setTravelInfo(newTravelList);
-              }} sx={{ visibility: hover ? 'visible' : 'hidden', opacity: hover ? '1' : '0', transition: 'all .2s ease-in-out' }}>
+                  setTravelInfo(newTravelList);
+                }}
+                sx={{
+                  visibility: hover ? "visible" : "hidden",
+                  opacity: hover ? "1" : "0",
+                  transition: "all .2s ease-in-out",
+                }}
+              >
                 <DeleteOutlineIcon />
               </IconButton>
-
-            </Box>
+            </Introduction>
 
             <Box>111</Box>
 

@@ -59,7 +59,7 @@ export default function Days() {
       scroller.scrollTo(day, {
         duration: 500,
         delay: 0,
-        
+
         smooth: "easeInOutQuart",
         containerId: "scroll-container",
       })
@@ -67,18 +67,22 @@ export default function Days() {
   };
 
   return (
-    <DaysWrapper>
-      <DaysContainer>
-        <ul>
-          {days.map((day) => {
-            return (
-              <li key={day}>
-                <Link to={day} 
+    <DaysContainer>
+      <ul>
+        {days.map((day) => {
+          return (
+            <li key={day}>
+              <Link
+                to={day}
                 containerId="scroll-container"
-                activeStyle={{color:'red'}} spy={true} smooth={true} duration={500}>
-                  {day}
-                </Link>
-                {/* <a
+                activeStyle={{ color: "red" }}
+                spy={true}
+                smooth={true}
+                duration={500}
+              >
+                {day}
+              </Link>
+              {/* <a
                   className="test1"
                   to="test1"
                   onClick={() => {
@@ -87,11 +91,10 @@ export default function Days() {
                 >
                   {day}
                 </a> */}
-              </li>
-            );
-          })}
-        </ul>
-      </DaysContainer>
-    </DaysWrapper>
+            </li>
+          );
+        })}
+      </ul>
+    </DaysContainer>
   );
 }
