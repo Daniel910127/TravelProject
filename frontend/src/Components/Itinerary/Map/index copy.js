@@ -35,6 +35,8 @@ export default function Map() {
 
   console.log('@@@@',focusSpot);
 
+  // const [mapCenter, setMapCenter] = useState([focusSpot.location.lat, focusSpot.location.lng]);
+
   const [mapCenter, setMapCenter] = useState([focusSpot.location.lat, focusSpot.location.lng]);
 
   const handleClickMarker = (markerPosition) => {

@@ -42,7 +42,7 @@ export default function StayTime(props) {
   const { item, startTime } = props;
   const { travelInfo, setTravelInfo } = useContext(TravelInfoStateContext);
   const startTimer = `${startTime.getHours()} : ${startTime.getMinutes()}`;
-  const endTime = new Date(startTime.getTime() + item.stayTime * 1000);
+  const endTime = new Date(startTime.getTime() + item.tl_StayTime * 1000);
   const endTimer = `${endTime.getHours()} : ${endTime.getMinutes()}`;
 
   // console.log('@@@@@@@', travelInfo.travelList, item);
@@ -59,8 +59,8 @@ export default function StayTime(props) {
     secToClock.getHour(
       travelInfo.travelList.find((i) => {
         // console.log(i.id, item.id)
-        return i.id === item.id;
-      }).stayTime
+        return i.s_Id === item.s_Id;
+      }).tl_StayTime
     )
   );
 
@@ -72,8 +72,8 @@ export default function StayTime(props) {
     secToClock.getMin(
       travelInfo.travelList.find((i) => {
         // console.log(i.id, item.id)
-        return i.id === item.id;
-      }).stayTime
+        return i.s_Id === item.s_Id;
+      }).tl_StayTime
     )
   );
 
@@ -84,10 +84,10 @@ export default function StayTime(props) {
   const handleChangeStayTime = () => {
     setTravelInfo(
       produce((draft) => {
-        const targetItem = draft.travelList.find((i) => i.id === item.id);
+        const targetItem = draft.travelList.find((i) => i.s_Id === item.s_Id);
         const newStayTime = hour * 60 * 60 + min * 60;
         if (targetItem) {
-          targetItem.stayTime = newStayTime;
+          targetItem.tl_StayTime = newStayTime;
         }
       })
     );
@@ -98,8 +98,8 @@ export default function StayTime(props) {
       secToClock.getMin(
         travelInfo.travelList.find((i) => {
           // console.log(i.id, item.id)
-          return i.id === item.id;
-        }).stayTime
+          return i.s_Id === item.s_Id;
+        }).tl_StayTime
       )
     );
 
@@ -107,8 +107,8 @@ export default function StayTime(props) {
       secToClock.getHour(
         travelInfo.travelList.find((i) => {
           // console.log(i.id, item.id)
-          return i.id === item.id;
-        }).stayTime
+          return i.s_Id === item.s_Id;
+        }).tl_StayTime
       )
     );
   };

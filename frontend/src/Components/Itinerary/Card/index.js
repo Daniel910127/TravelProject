@@ -7,6 +7,7 @@ import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import produce, { setAutoFreeze, setUseProxies } from "immer";
+
 const DragItem = styled.div`
   user-select: none;
   ${"" /* min-height: 50px; */}
@@ -18,24 +19,80 @@ const DragItem = styled.div`
   position: relative;
 `;
 
-const Introduction = styled.div`
+const Item = styled.div`
+  display: flex;
+  ${"" /* padding: 16px; */}
+  width: 100%;
+  gap: 24px;
+`;
+
+const IntroductionContainer = styled.div`
+  position: relative;
   background-color: #f3f4f5;
-  padding: 16px;
+  width: 320px;
+  padding: 12px;
+  border-radius: 12px;
+  z-index: 1;
 `;
 
 const Title = styled.h3`
   color: #545454;
 `;
 
-const Description = styled.p`
+const Summary = styled.p`
   color: #989898;
 `;
 
+const IntroductionHead = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+`;
+
+const ImgContainer = styled.div`
+  flex-grow: 1;
+  width: 200px;
+  height: 120px;
+  border-radius: 12px;
+  overflow: hidden;
+`;
+
+const Img = styled.img`
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+`;
+
+const Transport = styled.div`
+  position: relative;
+  display: flex;
+  left: 50px;
+  ${"" /* height: 100px; */}
+  ${"" /* border-left: 1px solid black; */}
+  align-items: center;
+
+  ::before {
+    content: "";
+    position: absolute;
+    ${"" /* top: -40px; */}
+    left: 0;
+    width: 1px;
+    height: 100px;
+    background-color: red;
+    opacity: 0.5;
+  }
+`;
 const Card = ({ item, startTime, index, count }) => {
-  const { name, order, stayTime, transportTime } = item;
+  const { s_Name, tl_StayTime, tl_TransportTime, s_Summary, s_Picture } = item;
+
+  console.log(item, item.s_Picture);
+
   const { travelInfo, setTravelInfo, focusSpot, setFocusSpot } = useContext(
     TravelInfoStateContext
   );
+
+  // console.log('startTime',startTime)
 
   const [hover, setHover] = useState(false);
   // console.log('@@@@',travelInfo);
@@ -53,14 +110,22 @@ const Card = ({ item, startTime, index, count }) => {
   };
 
   return (
-    <Draggable draggableId={item.id} index={index}>
+    <Draggable draggableId={`${item.s_Id}`} index={index}>
       {(provided, snapshot) => {
+        const style = {
+          ...provided.draggableProps.style,
+          backgroundColor: snapshot.isDragging ? "blue" : "white",
+          fontSize: 18,
+          marginBottom:0
+        };
+
         return (
           <DragItem
             ref={provided.innerRef}
             snapshot={snapshot}
             {...provided.draggableProps}
             {...provided.dragHandleProps}
+            style={style}
             onMouseEnter={() => {
               setHover(true);
             }}
@@ -71,21 +136,34 @@ const Card = ({ item, startTime, index, count }) => {
               setFocusSpot(item);
             }}
           >
-            <Introduction>
-              <Title>
-                {name}
-                {count}
-              </Title>
-              <span>{`${startTime.getHours()} : ${startTime.getMinutes()}`}</span>
-              <p>
-                停留時間:{secToClock.getHour(stayTime)} :{" "}
-                {secToClock.getMin(stayTime)}
-              </p>
-              <StayTime item={item} startTime={startTime} />
-              <p>
-                到下個景點的時間:{secToClock.getHour(transportTime)} :
-                {secToClock.getMin(transportTime)}
-              </p>
+            <Transport>
+              <span>{tl_TransportTime}</span>
+            </Transport>
+
+            <Item>
+              <IntroductionContainer>
+                <IntroductionHead>
+                  <Title>
+                    {s_Name}
+                    {/* {count} */}
+                  </Title>
+                  {/* <span>{`${startTime.getHours()} : ${startTime.getMinutes()}`}</span> */}
+                  {/* <p>
+                    停留時間:{secToClock.getHour(tl_StayTime)} :{" "}
+                    {secToClock.getMin(tl_StayTime)}
+                  </p> */}
+                  <StayTime item={item} startTime={startTime} />
+                  {/* <p>
+                    到下個景點的時間:{secToClock.getHour(tl_TransportTime)} :
+                    {secToClock.getMin(tl_TransportTime)}
+                  </p> */}
+                </IntroductionHead>
+                <Summary>{s_Summary}</Summary>
+              </IntroductionContainer>
+
+              <ImgContainer>
+                <Img src={`http://127.0.0.1:8000${s_Picture[0].sp_URL}`}></Img>
+              </ImgContainer>
 
               <IconButton
                 aria-label="delete"
@@ -95,7 +173,7 @@ const Card = ({ item, startTime, index, count }) => {
                   /* ajax delete travelList item  */
                   const newTravelList = produce((draft) => {
                     const targetItemIndex = draft.travelList.findIndex(
-                      (i) => i.id === item.id
+                      (i) => i.s_Id === item.s_Id
                     );
                     draft.travelList.splice(targetItemIndex, 1);
                   });
@@ -110,12 +188,10 @@ const Card = ({ item, startTime, index, count }) => {
               >
                 <DeleteOutlineIcon />
               </IconButton>
-            </Introduction>
-
-            <Box>111</Box>
+            </Item>
 
             {/* {order} */}
-            {/* {transportTime}
+            {/* {tl_TransportTime}
             {transportMode} */}
 
             {/* <TimeAvatar>{item.score}</TimeAvatar> */}

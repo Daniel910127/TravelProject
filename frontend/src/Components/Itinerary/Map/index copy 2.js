@@ -14,11 +14,13 @@ import { iconLocation } from "./icon";
 
 function MyMap(props) {
   const map = useMap();
-  const { setFocusSpot } = useContext(TravelInfoStateContext);
-  map.flyTo(props.mapCenter, 16, true);
-  map.on("moveend", () => {
-    setFocusSpot(null);
-  });
+  // const { x, y } = map.getSize();
+
+  // console.log(props);
+  // console.log(x, y);
+
+  map.flyTo(props.mapCenter, 18, true);
+
   return null;
 }
 
@@ -30,10 +32,12 @@ export default function Map() {
     setFocusSpot,
   } = useContext(TravelInfoStateContext);
 
-  // console.log('focus',focusSpot,travelList)
-  const center = focusSpot
-    ? [focusSpot.location.s_Latitude, focusSpot.location.s_Longitude]
-    : [travelList[0].location.s_Latitude, travelList[0].location.s_Longitude];
+  // console.log("@@@@", focusSpot);
+
+  // const [mapCenter, setMapCenter] = useState([
+  //   focusSpot.location.lat,
+  //   focusSpot.location.lng,
+  // ]);
 
   const handleClickMarker = (spot) => {
     setFocusSpot(spot);
@@ -45,12 +49,12 @@ export default function Map() {
 
   return (
     <MapContainer
-      center={center}
-      zoom={11}
+      center={[focusSpot.location.lat, focusSpot.location.lng]}
+      zoom={23}
       scrollWheelZoom={true}
       zoomControl={false}
     >
-      {focusSpot ? <MyMap mapCenter={center} /> : <></>}
+      <MyMap mapCenter={[focusSpot.location.lat, focusSpot.location.lng]} />
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -58,9 +62,8 @@ export default function Map() {
       {travelList.map((spot, index) => {
         return (
           <Marker
-            position={[spot.location.s_Latitude, spot.location.s_Longitude]}
-            key={spot.s_Id}
-            icon={iconLocation(index, color[spot.tls_Day % 4])}
+            position={[spot.location.lat, spot.location.lng]}
+            icon={iconLocation(index, color[spot.day % 4])}
             eventHandlers={{
               click: (event) => {
                 // console.log(event.containerPoint);

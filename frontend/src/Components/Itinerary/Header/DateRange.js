@@ -9,7 +9,7 @@ import { useEffect } from "react";
 const DateRangePickerExample = () => {
   const { travelInfo, setTravelInfo } = useContext(TravelInfoStateContext);
 
-  const { travelList, startDate, dayCount, startTime } = travelInfo;
+  const { travelList, t_StartDate, dayCount } = travelInfo;
 
   // const nowStartDate =
   // const nowEndDate = ;
@@ -26,10 +26,10 @@ const DateRangePickerExample = () => {
 
   useEffect(() => {
     setNowDate({
-      nowStartDate: moment(startDate),
-      nowEndDate: moment(moment(startDate).add(dayCount-1, "days")),
+      nowStartDate: moment(t_StartDate),
+      nowEndDate: moment(moment(t_StartDate).add(dayCount - 1, "days")),
     });
-  }, [startDate, dayCount]);
+  }, [t_StartDate, dayCount]);
 
   // const [nowEndDate, setNowEndDate] = useState();
 
@@ -42,20 +42,35 @@ const DateRangePickerExample = () => {
   // );
 
   const handleDatesChange = ({ startDate, endDate }) => {
-    // console.log("@@@!!", startDate, endDate);
+    console.log("@@@!!", startDate, endDate);
     // setNowStartDate(null);
     // setNowEndDate(null);
+
     setNowDate({
       nowStartDate: startDate,
       nowEndDate: endDate,
     });
 
     if (startDate && endDate) {
-      console.log('daycount',endDate.diff(startDate, "day"));
+      console.log("daycount", endDate.diff(startDate, "day"));
+      const newStartDate = startDate.format("YYYY-MM-DD");
+      const newDayCount = endDate.diff(startDate, "day") + 1;
+
+      const startTimes = { ...travelInfo.t_StartTime };
+
+      const defaultStartTimeValue = 28800;
+
+      for (let key = 1; key <= newDayCount; key++) {
+        if (!(key in startTimes)) {
+          startTimes[key] = defaultStartTimeValue;
+        }
+      }
+
       setTravelInfo(
         produce((draft) => {
-          draft.startDate = startDate.format("YYYY-MM-DD");
-          draft.dayCount = endDate.diff(startDate, "day") + 1;
+          draft.t_StartDate = newStartDate;
+          draft.dayCount = newDayCount;
+          draft.t_StartTime = startTimes;
         })
       );
     }
@@ -78,7 +93,7 @@ const DateRangePickerExample = () => {
         onFocusChange={handleFocusChange}
         // required
         isOutsideRange={() => null}
-        minimumNights={maxDay -1 < 0 ? 0 : maxDay-1 } // 限制日期範圍在三天或以上
+        minimumNights={maxDay - 1 < 0 ? 0 : maxDay - 1} // 限制日期範圍在三天或以上
       />
     </div>
   );
