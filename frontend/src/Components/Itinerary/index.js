@@ -53,7 +53,9 @@ const MapWrapper = styled.div`
   ${"" /* right: 0; */}
 `;
 
-const ItineraryHeaderContainer = styled.div``;
+const ItineraryHeaderContainer = styled.div`
+  
+`;
 
 const MapContainer = styled.div`
   ${"" /* position: relative; */}
@@ -89,6 +91,7 @@ function Itinerary() {
   const [days, setDays] = useState([]);
 
   const [focusSpot, setFocusSpot] = useState(null);
+
 
   useEffect(() => {
     setTravelInfo({
@@ -386,6 +389,7 @@ function Itinerary() {
           setDays,
           focusSpot,
           setFocusSpot,
+
         }}
       >
         <ItineraryContainer id="scroll-container">

@@ -4,7 +4,7 @@ import { TravelInfoStateContext } from "..";
 import produce from "immer";
 import moment from "moment";
 import "react-dates/lib/css/_datepicker.css";
-import "./style.css";
+import "./react_dates_overrides.css";
 import { useEffect } from "react";
 const DateRangePickerExample = () => {
   const { travelInfo, setTravelInfo } = useContext(TravelInfoStateContext);

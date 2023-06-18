@@ -21,9 +21,9 @@ const DropContextWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  ${'' /* gap: 17px; */}
+  ${"" /* gap: 17px; */}
   min-height: 500px;
-  width:100%;
+  width: 100%;
 `;
 
 const DroppableContainer = styled.div`
@@ -36,13 +36,21 @@ const SectionWrapper = styled.div`
   flex-basis: 50%;
 `;
 
-
+const OnDay = styled.span`
+  display: inline-block;
+  background-color:${props => props.color};
+  color: #fff;
+  padding: 6px;
+  border-radius: 6px;
+`;
 const PlanWrapper = styled.div``;
+
 export default function Plan() {
   const { travelInfo, setTravelInfo, days, setDays } = useContext(
     TravelInfoStateContext
   );
   const { travelList, t_StartDate, dayCount, t_StartTime } = travelInfo;
+  const color = ["#FFBE0B", "#FB5607", "#FF006E", "#8338EC", "#3A86FF"];
 
   const onDragEnd = (event) => {
     const { source, destination, draggableId } = event;
@@ -169,7 +177,7 @@ export default function Plan() {
                     item.tl_StayTime * 1000
                 );
 
-                console.log('itemstart',startTime)
+                console.log("itemstart", startTime);
 
                 return (
                   <Card
@@ -183,7 +191,7 @@ export default function Plan() {
             return (
               <SectionWrapper key={day}>
                 <ScrollElement name={day}>
-                  <h2>{day}</h2>
+                  <OnDay color={color[(dayIndex + 1) % 4]}>{day}</OnDay>
                   <StrictModeDroppable droppableId={`${dayIndex + 1}`}>
                     {(provided, snapshot) => (
                       <DroppableContainer
