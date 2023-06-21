@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import overview,spot,init_data,account,food,hotel,travel_list
+from .views import overview,spot,init_data,account,food,hotel,travel_list,like_record
 
 
 urlpatterns = [
@@ -38,6 +38,8 @@ urlpatterns = [
          name="init-hotelPictureData"),
     path('init-hotelStreData/', init_data.hotelStreInit, name="init-hotelStreData"),
     path('high_rating_spots/', spot.high_rating_spots, name="high_rating_spots"),
+
+    path('like_record/', like_record.LikeRecordAPIView.as_view(), name="like_record"),
 
 
 ]
