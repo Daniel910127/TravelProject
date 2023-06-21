@@ -1,14 +1,16 @@
 from django.urls import path
-from .views import overview,spot,init_data,account,food,hotel,travel_list,like_record
+from .views import overview,spot,init_data,account,food,hotel,travel_list,like_record,interest
 
 
 urlpatterns = [
     path('', overview.apiOverview, name="api-overview"),
 
-
+   
     path('account-list/', account.accountList, name="account-list"),
     path('account-create/', account.create_account, name="account-create"),
     path('account-login/', account.account_login, name="account-login"),
+
+    path('interest-list/', interest.interestList, name="interest-list"),
 
     path('spot-list/', spot.spotList, name="spot-list"),
     path('spot/', spot.spotWithPictureList, name="spot-image-list"),
