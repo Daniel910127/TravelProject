@@ -72,9 +72,9 @@ const pages = [
 ];
 
 const settings = [
-  { linkName: "Profile", linkURL: "/profile", click:"#" },
-  { linkName: "Account", linkURL: "/account", click:"#" },
-  { linkName: "Dashboard", linkURL: "/dashboard", click:"#" },
+  { linkName: "Profile", linkURL: "/profile" },
+  { linkName: "interest", linkURL: "/interest" },
+  { linkName: "Dashboard", linkURL: "/dashboard" },
   // { linkName: "Logout", linkURL: "#" , click:"handleLogout"}
 ];
 const setting1 = [
@@ -267,9 +267,11 @@ function NavBar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
+                  {settings.map((setting) => (
                 <MenuItem key={setting.linkURL} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting.linkName}</Typography>
+                  <NavLink to={setting.linkURL}>
+                    <Typography textAlign="center">{setting.linkName}</Typography>
+                  </NavLink>
                 </MenuItem>
               ))}
               <MenuItem onClick={handleLogout}>logout</MenuItem>
