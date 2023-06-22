@@ -9,13 +9,14 @@ library.add(fas, far);
 
 function App() {
   return (
-     <SessionProvider >
+    <BrowserRouter>
+      <SessionProvider >
         <React.StrictMode>
-      <BrowserRouter>
         <TravelRouter></TravelRouter>
-      </BrowserRouter>
     </React.StrictMode>
      </SessionProvider>
+    </BrowserRouter>
+     
     
   );
 }

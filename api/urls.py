@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import overview,spot,init_data,account,food,hotel,travel_list,like_record,interest
+from .views import overview,spot,init_data,account,food,hotel,travel_list,like_record,interest,member,hobby
 
 
 urlpatterns = [
@@ -9,7 +9,15 @@ urlpatterns = [
     path('account-list/', account.accountList, name="account-list"),
     path('account-create/', account.create_account, name="account-create"),
     path('account-login/', account.account_login, name="account-login"),
+    path('member/', member.MemberDetail, name="memeber"),
+    path('member-list/', member.MemberList, name="memeber-list"),
+    path('member-update/', member.UpdateMember, name="member-update"),
+    path('member-create/', member.CreateMember, name="member-create"),
 
+    path('interest/', hobby.InterestDetail, name="interest"),
+    path('interest-list/', hobby.InterestList, name="interest-list"),
+    path('interest-update/', hobby.UpdateInterest, name="interest-update"),
+     
     path('interest-list/', interest.interestList, name="interest-list"),
 
     path('spot-list/', spot.spotList, name="spot-list"),
