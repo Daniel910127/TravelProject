@@ -100,6 +100,10 @@ class Travel_ListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Travel_List
         fields = '__all__'
+class Travel_List_DetailSerializer_o(serializers.ModelSerializer):
+    class Meta:
+        model = Travel_List_Detail
+        fields = '__all__'
 class Travel_List_DetailSerializer(serializers.ModelSerializer):
     other_info = serializers.SerializerMethodField()             #forkey to spot/food/hotel
 
