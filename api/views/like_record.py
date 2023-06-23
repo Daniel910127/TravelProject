@@ -14,7 +14,7 @@ class LikeRecordAPIView(APIView):
             serializer.save()
             response_data = {
                 "success": True,
-                "message": "like association was created",
+                "message": "按讚點擊成功",
                 "data": serializer.data
             }
             return Response(response_data, status=status.HTTP_201_CREATED)

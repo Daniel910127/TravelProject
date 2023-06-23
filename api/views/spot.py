@@ -4,7 +4,6 @@ from django.http import JsonResponse, HttpResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import generics, status
-from django.shortcuts import get_object_or_404
 
 
 from ..serializers import  AccountSerializer, SpotSerializer, MemberSerializer, s_InterestSerializer, FoodSerializer, Travel_ListSerializer, Travel_List_DetailSerializer, QuestionSerializer, s_PictureSerializer, m_PictureSerializer, spotWithPictureURLSerializer
@@ -46,10 +45,23 @@ def spot_detail(request, s_Name):
 class SpotDetailView(generics.RetrieveAPIView):
     serializer_class = spotWithPictureURLSerializer
 
-    def get(self, request, s_Name):
-        my_model = get_object_or_404(Spot, s_Name= s_Name)
+    def get(self, request, s_Id):
+        try:
+            my_model = Spot.objects.get(s_Id=s_Id)
+            serializer = self.serializer_class(my_model)
 
-        serializer = self.serializer_class(my_model)
-        return Response(serializer.data)
+            response_data = {
+                "success": True,
+                "message": "景點資料回傳成功",
+                "data": serializer.data
+            }
+        except Spot.DoesNotExist:
+            response_data = {
+                "success": False,
+                "message": "景點資料回傳失敗",
+                "data": {}
+            }
+
+        return Response(response_data)
     
 spot_detail_view = SpotDetailView.as_view()
