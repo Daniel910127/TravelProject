@@ -38,6 +38,8 @@ urlpatterns = [
   
     path('travel-list-all/', travel_list.travel_List_Total, name="travel-list-all"),
     path('travel-list/<int:m_Id>/', travel_list.travel_List_detail_view, name="travel-list"),
+    path('travle-list-create/', travel_list.CreateTravelList, name="travel-list-create"),
+  
 
 
 
