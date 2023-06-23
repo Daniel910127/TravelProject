@@ -59,7 +59,7 @@ class SpotDetailView(generics.RetrieveAPIView):
             response_data = {
                 "success": False,
                 "message": "景點資料回傳失敗",
-                "data": {}
+                "error": "指定的s_Id不存在"
             }
 
         return Response(response_data)

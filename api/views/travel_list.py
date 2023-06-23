@@ -19,5 +19,25 @@ def travel_List_Total(request):
     serializer = Travel_List_TotalSerializer(travel_lists, many=True)
     return Response(serializer.data)
 
+class TravelListView(generics.RetrieveAPIView):
+    serializer_class = Travel_List_TotalSerializer
 
+    def get(self, request, m_Id):
+        my_models = Travel_List.objects.filter(m_Id=m_Id)
+        if not my_models:
+            response_data = {
+                "success": False,
+                "message": "行程表資料回傳失敗",
+                "error": "指定的m_Id不存在"
+            }
+        else:
+            serializer = self.serializer_class(my_models, many=True)
+            response_data = {
+                "success": True,
+                "message": "行程表資料回傳成功",
+                "data": serializer.data
+            }
 
+        return Response(response_data)
+
+travel_List_detail_view = TravelListView.as_view()

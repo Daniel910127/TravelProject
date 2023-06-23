@@ -39,7 +39,7 @@ class HotelDetailView(generics.RetrieveAPIView):
             response_data = {
                 "success": False,
                 "message": "住宿資料回傳失敗",
-                "data": {}
+                "error": "指定的h_Id不存在"
             }
 
         return Response(response_data)

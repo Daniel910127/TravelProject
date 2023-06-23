@@ -36,7 +36,9 @@ urlpatterns = [
 
     path('like_record/', like_record.LikeRecordAPIView.as_view(), name="like_record"),
   
-    path('travel-list/', travel_list.travel_List_Total, name="travel-list"),
+    path('travel-list-all/', travel_list.travel_List_Total, name="travel-list-all"),
+    path('travel-list/<int:m_Id>/', travel_list.travel_List_detail_view, name="travel-list"),
+
 
 
   

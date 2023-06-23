@@ -39,7 +39,7 @@ class FoodDetailView(generics.RetrieveAPIView):
             response_data = {
                 "success": False,
                 "message": "食物資料回傳失敗",
-                "data": {}
+                "error": "指定的f_Id不存在"
             }
 
         return Response(response_data)
