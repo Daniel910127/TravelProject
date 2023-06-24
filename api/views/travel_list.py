@@ -268,6 +268,106 @@ def UpdateTravelListStartTime(request):
         }
         return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['DELETE'])##主行程刪除(需要t_Id、m_Id、t_Name、t_Description、t_StartDate、t_EndDate、t_Views、t_Likes)
+def DeleteTravelList(request):
+    serializer = Travel_ListSerializer(data=request.data)
+    if serializer.is_valid():
+        t_Id = request.data.get('t_Id')
+
+        try:
+            # 使用 get() 獲取符合條件的記錄
+            travellist = Travel_List.objects.get(t_Id=request.data['t_Id'])
+            
+            # 執行刪除操作
+            travellist.delete()
+
+            response_data = {
+                "success": True,
+                "message": "主行程刪除成功",
+            }
+            return Response(response_data)
+        except Travel_List.DoesNotExist:
+            response_data = {
+                "success": False,
+                "message": "主行程不存在",
+                "errors": "指定的t_Id不存在"
+            }
+            return Response(response_data, status=status.HTTP_404_NOT_FOUND)
+    else:
+        response_data = {
+            "success": False,
+            "message": "主行程刪除失敗",
+            "errors": serializer.errors
+        }
+        return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['DELETE'])##行程細節刪除(需要tl_Id、tl_Order、tl_Id)
+def DeleteTravelListDetail(request):
+    serializer = Travel_List_DetailSerializer_o(data=request.data)
+    if serializer.is_valid():
+        tl_Id = request.data.get('tl_Id')
+
+        try:
+            # 使用 get() 獲取符合條件的記錄
+            travellist = Travel_List_Detail.objects.get(tl_Id=request.data['tl_Id'])
+            
+            # 執行刪除操作
+            travellist.delete()
+
+            response_data = {
+                "success": True,
+                "message": "行程細節刪除成功",
+            }
+            return Response(response_data)
+        except Travel_List_Detail.DoesNotExist:
+            response_data = {
+                "success": False,
+                "message": "行程細節不存在",
+                "errors": "指定的tl_Id不存在"
+            }
+            return Response(response_data, status=status.HTTP_404_NOT_FOUND)
+    else:
+        response_data = {
+            "success": False,
+            "message": "行程細節刪除失敗",
+            "errors": serializer.errors
+        }
+        return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['DELETE'])  ##行程表開始時間刪除(需要tls_Id、t_Id)
+def DeleteTravelListStartTime(request):
+    serializer = Travel_List_StartTimeSerializer_o(data=request.data)
+    if serializer.is_valid():
+        tls_Id = request.data['tls_Id']
+
+        try:
+            # 使用 get() 獲取符合條件的記錄
+            travellist = Travel_List_StartTime.objects.get(tls_Id=request.data['tls_Id'])
+            
+            # 刪除記錄
+            travellist.delete()
+
+            response_data = {
+                "success": True,
+                "message": "行程表開始時間刪除成功"
+            }
+            return Response(response_data)
+        except Travel_List_StartTime.DoesNotExist:
+            response_data = {
+                "success": False,
+                "message": "行程表開始時間不存在",
+                "errors": "指定的tls_Id不存在"
+            }
+            return Response(response_data, status=status.HTTP_404_NOT_FOUND)
+    else:
+        response_data = {
+            "success": False,
+            "message": "行程表開始時間刪除失敗",
+            "errors": serializer.errors
+        }
+        return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
 
 class TravelListView(generics.RetrieveAPIView):##單一會員所有行程表
     serializer_class = Travel_List_TotalSerializer

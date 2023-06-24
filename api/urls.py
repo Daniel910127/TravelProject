@@ -40,11 +40,15 @@ urlpatterns = [
     path('travel-list/<int:m_Id>/', travel_list.travel_List_detail_view, name="travel-list"),
     path('travle-list-create/', travel_list.CreateTravelList, name="travel-list-create"),
     path('travle-list-update/', travel_list.UpdateTravelList, name="travel-list-update"),
+    path('travle-list-delete/', travel_list.DeleteTravelList, name="travel-list-delete"),
+
     path('travle-list-detail-create/', travel_list.CreateTravelListDetail, name="travel-list-detail-create"),
     path('travle-list-detail-update/', travel_list.UpdateTravelListDetail, name="travel-list-detail-update"),
+    path('travle-list-detail-delete/', travel_list.DeleteTravelListDetail, name="travel-list-detail-delete"),
+
     path('travle-list-starttime-create/', travel_list.CreateTravelListStartTime, name="travel-list-starttime-create"),
     path('travle-list-starttime-update/', travel_list.UpdateTravelListStartTime, name="travel-list-starttime-update"),
-
+    path('travle-list-starttime-delete/', travel_list.DeleteTravelListStartTime, name="travel-list-starttime-delete"),
 
   
     path('init-spotData/', init_data.spotInit, name="init-spotData"),
