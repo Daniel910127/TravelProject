@@ -1,7 +1,7 @@
 from django.urls import path
 
 from .views import interest
-from .views import overview,spot,init_data,account,food,hotel,travel_list,like_record,interest,member
+from .views import overview,spot,init_data,account,food,hotel,travel_list,like_record,interest,member,question
 
 
 urlpatterns = [
@@ -36,6 +36,8 @@ urlpatterns = [
 
     path('like_record/', like_record.LikeRecordAPIView.as_view(), name="like_record"),
   
+    path('question/<int:s_Id>/', question.question_detail_view, name="question-detail"),
+
     path('travel-list-all/', travel_list.travel_List_Total, name="travel-list-all"),
     path('travel-list/<int:m_Id>/', travel_list.travel_List_detail_view, name="travel-list"),
     path('travle-list-create/', travel_list.CreateTravelList, name="travel-list-create"),

@@ -11,26 +11,26 @@ from ..serializers import  AccountSerializer, SpotSerializer, MemberSerializer, 
 from ..models import  Account, Spot, Member, s_Interest, Food, Travel_List, Travel_List_Detail, Question, s_Picture, m_Picture
 
 
-class SpotDetailView(generics.RetrieveAPIView):
-    serializer_class = spotWithPictureURLSerializer
+class QuestionDetailView(generics.RetrieveAPIView):
+    serializer_class = QuestionSerializer
 
     def get(self, request, s_Id):
-        try:
-            my_model = Spot.objects.get(s_Id=s_Id)
-            serializer = self.serializer_class(my_model)
-
-            response_data = {
-                "success": True,
-                "message": "景點資料回傳成功",
-                "data": serializer.data
-            }
-        except Spot.DoesNotExist:
+        my_models = Question.objects.filter(s_Id=s_Id)
+        if not my_models:
             response_data = {
                 "success": False,
-                "message": "景點資料回傳失敗",
+                "message": "問題資料回傳失敗",
                 "error": "指定的s_Id不存在"
+            }
+        else:
+            serializer = self.serializer_class(my_models, many=True)
+            response_data = {
+                "success": True,
+                "message": "問題資料回傳成功",
+                "data": serializer.data
             }
 
         return Response(response_data)
     
-spot_detail_view = SpotDetailView.as_view()
+question_detail_view = QuestionDetailView.as_view()
+
