@@ -115,7 +115,49 @@ def CreateTravelListStartTime(request):
             "message": "行程表開始時間創建失敗",
             "errors": serializer.errors
         }
-        return Response(response_data)       
+        return Response(response_data)    
+
+@api_view(['POST'])##行程表開始時間更改
+def UpdateTravelListStartTime(request):
+    serializer = Travel_List_StartTimeSerializer_o(data=request.data)
+    if serializer.is_valid():
+        tls_Id = serializer.validated_data.get('tls_Id')
+        t_Id = serializer.validated_data.get('t_Id')
+        tls_Day = serializer.validated_data.get('tls_Day')
+        tls_StartTime = serializer.validated_data.get('tls_StartTime')
+
+        try:
+            # 使用 get() 獲取符合條件的記錄
+            travellist = Travel_List_StartTime.objects.get(t_Id=t_Id, tls_Day=tls_Day)
+            
+            # 更新記錄
+            travellist.t_Id = t_Id
+            travellist.tls_Day = tls_Day
+            travellist.tls_StartTime = tls_StartTime
+            travellist.save()  # 儲存更新後的記錄
+
+            response_data = {
+                "success": True,
+                "message": "行程表開始時間更新成功",
+                "data": serializer.data
+            }
+            return Response(response_data)
+        except Travel_List_StartTime.DoesNotExist:
+            response_data = {
+                "success": False,
+                "message": "行程表開始時間不存在",
+                "errors": "指定的tls_Id不存在"
+            }
+            return Response(response_data, status=status.HTTP_404_NOT_FOUND)
+    else:
+        response_data = {
+            "success": False,
+            "message": "行程表開始時間更新失敗",
+            "errors": serializer.errors
+        }
+        return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
+
+
 class TravelListView(generics.RetrieveAPIView):##單一會員所有行程表
     serializer_class = Travel_List_TotalSerializer
 

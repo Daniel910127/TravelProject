@@ -41,7 +41,7 @@ urlpatterns = [
     path('travle-list-create/', travel_list.CreateTravelList, name="travel-list-create"),
     path('travle-list-detail-create/', travel_list.CreateTravelListDetail, name="travel-list-detail-create"),
     path('travle-list-starttime-create/', travel_list.CreateTravelListStartTime, name="travel-list-starttime-create"),
-
+    path('travle-list-starttime-update/', travel_list.UpdateTravelListStartTime, name="travel-list-starttime-update"),
 
 
   
