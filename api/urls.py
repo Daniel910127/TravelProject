@@ -39,6 +39,7 @@ urlpatterns = [
     path('travel-list-all/', travel_list.travel_List_Total, name="travel-list-all"),
     path('travel-list/<int:m_Id>/', travel_list.travel_List_detail_view, name="travel-list"),
     path('travle-list-create/', travel_list.CreateTravelList, name="travel-list-create"),
+    path('travle-list-update/', travel_list.UpdateTravelList, name="travel-list-update"),
     path('travle-list-detail-create/', travel_list.CreateTravelListDetail, name="travel-list-detail-create"),
     path('travle-list-detail-update/', travel_list.UpdateTravelListDetail, name="travel-list-detail-update"),
     path('travle-list-starttime-create/', travel_list.CreateTravelListStartTime, name="travel-list-starttime-create"),

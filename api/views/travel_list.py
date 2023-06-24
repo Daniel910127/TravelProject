@@ -116,6 +116,63 @@ def CreateTravelListStartTime(request):
             "errors": serializer.errors
         }
         return Response(response_data)    
+
+    
+@api_view(['POST'])##主行程更改
+def UpdateTravelList(request):
+    serializer = Travel_ListSerializer(data=request.data)
+    if serializer.is_valid(): 
+        m_Id = serializer.validated_data.get('m_Id')
+        t_Name = serializer.validated_data.get('t_Name')
+        t_Description = serializer.validated_data.get('t_Description')
+        t_FormTime = serializer.validated_data.get('t_FormTime')
+        t_StartDate = serializer.validated_data.get('t_StartDate')
+        t_EndDate = serializer.validated_data.get('t_EndDate')
+        t_StayDay = serializer.validated_data.get('t_StayDay')
+        t_Privacy = serializer.validated_data.get('t_Privacy')
+        t_Views = serializer.validated_data.get('t_Views')
+        t_Likes = serializer.validated_data.get('t_Likes')
+        t_score = serializer.validated_data.get('t_score') 
+
+        try:
+            # 使用 get() 獲取符合條件的記錄
+            travellist = Travel_List.objects.get(t_Id=request.data['t_Id'])
+            
+            # 更新記錄
+            travellist.m_Id = m_Id
+            travellist.t_Name= t_Name
+            travellist.t_Description = t_Description
+            travellist.t_FormTime =t_FormTime
+            travellist.t_StartDate=t_StartDate
+            travellist.t_EndDate=t_EndDate
+            travellist.t_StayDay=t_StayDay
+            travellist.t_Privacy=t_Privacy
+            travellist.t_Views = t_Views
+            travellist.t_Likes = t_Likes
+            travellist.t_score = t_score
+            travellist.save()  # 儲存更新後的記錄
+
+            response_data = {
+                "success": True,
+                "message": "主行程表更新成功",
+                "data": serializer.data
+            }
+            return Response(response_data)
+        except Travel_List.DoesNotExist:
+            response_data = {
+                "success": False,
+                "message": "主行程表不存在",
+                "errors": "指定的t_Id不存在"
+            }
+            return Response(response_data, status=status.HTTP_404_NOT_FOUND)
+    else:
+        response_data = {
+            "success": False,
+            "message": "主行程表更新失敗",
+            "errors": serializer.errors
+        }
+        return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
+    
     
 @api_view(['POST'])##行程細節更改
 def UpdateTravelListDetail(request):
