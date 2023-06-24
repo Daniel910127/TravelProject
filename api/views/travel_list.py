@@ -7,9 +7,9 @@ from rest_framework import generics, status
 from django.shortcuts import get_object_or_404
 
 
-from ..serializers import  Travel_List_TotalSerializer,Travel_ListSerializer,Travel_List_DetailSerializer_o
+from ..serializers import  Travel_List_TotalSerializer,Travel_ListSerializer,Travel_List_DetailSerializer_o,Travel_List_StartTimeSerializer_o
 
-from ..models import Travel_List,Travel_List_Detail
+from ..models import Travel_List,Travel_List_Detail,Travel_List_StartTime
 
 # Create your views here.
 
@@ -76,7 +76,7 @@ def CreateTravelListDetail(request):
             tl_TransportMode=tl_TransportMode, tl_TransportTime=tl_TransportTime, 
             tl_StayTime=tl_StayTime, tl_Day=tl_Day, tl_Order=tl_Order,
             tl_Notes=tl_Notes, tl_score=tl_score, f_Id=f_Id, h_Id= h_Id,
-            s_Id=s_Id, t_Id=t_Id, 
+            s_Id=s_Id, t_Id=t_Id
             )
         response_data = {
             "success": True,
@@ -91,6 +91,31 @@ def CreateTravelListDetail(request):
             "errors": serializer.errors
         }
         return Response(response_data)
+    
+@api_view(['POST'])##行程表開始時間創立
+def CreateTravelListStartTime(request):
+    serializer = Travel_List_StartTimeSerializer_o(data=request.data)
+    if serializer.is_valid():
+        t_Id= serializer.validated_data.get('t_Id')
+        tls_Day = serializer.validated_data.get('tls_Day')
+        tls_StartTime = serializer.validated_data.get('tls_StartTime')
+        
+        travellist = Travel_List_StartTime.objects.create(
+            t_Id=t_Id,tls_Day=tls_Day,tls_StartTime=tls_StartTime
+            )
+        response_data = {
+            "success": True,
+            "message": "行程表開始時間創建成功",
+            "data": serializer.data
+        }
+        return Response(response_data)
+    else:
+        response_data = {
+            "success": False,
+            "message": "行程表開始時間創建失敗",
+            "errors": serializer.errors
+        }
+        return Response(response_data)       
 class TravelListView(generics.RetrieveAPIView):##單一會員所有行程表
     serializer_class = Travel_List_TotalSerializer
 

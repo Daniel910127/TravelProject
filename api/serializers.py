@@ -92,6 +92,10 @@ class Like_RecordSerializer(serializers.ModelSerializer):
     class Meta:
         model = Like_Record
         fields = '__all__'
+class Travel_List_StartTimeSerializer_o(serializers.ModelSerializer):
+    class Meta:
+        model = Travel_List_StartTime
+        fields = '__all__'
 class Travel_List_StartTimeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Travel_List_StartTime
