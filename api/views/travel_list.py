@@ -116,19 +116,73 @@ def CreateTravelListStartTime(request):
             "errors": serializer.errors
         }
         return Response(response_data)    
+    
+@api_view(['POST'])##行程細節更改
+def UpdateTravelListDetail(request):
+    serializer = Travel_List_DetailSerializer_o(data=request.data)
+    if serializer.is_valid(): 
+        tl_TransportMode = serializer.validated_data.get('tl_TransportMode')
+        tl_TransportTime = serializer.validated_data.get('tl_TransportTime')
+        tl_StayTime = serializer.validated_data.get('tl_StayTime')
+        tl_Day = serializer.validated_data.get('tl_Day')
+        tl_Order = serializer.validated_data.get('tl_Order')
+        tl_Notes = serializer.validated_data.get('tl_Notes')
+        tl_score = serializer.validated_data.get('tl_score')
+        t_Id = serializer.validated_data.get('t_Id')   
+        s_Id = serializer.validated_data.get('s_Id')
+        f_Id = serializer.validated_data.get('f_Id')
+        h_Id = serializer.validated_data.get('h_Id')
 
+        try:
+            # 使用 get() 獲取符合條件的記錄
+            travellist = Travel_List_Detail.objects.get(tl_Id=request.data['tl_Id'])
+            
+            # 更新記錄
+            travellist.t_Id = t_Id
+            travellist.tl_TransportMode = tl_TransportMode
+            travellist.tl_TransportTime = tl_TransportTime
+            travellist.tl_StayTime =tl_StayTime
+            travellist.tl_Day=tl_Day
+            travellist.tl_Order=tl_Order
+            travellist.tl_Notes=tl_Notes
+            travellist.tl_score=tl_score
+            travellist.s_Id = s_Id
+            travellist.f_Id = f_Id
+            travellist.h_Id = h_Id
+            travellist.save()  # 儲存更新後的記錄
+
+            response_data = {
+                "success": True,
+                "message": "行程細節更新成功",
+                "data": serializer.data
+            }
+            return Response(response_data)
+        except Travel_List_Detail.DoesNotExist:
+            response_data = {
+                "success": False,
+                "message": "行程細節不存在",
+                "errors": "指定的tl_Id不存在"
+            }
+            return Response(response_data, status=status.HTTP_404_NOT_FOUND)
+    else:
+        response_data = {
+            "success": False,
+            "message": "行程細節更新失敗",
+            "errors": serializer.errors
+        }
+        return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
+    
 @api_view(['POST'])##行程表開始時間更改
 def UpdateTravelListStartTime(request):
     serializer = Travel_List_StartTimeSerializer_o(data=request.data)
     if serializer.is_valid():
-        tls_Id = serializer.validated_data.get('tls_Id')
         t_Id = serializer.validated_data.get('t_Id')
         tls_Day = serializer.validated_data.get('tls_Day')
         tls_StartTime = serializer.validated_data.get('tls_StartTime')
 
         try:
             # 使用 get() 獲取符合條件的記錄
-            travellist = Travel_List_StartTime.objects.get(t_Id=t_Id, tls_Day=tls_Day)
+            travellist = Travel_List_StartTime.objects.get(tls_Id=request.data['tls_Id'])
             
             # 更新記錄
             travellist.t_Id = t_Id
