@@ -35,14 +35,6 @@ class HotelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Hotel
         fields = '__all__'
-
-
-class QuestionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Question
-        fields = '__all__'
-
-
 class s_PictureSerializer(serializers.ModelSerializer):
     class Meta:
         model = s_Picture
@@ -88,9 +80,18 @@ class hotelWithPictureURLSerializer(serializers.ModelSerializer):
         model = Hotel
         fields = '__all__'
 
+class QuestionSerializer(serializers.ModelSerializer):
+    s_Id = spotWithPictureURLSerializer()
+    class Meta:
+        model = Question
+        fields = '__all__'
 class Like_RecordSerializer(serializers.ModelSerializer):
     class Meta:
         model = Like_Record
+        fields = '__all__'
+class Travel_List_StartTimeSerializer_o(serializers.ModelSerializer):
+    class Meta:
+        model = Travel_List_StartTime
         fields = '__all__'
 class Travel_List_StartTimeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -99,6 +100,14 @@ class Travel_List_StartTimeSerializer(serializers.ModelSerializer):
 class Travel_ListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Travel_List
+        fields = '__all__'
+class Travel_ListSerializer_d(serializers.ModelSerializer):
+    class Meta:
+        model = Travel_List
+        fields = ['t_Id']
+class Travel_List_DetailSerializer_o(serializers.ModelSerializer):
+    class Meta:
+        model = Travel_List_Detail
         fields = '__all__'
 class Travel_List_DetailSerializer(serializers.ModelSerializer):
     other_info = serializers.SerializerMethodField()             #forkey to spot/food/hotel

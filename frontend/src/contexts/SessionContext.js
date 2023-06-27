@@ -1,8 +1,10 @@
 import React, { createContext, useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom'; 
 
 export const SessionContext = createContext(null);
 
 export const SessionProvider = ({ children }) => {
+  const navigate = useNavigate();
   const [a_Id, setaId] = useState(() => {
     const storeda_ID = sessionStorage.getItem('a_Id');
     if (storeda_ID) {
@@ -67,6 +69,7 @@ export const SessionProvider = ({ children }) => {
     setaccount(null);
     // setpassword(null);
     setLevel(null);
+    navigate('/'); 
   };
 
   return (

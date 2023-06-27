@@ -13,12 +13,13 @@ class Account(models.Model):
     return self.a_Account
   
 #Member database model
+
+
 class Member(models.Model):
-  m_Id = models.AutoField( primary_key=True) 
-  m_Name = models.CharField(max_length=10, null=False, unique=True)
+  m_Id = models.AutoField(primary_key=True)
+  m_Name = models.CharField(max_length=10, null=False)
   m_Gender = models.CharField(max_length=2, null=False, default='m')
-  m_Old = models.IntegerField( null=False)
-  m_Email = models.EmailField(max_length=100,blank=True,default='')
+  m_Email = models.EmailField(max_length=100, blank=True, default='')
   m_Phone = models.CharField(max_length=20, null=False)
 
   def __str__(self):
