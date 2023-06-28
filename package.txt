@@ -12,3 +12,6 @@ python manage.py migrate
 pip install django-cors-headers==3.14.0    跨域請求用
 pip install Pillow
 pip install requests
+
+
+pip install whitenoise
