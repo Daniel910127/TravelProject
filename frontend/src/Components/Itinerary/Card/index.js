@@ -86,7 +86,7 @@ const Transport = styled.div`
 const Card = ({ item, startTime, index, count }) => {
   const { s_Name, tl_StayTime, tl_TransportTime, s_Summary, s_Picture } = item;
 
-  console.log(item, item.s_Picture);
+  // console.log(item, item.s_Picture);
 
   const { travelInfo, setTravelInfo, focusSpot, setFocusSpot } = useContext(
     TravelInfoStateContext

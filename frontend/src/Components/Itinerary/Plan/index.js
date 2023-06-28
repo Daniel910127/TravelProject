@@ -150,7 +150,7 @@ export default function Plan() {
 
     //dropend ajax
     const data = items.filter((item) => `${item.s_Id}` === draggableId)[0];
-    // console.log("axiosData", data);
+    console.log("axiosData", data);
   };
 
   return (
