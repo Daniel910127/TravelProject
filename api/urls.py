@@ -1,7 +1,7 @@
 from django.urls import path
 
 from .views import interest
-from .views import overview,spot,init_data,account,food,hotel,travel_list,like_record,interest,member,question
+from .views import overview,spot,init_data,account,food,hotel,travel_list,like_record,interest,interest_json,member,question
 
 
 urlpatterns = [
@@ -20,6 +20,10 @@ urlpatterns = [
     path('interest/', interest.InterestDetail, name="interest"),
     path('interest-list/', interest.InterestList, name="interest-list"),
     path('interest-update/', interest.UpdateInterest, name="interest-update"),
+
+    path('interest_json/', interest_json.InterestDetail, name="interest"),#能靖用來將interest_list轉成json用
+    path('interest-list_json/', interest_json.InterestList, name="interest-list"),
+    path('interest-update_json/', interest_json.UpdateInterest, name="interest-update"),
 
     path('spot-list/', spot.spotList, name="spot-list"),
     path('spot-image-list/', spot.spotWithPictureList, name="spot-image-list"),
