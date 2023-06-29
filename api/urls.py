@@ -1,7 +1,7 @@
 from django.urls import path
 
 from .views import interest
-from .views import overview,spot,init_data,account,food,hotel,travel_list,like_record,interest,member,question
+from .views import overview,spot,init_data,account,food,hotel,travel_list,like_record,interest,interest_json,member,question
 
 
 
@@ -22,7 +22,13 @@ urlpatterns = [
     path('interest-list/', interest.InterestList, name="interest-list"),
     path('interest-update/', interest.UpdateInterest, name="interest-update"),
 
+<<<<<<< HEAD
+
+    path('spot-list/', spot.spotList, name="spot-list"),
+    path('spot-image-list/', spot.spotWithPictureList, name="spot-image-list"),
+=======
     path('spot/', spot.spotWithPictureList, name="spot"),
+>>>>>>> 360efaf6067132b0d124ed9998cef03e176d05ef
     path('spot/<int:s_Id>/', spot.spot_detail_view, name="spot-detail"),
     path('spot/hot/', spot.high_rating_spots, name="spot-hot"),
 

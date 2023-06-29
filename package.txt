@@ -14,7 +14,12 @@ pip install django-cors-headers==3.14.0    跨域請求用
 pip install Pillow
 pip install requests
 
+<<<<<<< HEAD
 pip install djangorestframework-simplejwt  JWT驗證
 pip install djangorestframework djangorestframework_simplejwt
 
 
+=======
+
+pip install whitenoise
+>>>>>>> origin/main
