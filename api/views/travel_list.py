@@ -19,13 +19,15 @@ from ..models import Travel_List,Travel_List_Detail,Travel_List_StartTime
 
 @api_view(['GET'])##全部的行程表
 def travel_List_Total(request):
+    permission_classes = (IsAuthenticated,)
     travel_lists = Travel_List.objects.filter(travel_list_detail__s_Id__isnull=False).distinct()
     serializer = Travel_List_TotalSerializer(travel_lists, many=True)
     return Response(serializer.data)
 
 
-@api_view(['POST'])
+@api_view(['POST'])#主行程表創立
 def CreateTravelList(request):
+    permission_classes = (IsAuthenticated,)
     m_Id = request.data.get('m_Id')
     t_Name = request.data.get('t_Name')
     t_Description = request.data.get('t_Description')
@@ -35,11 +37,11 @@ def CreateTravelList(request):
     t_Views = 0
     t_Likes = 0
     t_score = 0  
-    # 获取request.data中的数据
+    # 獲取request.data中的數據
     custom = request.data.get('custom')
     if custom:
         interest_data = request.data.get('interest')
-        # 调用ai.py模块中的函数进行处理
+        # 調用ai.py中的函数進行處理
         ai.process_interest_data(interest_data)
     else:
         ai.custom = False
@@ -91,8 +93,9 @@ def CreateTravelList(request):
         return Response(response_data, status=status.HTTP_401_UNAUTHORIZED)
 
 
-@api_view(['POST'])##行程表細節創立
-def CreateTravelListDetail(request):
+@api_view(['POST'])##行程表細項創立
+def CreateTravelListDetail(request,t_Id):
+    permission_classes = (IsAuthenticated,)
     serializer = Travel_List_DetailSerializer_o(data=request.data)
     if serializer.is_valid():
         tl_TransportMode = serializer.validated_data.get('tl_TransportMode')
@@ -101,8 +104,8 @@ def CreateTravelListDetail(request):
         tl_Day = serializer.validated_data.get('tl_Day')
         tl_Order = serializer.validated_data.get('tl_Order')
         tl_Notes = serializer.validated_data.get('tl_Notes')
-        tl_score = serializer.validated_data.get('tl_score')
-        t_Id = serializer.validated_data.get('t_Id')   
+        tl_score = 0
+        t_Id = Travel_List.objects.get(pk=t_Id)
         s_Id = serializer.validated_data.get('s_Id')
         f_Id = serializer.validated_data.get('f_Id')
         h_Id = serializer.validated_data.get('h_Id')
@@ -114,24 +117,25 @@ def CreateTravelListDetail(request):
             s_Id=s_Id, t_Id=t_Id
             )
         response_data = {
-            "success": True,
+            "status": "201",
             "message": "行程創建成功",
             "data": serializer.data
         }
-        return Response(response_data)
+        return Response(response_data, status=status.HTTP_201_CREATED)
     else:
         response_data = {
-            "success": False,
+            "status": "401",
             "message": "行程創建失敗",
             "errors": serializer.errors
         }
-        return Response(response_data)
+        return Response(response_data, status=status.HTTP_401_UNAUTHORIZED)
     
 @api_view(['POST'])##行程表開始時間創立
-def CreateTravelListStartTime(request):
+def CreateTravelListStartTime(request,t_Id):
+    permission_classes = (IsAuthenticated,)
     serializer = Travel_List_StartTimeSerializer_o(data=request.data)
     if serializer.is_valid():
-        t_Id= serializer.validated_data.get('t_Id')
+        t_Id = Travel_List.objects.get(pk=t_Id)
         tls_Day = serializer.validated_data.get('tls_Day')
         tls_StartTime = serializer.validated_data.get('tls_StartTime')
         
@@ -139,78 +143,78 @@ def CreateTravelListStartTime(request):
             t_Id=t_Id,tls_Day=tls_Day,tls_StartTime=tls_StartTime
             )
         response_data = {
-            "success": True,
+            "status": "201",
             "message": "行程表開始時間創建成功",
             "data": serializer.data
         }
-        return Response(response_data)
+        return Response(response_data, status=status.HTTP_201_CREATED)
     else:
         response_data = {
-            "success": False,
+            "status": "401",
             "message": "行程表開始時間創建失敗",
             "errors": serializer.errors
         }
-        return Response(response_data)    
+        return Response(response_data, status=status.HTTP_401_UNAUTHORIZED)
 
     
-@api_view(['POST'])##主行程更改
-def UpdateTravelList(request):
+@api_view(['PUT'])  ## 主行程更改
+def UpdateTravelList(request, t_Id):
+    permission_classes = (IsAuthenticated,)
     serializer = Travel_ListSerializer(data=request.data)
-    if serializer.is_valid(): 
+    if serializer.is_valid():
         m_Id = serializer.validated_data.get('m_Id')
         t_Name = serializer.validated_data.get('t_Name')
         t_Description = serializer.validated_data.get('t_Description')
-        t_FormTime = serializer.validated_data.get('t_FormTime')
         t_StartDate = serializer.validated_data.get('t_StartDate')
-        t_EndDate = serializer.validated_data.get('t_EndDate')
         t_StayDay = serializer.validated_data.get('t_StayDay')
+        t_EndDate = serializer.validated_data.get('t_EndDate')
         t_Privacy = serializer.validated_data.get('t_Privacy')
         t_Views = serializer.validated_data.get('t_Views')
         t_Likes = serializer.validated_data.get('t_Likes')
-        t_score = serializer.validated_data.get('t_score') 
+        t_score = serializer.validated_data.get('t_score')
 
         try:
-            # 使用 get() 獲取符合條件的記錄
-            travellist = Travel_List.objects.get(t_Id=request.data['t_Id'])
-            
-            # 更新記錄
+            # 使用 get() 获取符合条件的记录
+            travellist = Travel_List.objects.get(pk=t_Id)
+
+            # 更新记录
             travellist.m_Id = m_Id
-            travellist.t_Name= t_Name
+            travellist.t_Name = t_Name
             travellist.t_Description = t_Description
-            travellist.t_FormTime =t_FormTime
-            travellist.t_StartDate=t_StartDate
-            travellist.t_EndDate=t_EndDate
-            travellist.t_StayDay=t_StayDay
-            travellist.t_Privacy=t_Privacy
+            travellist.t_StartDate = t_StartDate
+            travellist.t_EndDate = t_EndDate
+            travellist.t_StayDay = t_StayDay
+            travellist.t_Privacy = t_Privacy
             travellist.t_Views = t_Views
             travellist.t_Likes = t_Likes
             travellist.t_score = t_score
-            travellist.save()  # 儲存更新後的記錄
+            travellist.save()  # 保存更新后的记录
 
             response_data = {
-                "success": True,
+                "status": "204",
                 "message": "主行程表更新成功",
                 "data": serializer.data
             }
-            return Response(response_data)
+            return Response(response_data, status=status.HTTP_204_NO_CONTENT)
         except Travel_List.DoesNotExist:
             response_data = {
-                "success": False,
+                "status": "404",
                 "message": "主行程表不存在",
                 "errors": "指定的t_Id不存在"
             }
             return Response(response_data, status=status.HTTP_404_NOT_FOUND)
     else:
         response_data = {
-            "success": False,
-            "message": "主行程表更新失敗",
+            "status": "401",
+            "message": "主行程表更新失败",
             "errors": serializer.errors
         }
-        return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
+        return Response(response_data, status=status.HTTP_401_UNAUTHORIZED)
+
     
-    
-@api_view(['POST'])##行程細節更改
-def UpdateTravelListDetail(request):
+@api_view(['PUT'])##行程細節更改
+def UpdateTravelListDetail(request,t_Id,tl_Id):
+    permission_classes = (IsAuthenticated,)
     serializer = Travel_List_DetailSerializer_o(data=request.data)
     if serializer.is_valid(): 
         tl_TransportMode = serializer.validated_data.get('tl_TransportMode')
@@ -220,14 +224,15 @@ def UpdateTravelListDetail(request):
         tl_Order = serializer.validated_data.get('tl_Order')
         tl_Notes = serializer.validated_data.get('tl_Notes')
         tl_score = serializer.validated_data.get('tl_score')
-        t_Id = serializer.validated_data.get('t_Id')   
+        t_Id = serializer.validated_data.get('t_Id')
         s_Id = serializer.validated_data.get('s_Id')
         f_Id = serializer.validated_data.get('f_Id')
         h_Id = serializer.validated_data.get('h_Id')
 
         try:
             # 使用 get() 獲取符合條件的記錄
-            travellist = Travel_List_Detail.objects.get(tl_Id=request.data['tl_Id'])
+            travellist = Travel_List_Detail.objects.get(tl_Id=tl_Id, t_Id=t_Id)
+
             
             # 更新記錄
             travellist.t_Id = t_Id
@@ -244,28 +249,29 @@ def UpdateTravelListDetail(request):
             travellist.save()  # 儲存更新後的記錄
 
             response_data = {
-                "success": True,
+                "status": "204",
                 "message": "行程細節更新成功",
                 "data": serializer.data
             }
-            return Response(response_data)
+            return Response(response_data, status=status.HTTP_204_NO_CONTENT)
         except Travel_List_Detail.DoesNotExist:
             response_data = {
-                "success": False,
+                "status": "404",
                 "message": "行程細節不存在",
                 "errors": "指定的tl_Id不存在"
             }
             return Response(response_data, status=status.HTTP_404_NOT_FOUND)
     else:
         response_data = {
-            "success": False,
+            "status": "401",
             "message": "行程細節更新失敗",
             "errors": serializer.errors
         }
-        return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
+        return Response(response_data, status=status.HTTP_401_UNAUTHORIZED)
     
-@api_view(['POST'])##行程表開始時間更改
-def UpdateTravelListStartTime(request):
+@api_view(['PUT'])##行程表開始時間更改
+def UpdateTravelListStartTime(request,t_Id,tls_Id):
+    permission_classes = (IsAuthenticated,)
     serializer = Travel_List_StartTimeSerializer_o(data=request.data)
     if serializer.is_valid():
         t_Id = serializer.validated_data.get('t_Id')
@@ -274,7 +280,7 @@ def UpdateTravelListStartTime(request):
 
         try:
             # 使用 get() 獲取符合條件的記錄
-            travellist = Travel_List_StartTime.objects.get(tls_Id=request.data['tls_Id'])
+            travellist = Travel_List_StartTime.objects.get(tls_Id=tls_Id)
             
             # 更新記錄
             travellist.t_Id = t_Id
@@ -283,28 +289,29 @@ def UpdateTravelListStartTime(request):
             travellist.save()  # 儲存更新後的記錄
 
             response_data = {
-                "success": True,
+                "status": "204",
                 "message": "行程表開始時間更新成功",
                 "data": serializer.data
             }
-            return Response(response_data)
+            return Response(response_data, status=status.HTTP_204_NO_CONTENT)
         except Travel_List_StartTime.DoesNotExist:
             response_data = {
-                "success": False,
+                "status": "404",
                 "message": "行程表開始時間不存在",
                 "errors": "指定的tls_Id不存在"
             }
             return Response(response_data, status=status.HTTP_404_NOT_FOUND)
     else:
         response_data = {
-            "success": False,
+            "status": "401",
             "message": "行程表開始時間更新失敗",
             "errors": serializer.errors
         }
-        return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
+        return Response(response_data, status=status.HTTP_401_UNAUTHORIZED)
 
-@api_view(['DELETE'])##主行程刪除(需要t_Id、m_Id、t_Name、t_Description、t_StartDate、t_EndDate、t_Views、t_Likes)
+@api_view(['DELETE'])##主行程刪除
 def DeleteTravelList(request):
+    permission_classes = (IsAuthenticated,)
     serializer = Travel_ListSerializer(data=request.data)
     if serializer.is_valid():
         t_Id = request.data.get('t_Id')
@@ -317,92 +324,73 @@ def DeleteTravelList(request):
             travellist.delete()
 
             response_data = {
-                "success": True,
+                "status": "204",
                 "message": "主行程刪除成功",
             }
-            return Response(response_data)
+            return Response(response_data, status=status.HTTP_204_NO_CONTENT)
         except Travel_List.DoesNotExist:
             response_data = {
-                "success": False,
+                "status": "404",
                 "message": "主行程不存在",
                 "errors": "指定的t_Id不存在"
             }
             return Response(response_data, status=status.HTTP_404_NOT_FOUND)
     else:
         response_data = {
-            "success": False,
+            "status": "401",
             "message": "主行程刪除失敗",
             "errors": serializer.errors
         }
-        return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
+        return Response(response_data, status=status.HTTP_401_UNAUTHORIZED)
 
 
-@api_view(['DELETE'])##行程細節刪除(需要tl_Id、tl_Order、tl_Id)
-def DeleteTravelListDetail(request):
-    serializer = Travel_List_DetailSerializer_o(data=request.data)
-    if serializer.is_valid():
-        tl_Id = request.data.get('tl_Id')
-
-        try:
-            # 使用 get() 獲取符合條件的記錄
-            travellist = Travel_List_Detail.objects.get(tl_Id=request.data['tl_Id'])
+@api_view(['DELETE'])##行程細節刪除
+def DeleteTravelListDetail(request,tl_Id,t_Id):
+    permission_classes = (IsAuthenticated,)
+    try:
+        # 使用 get() 獲取符合條件的記錄
+        travellist = Travel_List_Detail.objects.get(tl_Id=tl_Id,t_Id=t_Id)
             
-            # 執行刪除操作
-            travellist.delete()
+        # 執行刪除操作
+        travellist.delete()
 
-            response_data = {
-                "success": True,
-                "message": "行程細節刪除成功",
-            }
-            return Response(response_data)
-        except Travel_List_Detail.DoesNotExist:
-            response_data = {
-                "success": False,
-                "message": "行程細節不存在",
-                "errors": "指定的tl_Id不存在"
-            }
-            return Response(response_data, status=status.HTTP_404_NOT_FOUND)
-    else:
         response_data = {
-            "success": False,
-            "message": "行程細節刪除失敗",
-            "errors": serializer.errors
+            "status": "204",
+            "message": "行程細節刪除成功",
         }
-        return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
+        return Response(response_data, status=status.HTTP_204_NO_CONTENT)
+    except Travel_List_Detail.DoesNotExist:
+        response_data = {
+            "status": "204",
+            "message": "行程細節不存在",
+            "errors": "指定的tl_Id不存在"
+        }
+        return Response(response_data, status=status.HTTP_404_NOT_FOUND)
 
 
-@api_view(['DELETE'])  ##行程表開始時間刪除(需要tls_Id、t_Id)
-def DeleteTravelListStartTime(request):
-    serializer = Travel_List_StartTimeSerializer_o(data=request.data)
-    if serializer.is_valid():
-        tls_Id = request.data['tls_Id']
 
+@api_view(['DELETE'])  ##行程表開始時間刪除
+def DeleteTravelListStartTime(request,tls_Id,t_Id):
+        permission_classes = (IsAuthenticated,)
         try:
             # 使用 get() 獲取符合條件的記錄
-            travellist = Travel_List_StartTime.objects.get(tls_Id=request.data['tls_Id'])
+            travellist = Travel_List_StartTime.objects.get(tls_Id=tls_Id)
             
             # 刪除記錄
             travellist.delete()
 
             response_data = {
-                "success": True,
+                "status": "204",
                 "message": "行程表開始時間刪除成功"
             }
-            return Response(response_data)
+            return Response(response_data, status=status.HTTP_204_NO_CONTENT)
         except Travel_List_StartTime.DoesNotExist:
             response_data = {
-                "success": False,
+                "status": "404",
                 "message": "行程表開始時間不存在",
                 "errors": "指定的tls_Id不存在"
             }
             return Response(response_data, status=status.HTTP_404_NOT_FOUND)
-    else:
-        response_data = {
-            "success": False,
-            "message": "行程表開始時間刪除失敗",
-            "errors": serializer.errors
-        }
-        return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
 
 class TravelListView(generics.RetrieveAPIView):##單一會員所有行程表
     permission_classes = (IsAuthenticated,)

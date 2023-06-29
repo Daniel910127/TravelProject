@@ -53,11 +53,11 @@ urlpatterns = [
 
     path('itinerary/<int:t_Id>/detail', travel_list.CreateTravelListDetail, name="itinerary-detail-create"),
     path('itinerary/<int:t_Id>/detail/<int:tl_Id>', travel_list.UpdateTravelListDetail, name="itinerary-detail-update"),
-    path('itinerary/<int:t_Id>/detail/<int:tl_Id>', travel_list.DeleteTravelListDetail, name="itinerary-detail-delete"),
+    path('itinerary/<int:t_Id>/detail/<int:tl_Id>/delete', travel_list.DeleteTravelListDetail, name="itinerary-detail-delete"),
 
-    path('itinerary/<int:t_Id>/starttime/<int:tls_Day>', travel_list.CreateTravelListStartTime, name="itinerary-starttime-create"),
+    path('itinerary/<int:t_Id>/starttime/', travel_list.CreateTravelListStartTime, name="itinerary-starttime-create"),
     path('itinerary/<int:t_Id>/starttime/<int:tls_Id>', travel_list.UpdateTravelListStartTime, name="itinerary-starttime-update"),
-    path('itinerary/<int:t_Id>/starttime/<int:tls_Id>', travel_list.DeleteTravelListStartTime, name="itinerary-starttime-delete"),
+    path('itinerary/<int:t_Id>/starttime/<int:tls_Id>/delete', travel_list.DeleteTravelListStartTime, name="itinerary-starttime-delete"),
 
   
     path('init-spotData/', init_data.spotInit, name="init-spotData"),

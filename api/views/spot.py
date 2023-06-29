@@ -13,7 +13,6 @@ from ..models import  Account, Spot, Member, s_Interest, Food, Travel_List, Trav
 
 # Create your views here.
 
-
 @api_view(['GET'])
 def spotList(request):
     spots = Spot.objects.all().order_by('-s_Id')
