@@ -246,42 +246,6 @@ function Itinerary() {
           //tl_Score
         },
         {
-          s_Id: 8,
-          s_Name: "南鯤鯓代天府",
-          s_Summary:
-            "三川殿邀請藝師王武雄，以剪黏技法完成西拉雅族赤崁社、荷蘭、明清、日治四個時期的作品，讓廟口門面如同臺南歷史的縮影；走入廟內，牆面是府城潘氏家族三代的彩繪，名家汪崇楹書法、杜牧河父子泥塑神像，在前殿的屋頂還有對於府城近代發展有貢獻的人物剪黏。",
-          location: { s_Latitude: 23.07505, s_Longitude: 120.04619 },
-          s_Address: "724 臺南市七股區十份里海埔47號",
-          tls_Day: 3,
-          tl_Order: 5,
-          tl_TransportMode: 0, //0開車  1走路  2腳踏車
-          tl_StayTime: 3600,
-          tl_TransportTime: 1400,
-          s_Picture: [
-            {
-              sp_Id: 25,
-              sp_URL:
-                "/media/images/spot/%E9%BB%91%E9%9D%A2%E7%90%B5%E9%B7%BA%E7%94%9F%E6%85%8B%E5%B1%95%E7%A4%BA%E9%A4%A8%EF%BC%88%E5%8E%9F%E9%BB%91%E9%9D%A2%E7%90%B5%E9%B7%BA%E7%A0%94%E7%A9%B6%E5%8F%8A%E4%BF%9D%E8%82%B2%E7%AE%A1%E7%90%86%E4%B8%AD%E5%BF%83%EF%BC%890.jpeg",
-              s_Id: 9,
-            },
-            {
-              sp_Id: 26,
-              sp_URL:
-                "/media/images/spot/%E9%BB%91%E9%9D%A2%E7%90%B5%E9%B7%BA%E7%94%9F%E6%85%8B%E5%B1%95%E7%A4%BA%E9%A4%A8%EF%BC%88%E5%8E%9F%E9%BB%91%E9%9D%A2%E7%90%B5%E9%B7%BA%E7%A0%94%E7%A9%B6%E5%8F%8A%E4%BF%9D%E8%82%B2%E7%AE%A1%E7%90%86%E4%B8%AD%E5%BF%83%EF%BC%891.jpeg",
-              s_Id: 9,
-            },
-            {
-              sp_Id: 27,
-              sp_URL:
-                "/media/images/spot/%E9%BB%91%E9%9D%A2%E7%90%B5%E9%B7%BA%E7%94%9F%E6%85%8B%E5%B1%95%E7%A4%BA%E9%A4%A8%EF%BC%88%E5%8E%9F%E9%BB%91%E9%9D%A2%E7%90%B5%E9%B7%BA%E7%A0%94%E7%A9%B6%E5%8F%8A%E4%BF%9D%E8%82%B2%E7%AE%A1%E7%90%86%E4%B8%AD%E5%BF%83%EF%BC%892.jpeg",
-              s_Id: 9,
-            },
-          ],
-          tl_Notes: "xxxxxxxxxxx",
-
-          //tl_Score
-        },
-        {
           s_Id: 11,
           s_Name: "頑皮世界野生動物園 ",
 

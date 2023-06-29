@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 
+import axios from "axios";
 import styled from "styled-components";
 import {
   Link,
@@ -15,6 +16,7 @@ import {
 import { TravelInfoStateContext } from "..";
 import { StrictModeDroppable } from "../../StrictModeDroppable";
 import Card from "../Card";
+import updateOrderAPI from "../../../util/updateOrderAPI";
 
 const DropContextWrapper = styled.div`
   font-family: sans-serif;
@@ -38,7 +40,7 @@ const SectionWrapper = styled.div`
 
 const OnDay = styled.span`
   display: inline-block;
-  background-color:${props => props.color};
+  background-color: ${(props) => props.color};
   color: #fff;
   padding: 6px;
   border-radius: 6px;
@@ -49,10 +51,11 @@ export default function Plan() {
   const { travelInfo, setTravelInfo, days, setDays } = useContext(
     TravelInfoStateContext
   );
+
   const { travelList, t_StartDate, dayCount, t_StartTime } = travelInfo;
   const color = ["#FFBE0B", "#FB5607", "#FF006E", "#8338EC", "#3A86FF"];
 
-  const onDragEnd = (event) => {
+  const onDragEnd = async (event) => {
     const { source, destination, draggableId } = event;
     // console.log(event);
     let items = Array.from(travelList);
@@ -70,7 +73,7 @@ export default function Plan() {
       return;
     }
 
-    if (source.droppableId === destination.droppableId) {
+    if (sourceDay === destDay) {
       const destItems = Array.from(travelList).filter(
         (item) => item.tls_Day === destDay
       );
@@ -78,17 +81,21 @@ export default function Plan() {
 
       destItems.splice(destIndex, 0, removed);
 
-      const newTravelList = travelList.filter(
+      const anotherTravelList = travelList.filter(
         (item) => item.tls_Day !== destDay
       );
-      // console.log(newTravelList, destItems)
-      let tempItems = [...newTravelList, ...destItems];
+
+      // console.log(anotherTravelList, destItems)
+      let tempItems = [...anotherTravelList, ...destItems];
+
       //day排序
       items = [];
       for (let day = 1; day <= dayCount; day++) {
-        let dayArray = tempItems.filter((item) => item.tls_Day === day);
-        items.push(...dayArray);
+        let dayItems = tempItems.filter((item) => item.tls_Day === day);
+        items.push(...dayItems);
       }
+
+      console.log("同天", items);
     } else {
       const sourceItems = Array.from(travelList).filter(
         (item) => item.tls_Day === sourceDay
@@ -110,11 +117,11 @@ export default function Plan() {
         item.tls_Day = destDay;
       });
 
-      const newTravelList = travelList.filter(
+      const anotherTravelList = travelList.filter(
         (item) => item.tls_Day !== sourceDay && item.tls_Day !== destDay
       );
 
-      let tempItems = [...newTravelList, ...sourceItems, ...destItems];
+      let tempItems = [...anotherTravelList, ...sourceItems, ...destItems];
 
       items = [];
       for (let day = 1; day <= dayCount; day++) {
@@ -146,11 +153,34 @@ export default function Plan() {
 
     items.sort((a, b) => a.tl_Order - b.tl_Order);
     // console.log(items)
-    setTravelInfo({ ...travelInfo, travelList: items });
+
+    const updateOrderData = items.filter(
+      (item) => `${item.s_Id}` === draggableId
+    )[0];
+
+    /* console.log(updateOrderData);
+    console.log(destDay, updateOrder);
+
+    try {
+      const updateTravelList = await updateOrderAPI(
+        `https://private-bee5ac-travel36.apiary-mock.com/api/itinerary/1/detail`,
+        {
+          tl_Order: updateOrder,
+          tls_Day: destDay,
+        }
+      );
+
+      console.log("updateTravelList", updateTravelList);
+      setTravelInfo(updateTravelList);
+    } catch (err) {
+      console.log(err);
+    } */  //後端api完成才能接
+
+    setTravelInfo({ ...travelInfo, travelList: items }); //前端暫時測試功能
 
     //dropend ajax
-    const data = items.filter((item) => `${item.s_Id}` === draggableId)[0];
-    console.log("axiosData", data);
+
+    // console.log("axiosData", data);
   };
 
   return (
