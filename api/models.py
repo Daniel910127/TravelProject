@@ -13,8 +13,6 @@ class Account(models.Model):
     return self.a_Account
   
 #Member database model
-
-
 class Member(models.Model):
   m_Id = models.AutoField(primary_key=True)
   m_Name = models.CharField(max_length=10, null=False)

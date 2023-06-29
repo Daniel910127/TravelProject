@@ -4,7 +4,11 @@ from django.http import JsonResponse, HttpResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import generics, status
+from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
+from datetime import datetime, timedelta
+from ..utils import ai
+
 
 
 from ..serializers import  Travel_List_TotalSerializer,Travel_ListSerializer,Travel_List_DetailSerializer_o,Travel_List_StartTimeSerializer_o
@@ -20,41 +24,72 @@ def travel_List_Total(request):
     return Response(serializer.data)
 
 
-@api_view(['POST'])##主行程表創立
+@api_view(['POST'])
 def CreateTravelList(request):
-    serializer = Travel_ListSerializer(data=request.data)
-    if serializer.is_valid():
-        m_Id = serializer.validated_data.get('m_Id')
-        t_Name = serializer.validated_data.get('t_Name')
-        t_Description = serializer.validated_data.get('t_Description')
-        t_FormTime = serializer.validated_data.get('t_FormTime')
-        t_StartDate = serializer.validated_data.get('t_StartDate')
-        t_EndDate = serializer.validated_data.get('t_EndDate')
-        t_StayDay = serializer.validated_data.get('t_StayDay')
-        t_Privacy = serializer.validated_data.get('t_Privacy')
-        t_Views = serializer.validated_data.get('t_Views')
-        t_Likes = serializer.validated_data.get('t_Likes')
-        t_score = serializer.validated_data.get('t_score')   
+    m_Id = request.data.get('m_Id')
+    t_Name = request.data.get('t_Name')
+    t_Description = request.data.get('t_Description')
+    t_StartDate = request.data.get('t_StartDate')
+    t_StayDay = request.data.get('t_StayDay')
+    t_Privacy = request.data.get('t_Privacy')
+    t_Views = 0
+    t_Likes = 0
+    t_score = 0  
+    # 获取request.data中的数据
+    custom = request.data.get('custom')
+    if custom:
+        interest_data = request.data.get('interest')
+        # 调用ai.py模块中的函数进行处理
+        ai.process_interest_data(interest_data)
+    else:
+        ai.custom = False
+        
+    playzone_data = request.data.get('playZone')
+    ai.process_playzone_data(playzone_data)
+    # 獲取當前時間
+    current_time = datetime.now()
+    # 格式化為所需的日期時間字符串
+    t_FormTime = current_time.strftime('%Y-%m-%d %H:%M:%S.%f')
+    # 將 t_StartDate 轉換為日期對象
+    start_date = datetime.strptime(t_StartDate, '%Y-%m-%d')
+    # 計算 t_EndDate
+    end_date = start_date + timedelta(days=int(t_StayDay))
+    # 將 t_EndDate 格式化為字符串
+    t_EndDate = end_date.strftime('%Y-%m-%d')
 
-        travellist = Travel_List.objects.create(
-            m_Id=m_Id, t_Name=t_Name, t_Description=t_Description, 
-            t_FormTime=t_FormTime, t_StartDate=t_StartDate, t_EndDate=t_EndDate,
-            t_StayDay=t_StayDay, t_Privacy=t_Privacy, t_Views=t_Views, t_Likes= t_Likes,
-            t_score=t_score
-            )
+    travellist = Travel_List.objects.create(
+        m_Id=m_Id, t_Name=t_Name, t_Description=t_Description, 
+        t_FormTime=t_FormTime, t_StartDate=t_StartDate, t_EndDate=t_EndDate,
+        t_StayDay=t_StayDay, t_Privacy=t_Privacy, t_Views=t_Views, t_Likes=t_Likes,
+        t_score=t_score
+    )
+
+    if travellist:
         response_data = {
-            "success": True,
+            "status": "201",
             "message": "行程表創建成功",
-            "data": serializer.data
+            "data": {
+                "m_Id": m_Id,
+                "t_Name": t_Name,
+                "t_Description": t_Description,
+                "t_FormTime": t_FormTime,
+                "t_StartDate": t_StartDate,
+                "t_EndDate": t_EndDate,
+                "t_StayDay": t_StayDay,
+                "t_Privacy": t_Privacy,
+                "t_Views": t_Views,
+                "t_Likes": t_Likes,
+                "t_score": t_score
+            }
         }
-        return Response(response_data)
+        return Response(response_data, status=status.HTTP_201_CREATED)
     else:
         response_data = {
-            "success": False,
-            "message": "行程表創建失敗",
-            "errors": serializer.errors
+            "status": "401",
+            "message": "行程表創建失敗"
         }
-        return Response(response_data)
+        return Response(response_data, status=status.HTTP_401_UNAUTHORIZED)
+
 
 @api_view(['POST'])##行程表細節創立
 def CreateTravelListDetail(request):
@@ -370,24 +405,25 @@ def DeleteTravelListStartTime(request):
         return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
 
 class TravelListView(generics.RetrieveAPIView):##單一會員所有行程表
+    permission_classes = (IsAuthenticated,)
     serializer_class = Travel_List_TotalSerializer
 
     def get(self, request, m_Id):
         my_models = Travel_List.objects.filter(m_Id=m_Id)
         if not my_models:
             response_data = {
-                "success": False,
-                "message": "行程表資料回傳失敗",
+                "status": "401",
+                "message": "行程表資料獲取失敗",
                 "error": "指定的m_Id不存在"
             }
+            return Response(response_data, status=status.HTTP_401_CREATED)
         else:
             serializer = self.serializer_class(my_models, many=True)
             response_data = {
-                "success": True,
-                "message": "行程表資料回傳成功",
+                "status": "201",
+                "message": "行程表資料獲取成功",
                 "data": serializer.data
             }
-
-        return Response(response_data)
+            return Response(response_data, status=status.HTTP_201_UNAUTHORIZED)
 
 travel_List_detail_view = TravelListView.as_view()

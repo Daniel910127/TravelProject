@@ -4,6 +4,7 @@ from .views import interest
 from .views import overview,spot,init_data,account,food,hotel,travel_list,like_record,interest,member,question
 
 
+
 urlpatterns = [
     path('', overview.apiOverview, name="api-overview"),
 
@@ -33,15 +34,17 @@ urlpatterns = [
     path('hotel-image-list/', hotel.hotelWithPictureList, name="hotel-image-list"),
     path('hotel/<int:h_Id>/', hotel.hotel_detail_view, name="hotel-detail"),
 
-    path('member/<int:m_Id>/like/<int:s_Id>/', like_record.LikeRecordAPIView.as_view(), name="like_record_spot"),
-    path('member/<int:m_Id>/like/<int:s_Id>/', like_record.LikeRecordAPIView.as_view(), name="like_record_spot"),
-    path('member/<int:m_Id>/like/<int:h_Id>/', like_record.LikeRecordAPIView.as_view(), name="like_record_hotel"),
-    path('member/<int:m_Id>/like/<int:h_Id>/', like_record.LikeRecordAPIView.as_view(), name="like_record_hotel"),
-    path('member/<int:m_Id>/like/<int:f_Id>/', like_record.LikeRecordAPIView.as_view(), name="like_record_food"),
-    path('member/<int:m_Id>/like/<int:f_Id>/', like_record.LikeRecordAPIView.as_view(), name="like_record_food"),
+    path('member/<int:m_Id>/like/', like_record.likeList, name="like_record_spot-create"),
+    path('member/<int:m_Id>/likespot/<int:s_Id>/', like_record.LikeSpotCreateView.as_view(), name="like_record_spot-create"),
+    path('member/<int:m_Id>/likespot/<int:s_Id>/delete', like_record.LikeSpotDeleteView.as_view(), name="like_record_spot-delete"),
+    path('member/<int:m_Id>/likefood/<int:f_Id>/', like_record.LikeFoodCreateView.as_view(), name="like_record_food-create"),
+    path('member/<int:m_Id>/likefood/<int:f_Id>/delete', like_record.LikeFoodDeleteView.as_view(), name="like_record_food-delete"),
+    path('member/<int:m_Id>/likehotel/<int:h_Id>/', like_record.LikeHotelCreateView.as_view(), name="like_record_hotel-create"),
+    path('member/<int:m_Id>/likehotel/<int:h_Id>/delete', like_record.LikeHotelDeleteView.as_view(), name="like_record_hotel-delete"),
+    path('member/<int:m_Id>/likeitinerary/<int:t_Id>/', like_record.LikeItineraryCreateView.as_view(), name="like_record_itinerary-create"),
+    path('member/<int:m_Id>/likeitinerary/<int:t_Id>/delete', like_record.LikeItineraryDeleteView.as_view(), name="like_record_itinerary-delete"),
   
     path('question/<int:s_Id>/', question.question_detail_view, name="question-detail"),
-
     
     path('member/<int:m_Id>/itinerary', travel_list.travel_List_detail_view, name="itinerary"),
     path('itinerary', travel_list.CreateTravelList, name="itinerary-create"),
