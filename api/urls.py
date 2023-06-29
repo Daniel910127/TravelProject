@@ -1,7 +1,7 @@
 from django.urls import path
 
 from .views import interest
-from .views import overview,spot,init_data,account,food,hotel,travel_list,like_record,interest,interest_json,member,question
+from .views import overview,spot,init_data,account,food,hotel,travel_list,like_record,interest,member,question
 
 
 
@@ -23,20 +23,14 @@ urlpatterns = [
     path('interest-update/', interest.UpdateInterest, name="interest-update"),
 
 
-    path('spot-list/', spot.spotList, name="spot-list"),
-    path('spot-image-list/', spot.spotWithPictureList, name="spot-image-list"),
-
     path('spot/', spot.spotWithPictureList, name="spot"),
-
     path('spot/<int:s_Id>/', spot.spot_detail_view, name="spot-detail"),
     path('spot/hot/', spot.high_rating_spots, name="spot-hot"),
 
-    path('food-list/', food.foodList, name="food-list"),
-    path('food-image-list/', food.foodWithPictureList, name="food-image-list"),
+    path('food/', food.foodWithPictureList, name="food-image-list"),
     path('food/<int:f_Id>/', food.food_detail_view, name="food-detail"),
-    
-    path('hotel-list/', hotel.hotelList, name="hotel-list"),
-    path('hotel-image-list/', hotel.hotelWithPictureList, name="hotel-image-list"),
+     
+    path('hotel/', hotel.hotelWithPictureList, name="hotel-image-list"),
     path('hotel/<int:h_Id>/', hotel.hotel_detail_view, name="hotel-detail"),
 
     path('member/<int:m_Id>/like/', like_record.likeList, name="like_record_spot-create"),
