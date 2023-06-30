@@ -1,13 +1,10 @@
 from rest_framework import serializers
 from .models import  Account, Spot, Member, s_Interest, Food, Travel_List, Travel_List_Detail, Question, s_Picture,f_Picture, m_Picture,Hotel,h_Picture,Like_Record,Travel_List_StartTime
 
-
 class AccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
         fields = '__all__'
-
-
 class SpotSerializer(serializers.ModelSerializer):
     class Meta:
         model = Spot
@@ -129,15 +126,23 @@ class Travel_List_DetailSerializer(serializers.ModelSerializer):
         
 class Travel_List_TotalSerializer(serializers.ModelSerializer):
     startTime = serializers.SerializerMethodField()
+    member = serializers.SerializerMethodField()  # 新增字段
 
     def get_startTime(self, obj):
         start_times = {}
         for start_time in obj.travel_list_starttime_set.all():
             start_times[str(start_time.tls_Day)] = start_time.tls_StartTime
         return start_times
+
+    def get_member(self, obj):
+        member = Member.objects.get(m_Id=obj.m_Id)  # 根據 Travel_List 的 m_Id 獲取相應的 Member
+        return MemberSerializer(member).data  # 序列化 Member 數據
+
     travel_list_detail = Travel_List_DetailSerializer(many=True, source='travel_list_detail_set')
+
     class Meta:
         model = Travel_List
         fields = '__all__'
+
 
 

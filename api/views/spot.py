@@ -4,6 +4,7 @@ from django.http import JsonResponse, HttpResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import generics, status
+from rest_framework.permissions import IsAuthenticated
 
 
 from ..serializers import  AccountSerializer, SpotSerializer, MemberSerializer, s_InterestSerializer, FoodSerializer, Travel_ListSerializer, Travel_List_DetailSerializer, QuestionSerializer, s_PictureSerializer, m_PictureSerializer, spotWithPictureURLSerializer
@@ -11,7 +12,6 @@ from ..serializers import  AccountSerializer, SpotSerializer, MemberSerializer, 
 from ..models import  Account, Spot, Member, s_Interest, Food, Travel_List, Travel_List_Detail, Question, s_Picture, m_Picture
 
 # Create your views here.
-
 
 @api_view(['GET'])
 def spotList(request):
@@ -43,6 +43,7 @@ def spot_detail(request, s_Name):
 #http://127.0.0.1:8000/api/spot/七股鹽山/  output:七股鹽山的資料(包含image url)
 
 class SpotDetailView(generics.RetrieveAPIView):
+    permission_classes = (IsAuthenticated,)     
     serializer_class = spotWithPictureURLSerializer
 
     def get(self, request, s_Id):
