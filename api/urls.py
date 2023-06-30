@@ -2,11 +2,6 @@ from django.urls import path
 
 from .views import interest
 from .views import overview,spot,init_data,account,food,hotel,travel_list,like_record,interest,member,question
-<<<<<<< HEAD
-=======
-
->>>>>>> 879c95327ae9d6b84e51a18c43cc672e9c7b1423
-
 
 urlpatterns = [
     path('', overview.apiOverview, name="api-overview"),
@@ -25,12 +20,8 @@ urlpatterns = [
     path('interest-list/', interest.InterestList, name="interest-list"),
     path('interest-update/', interest.UpdateInterest, name="interest-update"),
 
-<<<<<<< HEAD
     path('spot-list/', spot.spotList, name="spot-list"),
     path('spot-image-list/', spot.spotWithPictureList, name="spot-image-list"),
-=======
-
->>>>>>> 879c95327ae9d6b84e51a18c43cc672e9c7b1423
     path('spot/', spot.spotWithPictureList, name="spot"),
     path('spot/<int:s_Id>/', spot.spot_detail_view, name="spot-detail"),
     path('spot/hot/', spot.high_rating_spots, name="spot-hot"),
