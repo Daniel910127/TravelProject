@@ -1,6 +1,7 @@
 from ..models import Spot
 from ..serializers import SpotSerializer
 from django.http import JsonResponse
+from ..utils import ai_test
 
 
 interest_data = {}
@@ -25,3 +26,7 @@ def spotList():
     spots = Spot.objects.all().order_by('-s_Id')
     serializer = SpotSerializer(spots, many=True)
     return JsonResponse(serializer.data, safe=False)
+
+def spotListid(s_id):
+    spot=ai_test.get_spot_json(s_id)
+    return spot
