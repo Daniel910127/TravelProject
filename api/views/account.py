@@ -1,6 +1,8 @@
 from json.decoder import JSONDecodeError
 from ..serializers import AccountSerializer
 from ..models import Account
+from django.http import Http404
+from rest_framework_simplejwt.tokens import RefreshToken
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
@@ -8,63 +10,164 @@ from django.contrib.auth import authenticate
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.views import APIView
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.permissions import IsAuthenticated
+from datetime import datetime
 
 
-from ..serializers import  AccountSerializer, SpotSerializer, MemberSerializer, s_InterestSerializer, FoodSerializer, Travel_ListSerializer, Travel_List_DetailSerializer, QuestionSerializer, s_PictureSerializer, m_PictureSerializer
 
-from ..models import  Account, Spot, Member, s_Interest, Food, Travel_List, Travel_List_Detail, Question, s_Picture, m_Picture
+
+from ..serializers import  AccountSerializer,LoginSerializer
+
+from ..models import  Account
 from ..utils import spot_data
 from rest_framework.views import APIView
 import json
 
 
 # Create your views here.
+class CreateAccountView(APIView):#創建帳號
+    def post(self, request, format=None):
+        serializer = AccountSerializer(data=request.data)
+        if serializer.is_valid():
+            account = serializer.validated_data['account']
+            password = serializer.validated_data['password']
+            username = serializer.validated_data['username']
+            if Account.objects.filter(username=username).exists():
+                return Response({'error': '該名稱已被使用'}, status=status.HTTP_400_BAD_REQUEST)
+            email = serializer.validated_data['email']
+            if Account.objects.filter(email=email).exists():
+                return Response({'error': '該電子郵件地址已被使用'}, status=status.HTTP_400_BAD_REQUEST)
+            rank = serializer.validated_data.get('rank', 0)
+
+            # 使用AccountManager的create_user方法创建账户
+            account = Account.objects.create_user(account=account, password=password, rank=rank,email=email,username=username)
+
+            response_data = {
+                "status": "201",
+                "message": "帳號創建成功",
+                "data": serializer.data
+            }
+
+            # 返回成功响应
+            return Response(response_data, status=status.HTTP_201_CREATED)
+        else:
+            response_data = {
+                "status": "400",
+                "message": "帳號創建失败",
+                "error": serializer.errors
+            }
+            return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
+class LoginView(APIView):#登入帳號
+    def post(self, request):
+        serializer = LoginSerializer(data=request.data)
+        if serializer.is_valid():
+            account = serializer.validated_data['account']
+            password = serializer.validated_data['password']
+
+            try:
+                user = Account.objects.get(account=account)
+                if user.check_password(password):
+                    user.last_login = datetime.now()  
+                    user.save()
+                    refresh = RefreshToken.for_user(user)
+                    data = {
+                        'status': "201",
+                        'message': "帳號登入成功",
+                        'refresh': str(refresh),
+                        'access': str(refresh.access_token),
+                        'id': user.id,
+                        'account': user.account,
+                        'username': user.username,
+                        'email': user.email
+                    }
+                    return Response(data, status=status.HTTP_201_CREATED)
+                else:
+                    data = {
+                        'status': "401",
+                        'error': "密碼錯誤",
+                    }
+                    return Response(data, status=status.HTTP_401_UNAUTHORIZED)
+            except Account.DoesNotExist:
+                data = {
+                        'status': "401",
+                        'error': "帳號不存在",
+                    }
+                return Response(data, status=status.HTTP_401_UNAUTHORIZED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['POST'])
-def create_account(request):
-    serializer = AccountSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    else:
-    	return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class UpdateAccountView(APIView):#更改帳號資訊
+    permission_classes = (IsAuthenticated,) 
 
-@api_view(['POST'])
-def account_login(request):
-    try:
-        data = json.loads(request.body)
-    except JSONDecodeError:
-        return JsonResponse({'message': '資料格式不正確', 'setredirect': 0})
+    def get_object(self, id):
+        try:
+            return Account.objects.get(id=id)
+        except Account.DoesNotExist:
+            raise Http404("帳號不存在")
 
-    username = data.get('username', None)
-    password = data.get('password', None)
+    def check_duplicate_username(self, username, account):
+        return Account.objects.filter(username=username).exclude(id=account.id).exists()
 
-    try:
-        user = Account.objects.get(a_Account=username, a_Password=password)
-    except Account.DoesNotExist:
-        return JsonResponse({'message': '帳號或密碼錯誤', 'setredirect': 0})
+    def check_duplicate_email(self, email, account):
+        return Account.objects.filter(email=email).exclude(id=account.id).exists()
 
-    serializer = AccountSerializer(user, many=False)
-    whole = serializer.data
-    a_Id = whole['a_Id']
-    m_Id = whole['m_Id']
-    a_Account = whole['a_Account']
-    a_Password = whole['a_Password']
-    a_Level = whole['a_Level']
+    def get(self, request, id, format=None):
+        account = self.get_object(id)
+        serializer = AccountSerializer(account)
+        return Response(serializer.data)
 
-    request.session['a_Id'] = a_Id
-    request.session['m_Id'] = m_Id
-    request.session['a_Account'] = a_Account
-    # request.session['a_Password'] = a_Password
-    request.session['a_Level'] = a_Level
+    def put(self, request, id, format=None):
+        try:
+            account = self.get_object(id)
+        except Http404 as e:
+            return Response({'status': '404', 'message': '帳號不存在'}, status=status.HTTP_404_NOT_FOUND)
+        serializer = AccountSerializer(account, data=request.data)
+        if serializer.is_valid():
+            username = serializer.validated_data.get('username')
+            email = serializer.validated_data.get('email')
 
-    return JsonResponse({'message': '登入成功', 'setredirect': 1, 'redirect': '/home', 'a_Id': a_Id, 'm_Id': m_Id, 'a_Account': a_Account, 'a_Level': a_Level})
+            if username and self.check_duplicate_username(username, account):
+                errors = {
+                    'status': "401",
+                    'message': "會員更改失敗",
+                    'errors': {'username': ['用户名已存在']}
+                }
+                return Response(errors, status=status.HTTP_400_BAD_REQUEST)
+
+            if email and self.check_duplicate_email(email, account):
+                errors = {
+                    'status': "401",
+                    'message': "會員更改失敗",
+                    'errors': {'email': ['电子邮件已存在']}
+                }
+                return Response(errors, status=status.HTTP_400_BAD_REQUEST)
+
+            serializer.save()
+            data = {
+                'status': "201",
+                'message': "帳號更改成功",
+                'data': serializer.data
+            }
+            return Response(data, status=status.HTTP_201_CREATED)
+        else:
+            errors = {
+                'status': "401",
+                'message': "會員更改失敗",
+                'errors': serializer.errors
+            }
+            return Response(errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def update(self, request, id, format=None):
+        return self.put(request, id, format)
+
 
 
 @api_view(['GET'])
 def accountList(request):
-	accounts = Account.objects.all().order_by('-a_Id')
+	accounts = Account.objects.all().order_by('-id')
 	serializer = AccountSerializer(accounts, many=True)
 	return Response(serializer.data)

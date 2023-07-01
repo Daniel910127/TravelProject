@@ -25,5 +25,3 @@ def spotList():
     spots = Spot.objects.all().order_by('-s_Id')
     serializer = SpotSerializer(spots, many=True)
     return JsonResponse(serializer.data, safe=False)
-
-spotList()
