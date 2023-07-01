@@ -1,21 +1,59 @@
 from rest_framework import serializers
-from .models import  Account, Spot, Member, s_Interest, Food, Travel_List, Travel_List_Detail, Question, s_Picture,f_Picture, m_Picture,Hotel,h_Picture,Like_Record,Travel_List_StartTime
+from django.contrib.auth.hashers import make_password
+from .models import  Account, Spot, s_Interest, Food, Travel_List, Travel_List_Detail, Question, s_Picture,f_Picture, a_Picture,Hotel,h_Picture,Like_Record,Travel_List_StartTime
 
-class AccountSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Account
-        fields = '__all__'
+class AccountSerializer(serializers.Serializer):
+    account = serializers.CharField(max_length=20)
+    password = serializers.CharField(max_length=128)
+    username = serializers.CharField(max_length=100)
+    email = serializers.EmailField()
+    rank = serializers.IntegerField(default=0, required=False)
+
+    def create(self, validated_data):
+        account = validated_data['account']
+        password = validated_data['password']
+        username = validated_data['username']
+        email = validated_data['email']
+        rank = validated_data.get('rank', 0)
+
+        # 使用AccountManager的create_user方法创建账户
+        account = Account.objects.create_user(account=account, password=password, rank=rank, email=email, username=username)
+        return account
+   
+
+    def update(self, instance, validated_data):
+        instance.account = validated_data.get('account', instance.account)
+        password = validated_data.get('password')
+        if password:
+            instance.password = make_password(password)
+        instance.username = validated_data.get('username', instance.username)
+        instance.email = validated_data.get('email', instance.email)
+        instance.rank = validated_data.get('rank', instance.rank)
+        instance.save()
+        return instance
+
+class LoginSerializer(serializers.Serializer):
+    account = serializers.CharField(max_length=20)
+    password = serializers.CharField(max_length=128)
+
+    def validate(self, data):
+        account = data.get('account')
+        password = data.get('password')
+
+        # 进行帐号和密码的验证逻辑
+        try:
+            user = Account.objects.get(account=account)
+            if not user.check_password(password):
+                raise serializers.ValidationError("Invalid credentials")
+        except Account.DoesNotExist:
+            raise serializers.ValidationError("Invalid credentials")
+
+        return data
+
 class SpotSerializer(serializers.ModelSerializer):
     class Meta:
         model = Spot
         fields = '__all__'
-
-
-class MemberSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Member
-        fields = '__all__'
-
 
 class s_InterestSerializer(serializers.ModelSerializer):
     class Meta:
@@ -43,9 +81,9 @@ class f_PictureSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class m_PictureSerializer(serializers.ModelSerializer):
+class a_PictureSerializer(serializers.ModelSerializer):
     class Meta:
-        model = m_Picture
+        model = a_Picture
         fields = '__all__'
 
 class h_PictureSerializer(serializers.ModelSerializer):
@@ -126,7 +164,7 @@ class Travel_List_DetailSerializer(serializers.ModelSerializer):
         
 class Travel_List_TotalSerializer(serializers.ModelSerializer):
     startTime = serializers.SerializerMethodField()
-    member = serializers.SerializerMethodField()  # 新增字段
+    account = serializers.SerializerMethodField()  # 新增字段
 
     def get_startTime(self, obj):
         start_times = {}
@@ -134,15 +172,13 @@ class Travel_List_TotalSerializer(serializers.ModelSerializer):
             start_times[str(start_time.tls_Day)] = start_time.tls_StartTime
         return start_times
 
-    def get_member(self, obj):
-        member = Member.objects.get(m_Id=obj.m_Id)  # 根據 Travel_List 的 m_Id 獲取相應的 Member
-        return MemberSerializer(member).data  # 序列化 Member 數據
+    def get_account(self, obj):
+        account = Account.objects.get(id=obj.account.id)  # 根據 Travel_List 的 id 獲取相應的 Member
+        return AccountSerializer(account).data  # 序列化 Member 數據
 
     travel_list_detail = Travel_List_DetailSerializer(many=True, source='travel_list_detail_set')
 
     class Meta:
         model = Travel_List
         fields = '__all__'
-
-
 

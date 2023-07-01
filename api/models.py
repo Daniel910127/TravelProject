@@ -1,38 +1,70 @@
 from django.db import models
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager,PermissionsMixin
 
-#Account database model 
-class Account(models.Model):
-  a_Id = models.AutoField( primary_key=True) 
-  m_Id = models.IntegerField( null=False) 
-  a_Account = models.CharField(max_length=20, null=False, unique=True)
-  a_Password = models.CharField(max_length=20, null=False)
-  a_Level = models.IntegerField(null=False)
-  a_rank = models.IntegerField(null=False, default=0)
+from django.db import models
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 
-  def __str__(self):
-    return self.a_Account
-  
-#Member database model
-class Member(models.Model):
-  m_Id = models.AutoField(primary_key=True)
-  m_Name = models.CharField(max_length=10, null=False)
-  m_Gender = models.CharField(max_length=2, null=False, default='m')
-  m_Email = models.EmailField(max_length=100, blank=True, default='')
-  m_Phone = models.CharField(max_length=20, null=False)
+class AccountManager(BaseUserManager):
+    def create_user(self, account, password,username,email, rank=0):
+        account = self.model(
+            account=account,
+            rank=rank,
+            username=username,
+            email=email
+        )
+        account.set_password(password)
+        account.save(using=self._db)
+        return account
 
-  def __str__(self):
-    return self.m_Name
+
+    def create_superuser(self, account, password,username,email, rank=999):
+        account = self.create_user(
+            account=account,
+            password=password,
+            rank=rank,
+            username=username,
+            email=email
+        )
+        account.is_superuser = True
+        account.is_staff = True
+        account.save(using=self._db)
+        return account
+
+class Account(AbstractBaseUser, PermissionsMixin):
+    id = models.AutoField(primary_key=True)
+    account = models.CharField(max_length=20, null=False, unique=True)
+    email = models.EmailField(unique=True, default='', editable=False)
+    username = models.CharField(max_length=100, unique=True, default='', editable=False)
+    rank = models.IntegerField(null=False, default=0)
+
+    is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+
+    USERNAME_FIELD = 'account'
+
+    objects = AccountManager()
+
+    def save(self, *args, **kwargs):
+        if not self.email:  # 如果 email 字段尚未設置
+            self.email = f'{self.account}@gmail.com'
+        if not self.username:  # 如果 username 字段尚未設置
+            self.username = self.account
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.account
+
 
 #Travel_List database model
 class Travel_List(models.Model):
   t_Id = models.AutoField( primary_key=True) 
-  m_Id = models.IntegerField(null=False) 
+  account = models.ForeignKey(to="Account",null=True, on_delete=models.CASCADE)
   t_Name = models.CharField(max_length=10, null=False)#行程表名稱
   t_Description = models.CharField(max_length=10, null=False)#行程表簡介
   t_FormTime = models.DateTimeField(auto_now=True)#行程表建立時間
   t_StartDate = models.CharField(max_length=100,null=False)#旅行開始日期
   t_EndDate = models.CharField(max_length=100,null=False)#旅行結束日期
-  t_StayDay = models.IntegerField(null=False, default='1')#旅行停留時間
+  t_StayDay = models.IntegerField(null=False, default=1)#旅行停留時間
   t_Privacy = models.CharField(max_length=2, null=False, default='n')#行程表公開與否
   t_Views =  models.IntegerField(null=False)#行程表瀏覽次數
   t_Likes =  models.IntegerField(null=False)#行程表喜歡次數
@@ -158,13 +190,13 @@ class  f_Picture(models.Model):
     return self.fp_URL
 
 #m_Picture database model
-class  m_Picture(models.Model):
-  mp_Id = models.AutoField( primary_key=True) 
-  m_Id = models.ForeignKey(to="Member", on_delete=models.CASCADE)  
-  mp_URL = models.ImageField(upload_to='images/member/', default=None)
+class  a_Picture(models.Model):
+  ap_Id = models.AutoField( primary_key=True) 
+  id = models.ForeignKey(to="Account",null=True, on_delete=models.CASCADE)
+  ap_URL = models.ImageField(upload_to='images/account/', default=None)
 
   def __str__(self):
-    return self.mp_URL
+    return self.ap_URL
 
 #h_Picture database model
 class  h_Picture(models.Model):
@@ -192,7 +224,7 @@ class Question(models.Model):
 #s_Interest database model
 class s_Interest(models.Model):
   si_Id = models.AutoField( primary_key=True) 
-  m_Id = models.ForeignKey(to="Member", on_delete=models.CASCADE)   
+  id = models.ForeignKey(to="Account", null=True,on_delete=models.CASCADE)
   si_pg = models.IntegerField( null=False) #公園綠地
   si_os = models.IntegerField( null=False) #戶外運動
   si_tp = models.IntegerField( null=False) #主題園區、風景區
@@ -208,18 +240,20 @@ class s_Interest(models.Model):
   si_tf = models.IntegerField( null=False) #觀光工廠
 
   def __str__(self):
-    return self.m_Id
+    return self.id
   
 
 #Like_Record database  model
 class Like_Record(models.Model):
   r_Id = models.AutoField( primary_key=True) 
-  m_Id = models.ForeignKey(to="Member", on_delete=models.CASCADE) 
+  id = models.ForeignKey(to="Account",null=True, on_delete=models.CASCADE)
   t_Id = models.ForeignKey(to="Travel_List",null=True, on_delete=models.CASCADE)  
   s_Id =  models.ForeignKey(to="Spot",null=True, on_delete=models.CASCADE)  
   f_Id =  models.ForeignKey(to="Food",null=True, on_delete=models.CASCADE)  
   h_Id =  models.ForeignKey(to="Hotel",null=True, on_delete=models.CASCADE) 
-  r_LikeOrDisLike =models.IntegerField( null=False,default=0)
+  
+  def __str__(self):
+    return self.id
 
 
 

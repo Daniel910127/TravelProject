@@ -3,9 +3,8 @@ from django.http import JsonResponse, HttpResponse
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from ..serializers import  AccountSerializer, SpotSerializer, MemberSerializer, s_InterestSerializer, FoodSerializer, Travel_ListSerializer, Travel_List_DetailSerializer, QuestionSerializer, s_PictureSerializer, m_PictureSerializer, h_PictureSerializer
 
-from ..models import  Account, Spot, Member, s_Interest,Hotel, Food, Travel_List, Travel_List_Detail, Question, s_Picture, m_Picture,f_Picture,h_Picture
+from ..models import   Spot, Hotel, Food, s_Picture,f_Picture,h_Picture
 from ..utils import spot_data,food_data,hotel_data,crawl_spot_image,crawl_food_image,crawl_hotel_image,crawl_food_stars_reviews,crawl_hotel_stars_reviews,crawl_spot_stars_reviews
 
 # Create your views here.

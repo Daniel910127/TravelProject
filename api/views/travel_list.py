@@ -8,12 +8,13 @@ from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from datetime import datetime, timedelta
 from ..utils import ai
+from django.core.exceptions import ObjectDoesNotExist
 
 
 
 from ..serializers import  Travel_List_TotalSerializer,Travel_ListSerializer,Travel_List_DetailSerializer_o,Travel_List_StartTimeSerializer_o
 
-from ..models import Travel_List,Travel_List_Detail,Travel_List_StartTime
+from ..models import Travel_List,Travel_List_Detail,Travel_List_StartTime,Account
 
 # Create your views here.
 
@@ -25,10 +26,20 @@ def travel_List_Total(request):
     return Response(serializer.data)
 
 
-@api_view(['POST'])#主行程表創立
+@api_view(['POST'])#創建主行程表
 def CreateTravelList(request):
     permission_classes = (IsAuthenticated,)
-    m_Id = request.data.get('m_Id')
+    account_id = request.data.get('id')
+    try:
+        account = Account.objects.get(id=account_id)
+    except Account.DoesNotExist:
+        response_data = {
+            "status": "401",
+            "message": "行程表創建失敗",
+            "error": "指定的id不存在"
+        }
+        return Response(response_data, status=status.HTTP_401_UNAUTHORIZED)
+    
     t_Name = request.data.get('t_Name')
     t_Description = request.data.get('t_Description')
     t_StartDate = request.data.get('t_StartDate')
@@ -36,34 +47,12 @@ def CreateTravelList(request):
     t_Privacy = request.data.get('t_Privacy')
     t_Views = 0
     t_Likes = 0
-    t_score = 0  
-    # 獲取request.data中的數據
-    custom = request.data.get('custom')
-    if custom:
-        interest_data = request.data.get('interest')
-        # 調用ai.py中的函数進行處理
-        ai.process_interest_data(interest_data)
-    else:
-        ai.custom = False
-        
-    playzone_data = request.data.get('playZone')
-    ai.process_playzone_data(playzone_data)
-    # 獲取當前時間
-    current_time = datetime.now()
-    # 格式化為所需的日期時間字符串
-    t_FormTime = current_time.strftime('%Y-%m-%d %H:%M:%S.%f')
-    # 將 t_StartDate 轉換為日期對象
-    start_date = datetime.strptime(t_StartDate, '%Y-%m-%d')
-    # 計算 t_EndDate
-    end_date = start_date + timedelta(days=int(t_StayDay))
-    # 將 t_EndDate 格式化為字符串
-    t_EndDate = end_date.strftime('%Y-%m-%d')
+    t_score = 0
 
     travellist = Travel_List.objects.create(
-        m_Id=m_Id, t_Name=t_Name, t_Description=t_Description, 
-        t_FormTime=t_FormTime, t_StartDate=t_StartDate, t_EndDate=t_EndDate,
-        t_StayDay=t_StayDay, t_Privacy=t_Privacy, t_Views=t_Views, t_Likes=t_Likes,
-        t_score=t_score
+        id=account, t_Name=t_Name, t_Description=t_Description, 
+        t_StartDate=t_StartDate, t_StayDay=t_StayDay, t_Privacy=t_Privacy,
+        t_Views=t_Views, t_Likes=t_Likes, t_score=t_score
     )
 
     if travellist:
@@ -71,12 +60,10 @@ def CreateTravelList(request):
             "status": "201",
             "message": "行程表創建成功",
             "data": {
-                "m_Id": m_Id,
+                "id": account_id,
                 "t_Name": t_Name,
                 "t_Description": t_Description,
-                "t_FormTime": t_FormTime,
                 "t_StartDate": t_StartDate,
-                "t_EndDate": t_EndDate,
                 "t_StayDay": t_StayDay,
                 "t_Privacy": t_Privacy,
                 "t_Views": t_Views,
@@ -162,7 +149,7 @@ def UpdateTravelList(request, t_Id):
     permission_classes = (IsAuthenticated,)
     serializer = Travel_ListSerializer(data=request.data)
     if serializer.is_valid():
-        m_Id = serializer.validated_data.get('m_Id')
+        id = serializer.validated_data.get('id')
         t_Name = serializer.validated_data.get('t_Name')
         t_Description = serializer.validated_data.get('t_Description')
         t_StartDate = serializer.validated_data.get('t_StartDate')
@@ -178,7 +165,7 @@ def UpdateTravelList(request, t_Id):
             travellist = Travel_List.objects.get(pk=t_Id)
 
             # 更新记录
-            travellist.m_Id = m_Id
+            travellist.id = id
             travellist.t_Name = t_Name
             travellist.t_Description = t_Description
             travellist.t_StartDate = t_StartDate
@@ -191,11 +178,11 @@ def UpdateTravelList(request, t_Id):
             travellist.save()  # 保存更新后的记录
 
             response_data = {
-                "status": "204",
+                "status": "201",
                 "message": "主行程表更新成功",
                 "data": serializer.data
             }
-            return Response(response_data, status=status.HTTP_204_NO_CONTENT)
+            return Response(response_data, status=status.HTTP_201_CREATED)
         except Travel_List.DoesNotExist:
             response_data = {
                 "status": "404",
@@ -396,22 +383,24 @@ class TravelListView(generics.RetrieveAPIView):##單一會員所有行程表
     permission_classes = (IsAuthenticated,)
     serializer_class = Travel_List_TotalSerializer
 
-    def get(self, request, m_Id):
-        my_models = Travel_List.objects.filter(m_Id=m_Id)
-        if not my_models:
+    def get(self, request, *args, **kwargs):
+        try:
+            account_id = self.kwargs['id']  # Get the account ID from the URL kwargs
+            my_model = Travel_List.objects.get(account_id=account_id)
+            serializer = self.serializer_class(my_model)
             response_data = {
-                "status": "401",
-                "message": "行程表資料獲取失敗",
-                "error": "指定的m_Id不存在"
-            }
-            return Response(response_data, status=status.HTTP_401_CREATED)
-        else:
-            serializer = self.serializer_class(my_models, many=True)
-            response_data = {
-                "status": "201",
+                "status": "200",
                 "message": "行程表資料獲取成功",
                 "data": serializer.data
             }
-            return Response(response_data, status=status.HTTP_201_UNAUTHORIZED)
+            return Response(response_data, status=status.HTTP_200_OK)
+
+        except ObjectDoesNotExist:
+            response_data = {
+                "status": "401",
+                "message": "行程表資料獲取失敗",
+                "error": "指定的id不存在"
+            }
+            return Response(response_data, status=status.HTTP_401_UNAUTHORIZED)
 
 travel_List_detail_view = TravelListView.as_view()

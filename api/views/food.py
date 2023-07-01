@@ -5,10 +5,9 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
-from ..serializers import AccountSerializer,SpotSerializer,MemberSerializer,s_InterestSerializer,FoodSerializer,Travel_ListSerializer,Travel_List_DetailSerializer,QuestionSerializer,s_PictureSerializer,m_PictureSerializer,foodWithPictureURLSerializer
+from ..serializers import FoodSerializer,foodWithPictureURLSerializer
 
-from ..models import Account,Spot,Member,s_Interest,Food,Travel_List,Travel_List_Detail,Question,s_Picture,m_Picture
-
+from ..models import Food
 # Create your views here.
 
 @api_view(['GET'])
