@@ -5,6 +5,8 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.views import TokenRefreshView
 
 
+
+
 urlpatterns = [
     path('', overview.apiOverview, name="api-overview"),
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
@@ -20,7 +22,8 @@ urlpatterns = [
     path('account/<int:id>/interest-create/', interest.CreateInterestView.as_view(), name="interest-create"),
     path('account/<int:id>/interest-update/', interest.UpdateInterestView.as_view(), name="interest-update"),
 
-
+    path('spot-list/', spot.spotList, name="spot-list"),
+    path('spot-image-list/', spot.spotWithPictureList, name="spot-image-list"),
     path('spot/', spot.spotWithPictureList, name="spot"),
     path('spot/<int:s_Id>/', spot.spot_detail_view, name="spot-detail"),
     path('spot/hot/', spot.high_rating_spots, name="spot-hot"),
