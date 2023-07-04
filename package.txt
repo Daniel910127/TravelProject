@@ -1,3 +1,4 @@
+superuser username:admin , password:1234
 有裝的套件版本打在這裡  大家統一版本一下   pip list
 
 pip install selenium==4.8.2    爬蟲用
@@ -12,3 +13,13 @@ python manage.py migrate
 pip install django-cors-headers==3.14.0    跨域請求用
 pip install Pillow
 pip install requests
+
+<<<<<<< HEAD
+pip install djangorestframework-simplejwt  JWT驗證
+pip install djangorestframework djangorestframework_simplejwt
+
+
+=======
+
+pip install whitenoise
+>>>>>>> origin/main

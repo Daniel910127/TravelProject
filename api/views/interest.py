@@ -7,70 +7,124 @@ from django.http import JsonResponse, HttpResponse
 from django.contrib.auth import authenticate
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import generics, status
+from rest_framework.permissions import IsAuthenticated
+from django.core.exceptions import ObjectDoesNotExist
 
 
-from ..serializers import AccountSerializer, SpotSerializer, MemberSerializer, s_InterestSerializer, FoodSerializer, Travel_ListSerializer, Travel_List_DetailSerializer, QuestionSerializer, s_PictureSerializer, m_PictureSerializer
 
-from ..models import Account, Spot, Member, s_Interest, Food, Travel_List, Travel_List_Detail, Question, s_Picture, m_Picture
+from ..serializers import  s_InterestSerializer
+
+from ..models import  s_Interest
 from ..utils import spot_data
 from rest_framework.views import APIView
 import json
 
+class CreateInterestView(APIView):#帳號興趣創立
+    permission_classes = (IsAuthenticated,)
+    def post(self, request, id):
+        serializer = s_InterestSerializer(data=request.data)
+        if serializer.is_valid():
+            if Account.objects.filter(id=id).exists():
+                return Response({'error': '該帳號已創立興趣'}, status=status.HTTP_400_BAD_REQUEST)
+            id = serializer.validated_data.get('id')
+            si_pg = serializer.validated_data.get('si_pg')
+            si_os = serializer.validated_data.get('si_os')
+            si_tp = serializer.validated_data.get('si_tp')
+            si_ee = serializer.validated_data.get('si_ee')
+            si_ff = serializer.validated_data.get('si_ff')
+            si_la = serializer.validated_data.get('si_la')
+            si_le = serializer.validated_data.get('si_le')
+            si_ns = serializer.validated_data.get('si_ns')
+            si_np = serializer.validated_data.get('si_np')
+            si_rt = serializer.validated_data.get('si_rt')
+            si_se = serializer.validated_data.get('si_se')
+            si_ha = serializer.validated_data.get('si_ha')
+            si_tf = serializer.validated_data.get('si_tf')
 
-@api_view(['POST'])
-def InterestDetail(request):
-    data = json.loads(request.body)
-    m_Id = data.get('m_Id', None)
-    try:
-        member = s_Interest.objects.get(m_Id=m_Id)
-        serializer = s_InterestSerializer(member, many=False)
-        return Response(serializer.data)
-    except s_Interest.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+            interest = s_Interest.objects.create(
+                id=id,
+                si_pg=si_pg,
+                si_os=si_os,
+                si_tp=si_tp,
+                si_ee=si_ee,
+                si_ff=si_ff,
+                si_la=si_la,
+                si_le=si_le,
+                si_ns=si_ns,
+                si_np=si_np,
+                si_rt=si_rt,
+                si_se=si_se,
+                si_ha=si_ha,
+                si_tf=si_tf
+            )
 
+            response_data = {
+                "status": "201",
+                "message": "帳號興趣創建成功",
+                "data": serializer.data
+            }
 
-@api_view(['GET'])
-def InterestList(request):
-	members = s_Interest.objects.all().order_by('-m_Id')
-	serializer = s_InterestSerializer(members, many=True)
-	return Response(serializer.data)
+            # 返回成功响应
+            return Response(response_data, status=status.HTTP_201_CREATED)
+        else:
+            # 返回验证错误响应
+            response_data = {
+                "status": "400",
+                "message": "帳號興趣創建失敗",
+                "error": serializer.errors
+            }
 
+            return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['POST'])
-def UpdateInterest(request):
-    serializer = s_InterestSerializer(data=request.data)
-    if serializer.is_valid():
+class UpdateInterestView(APIView):#帳號興趣修改
+    permission_classes = (IsAuthenticated,)
+    def put(self, request, id):
         try:
-            interest = s_Interest.objects.get(m_Id=request.data['m_Id'])
+            interest = s_Interest.objects.get(id=id)
         except s_Interest.DoesNotExist:
-            return Response(status=404)
-        interest.si_pg = serializer.validated_data.get(
-            'si_pg', interest.si_pg)
-        interest.si_os = serializer.validated_data.get(
-            'si_os', interest.si_os)
-        interest.si_tp = serializer.validated_data.get(
-            'si_tp', interest.si_tp)
-        interest.si_ee = serializer.validated_data.get(
-            'si_ee', interest.si_ee)
-        interest.si_ff = serializer.validated_data.get(
-            'si_ff', interest.si_ff)
-        interest.si_la = serializer.validated_data.get(
-            'si_la', interest.si_la)
-        interest.si_le = serializer.validated_data.get(
-            'si_le', interest.si_le)
-        interest.si_ns = serializer.validated_data.get(
-            'si_ns', interest.si_ns)
-        interest.si_np = serializer.validated_data.get(
-            'si_np', interest.si_np)
-        interest.si_rt = serializer.validated_data.get(
-            'si_rt', interest.si_rt)
-        interest.si_se = serializer.validated_data.get(
-            'si_se', interest.si_se)
-        interest.si_ha = serializer.validated_data.get(
-            'si_ha', interest.si_ha)
-        interest.si_tf = serializer.validated_data.get(
-            'si_tf', interest.si_tf)
-        interest.save()
-        return Response(serializer.data)
-    return Response(serializer.errors, status=400)
+            response_data = {
+                "status": "404",
+                'error': '帳號興趣不存在'
+            }
+            return Response(response_data, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = s_InterestSerializer(interest, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            response_data = {
+                "status": "200",
+                "message": "帳號興趣更新成功",
+                "data": serializer.data
+            }
+            return Response(response_data, status=status.HTTP_200_OK)
+        else:
+            response_data = {
+                "status": "400",
+                "message": "帳號興趣更新失败",
+                "error": serializer.errors
+            }
+            return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
+
+class InterestListView(generics.RetrieveAPIView):##單一帳號興趣
+    permission_classes = (IsAuthenticated,)
+    serializer_class = s_InterestSerializer
+
+    def get(self, request, id):
+        try:
+            my_models = s_Interest.objects.get(id=id)
+            serializer = self.serializer_class(my_models)
+            response_data = {
+                "status": "201",
+                "message": "興趣資料獲取成功",
+                "data": serializer.data
+            }
+            return Response(response_data, status=status.HTTP_200_OK)
+        except ObjectDoesNotExist:
+            response_data = {
+                "status": "401",
+                "message": "興趣資料獲取失敗",
+                "error": "指定的id不存在"
+            }
+            return Response(response_data, status=status.HTTP_401_UNAUTHORIZED)
+
