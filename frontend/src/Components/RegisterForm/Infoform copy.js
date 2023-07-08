@@ -272,7 +272,7 @@ function InfoForm(props) {
           ></TextField>
         </Grid>
 
-        {/* <Grid item xs={12}>
+        <Grid item xs={12}>
           <Controller
             name="phone"
             control={control}
@@ -305,9 +305,9 @@ function InfoForm(props) {
               />
             )}
           />
-        </Grid> */}
+        </Grid>
 
-       {/*  <Grid item xs={6}>
+        <Grid item xs={6}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Controller
               name="birthday"
@@ -340,9 +340,9 @@ function InfoForm(props) {
               )}
             />
           </LocalizationProvider>
-        </Grid> */}
+        </Grid>
 
-       {/*  <Grid item xs={6}>
+        <Grid item xs={6}>
           <FormLabel id="demo-row-radio-buttons-group-label">Gender</FormLabel>
 
           <Controller
@@ -368,7 +368,7 @@ function InfoForm(props) {
             name="gender"
             control={control}
           />
-        </Grid> */}
+        </Grid>
       </Grid>
 
       <Grid container justifyContent="flex-end">
