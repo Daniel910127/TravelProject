@@ -82,6 +82,7 @@ const IconSlider = (props) => {
   const [value, setValue] = useState(0);
   function IconThumbComponent(props) {
     const { children, ...other } = props;
+    console.log(other)
     return (
       <SliderThumb {...other}>
         {children}

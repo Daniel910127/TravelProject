@@ -7,7 +7,7 @@ const ItineraryCreateContext = createContext();
 export function ItineraryCreateProvider({ children }) {
   const [itineraryCreateInfo, setItineraryCreateInfo] = useState({
     t_Name: null,
-    playZone: null,
+    playZone: [],
     custom: false,
     t_StartDate: null,
     t_StayDay: null,
