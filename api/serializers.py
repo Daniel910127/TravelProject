@@ -124,6 +124,24 @@ class Like_RecordSerializer(serializers.ModelSerializer):
     class Meta:
         model = Like_Record
         fields = '__all__'
+class Like_Record_Detail_Serializer(serializers.ModelSerializer):
+
+    other_info = serializers.SerializerMethodField()             #forkey to spot/food/hotel
+
+    def get_other_info(self, obj):
+        spot = obj.s_Id
+        food = obj.f_Id
+        hotel = obj.h_Id
+        if spot is not None:
+            return spotWithPictureURLSerializer(spot).data
+        if food is not None:
+            return foodWithPictureURLSerializer(food).data
+        if hotel is not None:
+            return hotelWithPictureURLSerializer(hotel).data
+        return None
+    class Meta:
+        model = Like_Record
+        fields = '__all__'
 class Travel_List_StartTimeSerializer_o(serializers.ModelSerializer):
     class Meta:
         model = Travel_List_StartTime
