@@ -83,7 +83,7 @@ class Travel_List_Detail(models.Model):
   h_Id =  models.ForeignKey(to="Hotel",null=True, on_delete=models.CASCADE)  
   tl_TransportMode = models.CharField(max_length=20, null=True)#到該景點交通工具
   tl_TransportTime = models.IntegerField(null=True) #交通工具移動時間
-  tl_StayTime =  models.IntegerField(max_length=10, null=False,default=2)#停留時間
+  tl_StayTime =  models.IntegerField( null=False,default=2)#停留時間
   tl_Day = models.IntegerField(null=False,default=1)#該景點屬於第幾天
   tl_Order = models.IntegerField(null=False)#該景點順序
   tl_Notes = models.CharField(max_length=200, null=True)#景點小筆記
