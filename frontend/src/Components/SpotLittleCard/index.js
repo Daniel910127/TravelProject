@@ -11,6 +11,7 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { red } from "@mui/material/colors";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ShareIcon from "@mui/icons-material/Share";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -22,7 +23,27 @@ const ImageCardWrapper = styled("div")(({ theme }) => ({
 }));
 
 export default function RecipeReviewCard(props) {
-  const { s_Id, s_Name, s_Pictures, s_District } = props;
+  const {
+    s_Id,
+    s_Name,
+    s_Pictures,
+    s_District,
+    isLike = false,
+    setItems,
+    onLikeClick = () => {},
+  } = props;
+
+  const [like, setLike] = React.useState(false);
+
+  React.useEffect(() => {
+    setLike(isLike);
+  }, [isLike]);
+
+  const updateLike = () => {
+    setLike(!like);
+    //ajs like
+  };
+
   // console.log(s_Pictures);
   return (
     <Card
@@ -44,7 +65,9 @@ export default function RecipeReviewCard(props) {
         <CardMedia
           component="img"
           height="140"
-          image={s_Pictures[0] ?  `http://localhost:8000${s_Pictures[0].sp_URL}`: ''}
+          image={
+            s_Pictures[0] ? `http://localhost:8000${s_Pictures[0].sp_URL}` : ""
+          }
           alt="Paella dish"
         />
       </ImageCardWrapper>
@@ -74,10 +97,11 @@ export default function RecipeReviewCard(props) {
           onClick={(event) => {
             event.stopPropagation();
             event.preventDefault();
-            console.log("Button clicked");
+            updateLike();
+            onLikeClick(s_Id);
           }}
         >
-          <FavoriteIcon />
+          {like ? <FavoriteIcon /> : <FavoriteBorderIcon />}
         </IconButton>
         <IconButton
           aria-label="share"
