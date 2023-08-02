@@ -7,14 +7,19 @@ from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from ..models import Like_Record,Account,Spot,Food,Hotel,Travel_List
-from ..serializers import Like_RecordSerializer
+from ..serializers import Like_RecordSerializer,Like_Record_Detail_Serializer
 
 @api_view(['GET'])  # 某一會員的Like_record紀錄
 def likeList(request, account_id):
     permission_classes = (IsAuthenticated,) 
     likes = Like_Record.objects.filter(id=account_id).order_by('-r_Id')
-    serializer = Like_RecordSerializer(likes, many=True)
-    return Response(serializer.data)
+    serializer = Like_Record_Detail_Serializer(likes, many=True)
+    response_data = {
+            "status": "200",
+            "message": "按讚資料獲取成功",
+            "data": serializer.data
+        }
+    return Response(response_data, status=status.HTTP_200_OK)
 
 class LikeSpotCreateView(APIView):#按讚景點新增
     def post(self, request, account_id, s_Id):
