@@ -33,11 +33,11 @@ export default function InterestChart({ data }) {
 
   return (
     <RadarChart
-      cx={300}
-      cy={250}
-      outerRadius={150}
-      width={500}
-      height={500}
+      cx={240}
+      cy={180}
+      outerRadius={140}
+      width={480}
+      height={360}
       data={formatData}
     >
       <PolarGrid />

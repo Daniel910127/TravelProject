@@ -15,6 +15,8 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Popper from "@mui/material/Popper";
 
+import deleteItineraryAPI from '../../../utils/apis/deleteItinerary';
+
 import DeleteConfirmModal from "./DeleteConfirmModal";
 
 import moment from "moment";

@@ -3,46 +3,53 @@ import { useContext } from "react";
 import { TravelInfoStateContext } from "..";
 import "react-dates/initialize";
 import DateRangePickerExample from "./DateRange";
-import styled from "styled-components";
+// import styled from "styled-components";
 // import "./react_dates_overrides.css";
 
-const HeaderWrapper = styled.div`
-  position: relative;
-  height: 260px;
-  ${"" /* background-color: blue; */}
-  background-size: cover;
-  background-image: url(${(props) => props.bgImg});
-  padding: 30px;
-  margin-bottom: 100px;
-`;
+import { styled } from "@mui/material/styles";
+import { Paper } from "@mui/material";
+const HeaderWrapper = styled("div")(({ theme, bgImg }) => ({
+  position: "relative",
+  height: "260px",
+  backgroundSize: "cover",
+  backgroundImage: `url(${bgImg})`,
+  padding: "30px",
+  marginBottom: "100px",
+}));
 
-const InfoPanel = styled.div`
-  position: relative;
-  background-color: white;
-  padding: 30px;
-  border-radius: 9px;
-  height: 180px;
-  width: 100%;
-  top: 60%;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px;
+const InfoPanel = styled(Paper)(({ theme }) => ({
+  position: "relative",
+  backgroundColor: "white",
+  padding: "30px",
+  borderRadius: "9px",
+  height: "180px",
+  width: "100%",
+  top: "60%",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "space-between",
 
-  display:flex;
-  flex-direction: column;
-  justify-content: space-between;
+  h3: {
+    fontSize: "32px",
+    color: "#545454",
+    fontWeight: "600",
+  },
+}));
 
-  h3 {
-    font-size: 32px;
-    color: #545454;
-    font-weight: 600;
-  }
-`;
+/* const Item = styled(Paper)(({ theme }) => ({
+  ...theme.typography.body2,
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+  height: 60,
+  lineHeight: '60px',
+})); */
 
 export default function Header() {
   const { travelInfo, setTravelInfo } = useContext(TravelInfoStateContext);
 
   return (
     <HeaderWrapper bgImg={`https://picsum.photos/600/400`}>
-      <InfoPanel>
+      <InfoPanel elevation={6}>
         <h3>台南三日遊</h3>
         <div className="custom-picker">
           <DateRangePickerExample />

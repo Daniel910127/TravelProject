@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 
 import axios from "axios";
-import styled from "styled-components";
+
 import {
   Link,
   DirectLink,
@@ -13,46 +13,76 @@ import {
   scroller,
 } from "react-scroll";
 
+import { styled } from "@mui/material/styles";
+
 import { TravelInfoStateContext } from "..";
 import { StrictModeDroppable } from "../../StrictModeDroppable";
+import CustomMuiTextField from "../../CustomMuiTextField";
+
 import Card from "../Card";
-import updateOrderAPI from "../../../util/updateOrderAPI";
 
-const DropContextWrapper = styled.div`
-  font-family: sans-serif;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  ${"" /* gap: 17px; */}
-  min-height: 500px;
-  width: 100%;
-`;
+import updateOrderAPI from "../../../utils/updateOrderAPI";
+import DayStartTime from "../DayStartTime";
+import SearchSpot from "../SearchSpot";
+import RecommendSwiper from "../RecommendSwiper";
 
-const DroppableContainer = styled.div`
-  background-color: #f5efe6;
-  min-height: 30px;
-  height: 100%;
-`;
+const DropContextWrapper = styled("div")(({ theme }) => ({
+  position: 'relative',
+  fontFamily: 'sans-serif',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  minHeight: '500px',
+}));
 
-const SectionWrapper = styled.div`
-  flex-basis: 50%;
-`;
+const DroppableContainer = styled("div")(({ theme }) => ({
+  minHeight: '60px',
+  height: '100%',
+}));
 
-const OnDay = styled.span`
-  display: inline-block;
-  background-color: ${(props) => props.color};
-  color: #fff;
-  padding: 6px;
-  border-radius: 6px;
-`;
-const PlanWrapper = styled.div``;
+const SectionWrapper = styled("div")(({ theme }) => ({
+  marginBottom: '2rem',
+}));
+
+const DayHeader = styled("div")(({ theme }) => ({
+  
+  display: 'flex',
+  padding:'0 30px',
+  alignItems:'center',
+
+}));
+
+const OnDay  = styled("span")(({ theme,color}) => ({
+  display: 'inline-block',
+  backgroundColor: color,
+  color: '#fff',
+  padding: '6px',
+  borderRadius: '6px',
+  
+  marginRight: '.6rem',
+}));
+
+
+
+const AddMoreContainer = styled("div")(({ theme }) => ({
+  margin:'0 30px',
+  paddingBottom:'24px',
+  borderBottom: `1px solid ${theme.palette.divider}`,
+}))
+
 
 export default function Plan() {
   const { travelInfo, setTravelInfo, days, setDays } = useContext(
     TravelInfoStateContext
   );
 
-  const { travelList, t_StartDate, dayCount, t_StartTime } = travelInfo;
+  const {
+    travelList,
+    t_StartDate,
+    dayCount,
+    t_StartTime,
+    t_StartTime: dayStartTime,
+  } = travelInfo;
   const color = ["#FFBE0B", "#FB5607", "#FF006E", "#8338EC", "#3A86FF"];
 
   const onDragEnd = async (event) => {
@@ -174,7 +204,7 @@ export default function Plan() {
       setTravelInfo(updateTravelList);
     } catch (err) {
       console.log(err);
-    } */  //後端api完成才能接
+    } */ //後端api完成才能接
 
     setTravelInfo({ ...travelInfo, travelList: items }); //前端暫時測試功能
 
@@ -184,61 +214,80 @@ export default function Plan() {
   };
 
   return (
-    <PlanWrapper>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <DropContextWrapper>
-          {days.map((day, dayIndex) => {
-            const currTime = new Date(t_StartDate);
-            currTime.setUTCHours(-8); //時區-8
-            {
-              /* console.log(day, currTime); */
-            }
-            currTime.setDate(currTime.getDate() + dayIndex - 1);
-            currTime.setTime(
-              currTime.getTime() + t_StartTime[dayIndex + 1] * 1000
-            );
-            const DroppableItems = travelList
-              .filter((item) => item.tls_Day === dayIndex + 1)
-              .map((item, index) => {
-                const startTime = new Date(currTime.getTime());
-                currTime.setTime(
-                  currTime.getTime() +
-                    item.tl_TransportTime * 1000 +
-                    item.tl_StayTime * 1000
-                );
+    <DragDropContext onDragEnd={onDragEnd}>
+      <DropContextWrapper>
+        {days.map((day, dayIndex) => {
+          const currTime = new Date(t_StartDate);
+          currTime.setUTCHours(-8); //時區-8
+          currTime.setDate(currTime.getDate() + dayIndex - 1);
+          currTime.setTime(
+            currTime.getTime() + t_StartTime[dayIndex + 1] * 1000
+          );
+          const DroppableItems = travelList
+            .filter((item) => item.tls_Day === dayIndex + 1)
+            .map((item, index) => {
+              const startTime = new Date(currTime.getTime());
+              currTime.setTime(
+                currTime.getTime() +
+                  item.tl_TransportTime * 1000 +
+                  item.tl_StayTime * 1000
+              );
 
-                console.log("itemstart", startTime);
-
-                return (
-                  <Card
-                    item={item}
-                    startTime={startTime}
-                    index={index}
-                    key={item.s_Id}
-                  />
-                );
+              // console.log(item)
+              const orderIndex = travelList.findIndex((i) => {
+                return i.tl_Id === item.tl_Id;
               });
-            return (
-              <SectionWrapper key={day}>
-                <ScrollElement name={day}>
-                  <OnDay color={color[(dayIndex + 1) % 4]}>{day}</OnDay>
-                  <StrictModeDroppable droppableId={`${dayIndex + 1}`}>
-                    {(provided, snapshot) => (
-                      <DroppableContainer
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
-                      >
-                        {DroppableItems}
-                        {provided.placeholder}
-                      </DroppableContainer>
-                    )}
-                  </StrictModeDroppable>
-                </ScrollElement>
-              </SectionWrapper>
-            );
-          })}
-        </DropContextWrapper>
-      </DragDropContext>
-    </PlanWrapper>
+
+              return (
+                <Card
+                  item={item}
+                  startTime={startTime}
+                  index={index}
+                  key={item.s_Id}
+                  orderIndex={orderIndex}
+                />
+              );
+            });
+
+          // console.log(first)
+          return (
+            <SectionWrapper key={day}>
+              <ScrollElement name={day}>
+
+
+                <DayHeader>
+                  <OnDay color={color[(dayIndex + 1) % 4]}>
+                    第{dayIndex + 1}天
+                  </OnDay>
+                  {dayStartTime[dayIndex + 1] && (
+                    <DayStartTime
+                      day={dayIndex + 1}
+                      time={dayStartTime[dayIndex + 1]}
+                    />
+                  )}
+                </DayHeader>
+
+                <StrictModeDroppable droppableId={`${dayIndex + 1}`}>
+                  {(provided, snapshot) => (
+                    <DroppableContainer
+                      ref={provided.innerRef}
+                      {...provided.droppableProps}
+                    >
+                      {DroppableItems}
+                      {provided.placeholder}
+                    </DroppableContainer>
+                  )}
+                </StrictModeDroppable>
+
+                <AddMoreContainer>
+                  <SearchSpot />
+                  <RecommendSwiper></RecommendSwiper>
+                </AddMoreContainer>
+              </ScrollElement>
+            </SectionWrapper>
+          );
+        })}
+      </DropContextWrapper>
+    </DragDropContext>
   );
 }

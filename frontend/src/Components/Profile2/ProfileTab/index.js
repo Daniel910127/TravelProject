@@ -33,6 +33,7 @@ function useRouteMatch(patterns) {
 }
 
 const MyTabs = styled(Tabs)(({ theme }) => ({
+  marginBottom: '1.25rem',
   "& .MuiTabs-indicator": {
     display: "none",
   },
@@ -65,8 +66,8 @@ const MyTab = styled(Tab)(({ theme }) => ({
   );
 } */
 
-const TabsContainer = styled(Box)(({ theme }) => ({
-  padding: "1.25rem",
+const TabsWrapper = styled(Box)(({ theme }) => ({
+  padding: "0 1.25rem 1.25rem 1.25rem",
 }));
 
 /* function a11yProps(index) {
@@ -91,7 +92,7 @@ function ProfileTab() {
   }; */
 
   return (
-    <TabsContainer>
+    <TabsWrapper>
       <MyTabs value={currentTab ? currentTab : "/profile/myItinerary"}>
         <MyTab
           label="我的行程"
@@ -120,7 +121,7 @@ function ProfileTab() {
       </MyTabs>
 
       <Outlet></Outlet>
-    </TabsContainer>
+    </TabsWrapper>
   );
 }
 

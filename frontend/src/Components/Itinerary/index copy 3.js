@@ -2,91 +2,96 @@ import React from "react";
 import { useState, createContext } from "react";
 
 import { nanoid } from "nanoid";
-import {grey} from "@mui/material/colors";
+
 import { useEffect } from "react";
 import ItineraryHeader from "./Header";
 import Days from "./Days";
 import Plan from "./Plan";
 import "./style.css";
+import {
+  Link,
+  DirectLink,
+  Element as ScrollElement,
+  Events,
+  animateScroll as scroll,
+  scrollSpy,
+  scroller,
+} from "react-scroll";
 import Map from "./Map";
 import SearchSpot from "./SearchSpot";
-import { styled } from "@mui/material/styles";
+
 
 const ItineraryContainer = styled("div")(({ theme }) => ({
   position: "relative",
   display: "flex",
   width: "100%",
   height: "calc(100vh - 0px)",
-  
+  background:'pink',
+  overflowY: "scroll",
+  overflowX: "hidden",
 }));
 
+const DaysWrapper = styled("div")(({ theme }) => ({
+  display: "flex",
+  justifyContent: "center",
+  position: "relative",
+  height: "100%",
+  flex: 0,
+  flexBasis: "50px",
+  boxShadow: theme.shadows[6],
+  // overflowY: "scroll",
+  // overflowX: "hidden",
+  // "::-webkit-scrollbar": {
+  //   display: "none",
+  // },
+}));
+
+const PlanWrapper = styled("div")(({ theme }) => ({
+  position: "relative",
+  flex: 1,
+  height: "100%",
+  overflowY: "scroll",
+  display: "flex",
+  background:'white',
+  /* '::-webkit-scrollbar':{
+    display: 'none'
+  } */  
+}));
+
+const PlanContainer = styled("div")(({ theme }) => ({
+  height: "100%",
+  minWidth: "0",
+  maxWidth:'500px',
+  flexGrow:1,
+}));
+
+const PlanHidden = styled("div")(({ theme }) => ({
+  height: "100%",
+  width: "calc(100% - 100px)",
+  background:'yellow'
+}));
+
+const MapWrapper = styled("div")(({ theme }) => ({
+  position: "fixed",
+  
+  height: "calc(100vh - 0px)",
+  width: "500px",
+  // top:0,
+  // left:0,
+  // right:0,
+  // bottom:0,
+}));
 const ItineraryHeaderContainer = styled("div")(({ theme }) => {
   console.log(theme);
   return {};
 });
 
-const SideContainer = styled("div")(({ theme }) => ({
-  position: "sticky",
-  display: "flex",
-  height: "100%",
-  top: 0,
-  flex: "1",
-  background: "orange",
-  overflowY: "scroll",
-}));
-
-const LeftSideWrapper = styled("div")(({ theme }) => ({
-  position: "relative",
-  flex: "1.35",
-  background: grey[50],
-  height: "max-content",
-  minWidth: "0",
-  maxWidth: "600px",
-}));
-
-const RightSideWrapper = styled("div")(({ theme }) => ({
-  position: "sticky",
-  alignSelf: "flex-start",
-  flex: "1",
-  top: 0,
-  bottom: 0,
-  height: "100%",
-}));
-
-const DaysWrapper = styled("div")(({ theme }) => ({
-  position: "sticky",
-  flex: "0 0 48px",
-  background: grey[50],
-  borderRight:`1px solid ${grey[200]}`,
-  top: 0,
-}));
-
-
-
-const DaysContainer = styled("div")(({ theme }) => ({
-  position: "relative",
-  display: "flex",
-  justifyContent: "center",
-
-  boxShadow: theme.shadows[6],
-  minHeight: "100%",
-  maxHeight: "100%",
-  width: "48px",
-  overflowY: "scroll",
-  overflowX: "hidden",
-  "::-webkit-scrollbar": {
-    display: "none",
-  },
-}));
-
-
-
 const MapContainer = styled("div")(({ theme }) => ({
-  // width:'100%'
-
-  // minWidth: "460px",
-  backgroundColor: "black",
-  top: 0,
+  height: "100%",
+  width: "calc(100% - 0px)",
+  position: "fixed",
+  // backgroundColor: "green",
+  // opacity:0.3,
 }));
 
 const TravelInfoStateContext = createContext({
@@ -382,26 +387,26 @@ function Itinerary() {
           setFocusSpot,
         }}
       >
-        <ItineraryContainer>
+        <ItineraryContainer  >
           <DaysWrapper>
-            <DaysContainer>
-              <Days></Days>
-            </DaysContainer>
+            <Days></Days>
           </DaysWrapper>
-          <SideContainer id="scroll-container">
-            <LeftSideWrapper>
+          <PlanWrapper id="scroll-container">
+            <PlanContainer>
               <ItineraryHeaderContainer>
                 <ItineraryHeader />
               </ItineraryHeaderContainer>
-              
-                <Plan></Plan>
-             
-            </LeftSideWrapper>
+              <Plan></Plan>
+            </PlanContainer>
 
-            <RightSideWrapper>
-              <Map></Map>
-            </RightSideWrapper>
-          </SideContainer>
+            <PlanHidden></PlanHidden>
+          </PlanWrapper>
+
+          <MapWrapper>
+            <MapContainer>
+              {/* <Map></Map> */}
+            </MapContainer>
+          </MapWrapper>
         </ItineraryContainer>
       </TravelInfoStateContext.Provider>
     )

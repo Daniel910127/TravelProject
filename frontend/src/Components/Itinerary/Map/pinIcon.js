@@ -1,7 +1,7 @@
 import L from "leaflet";
 import mapIcon from "./iconmonstr-location-1.svg";
 
-const iconLocation = (index, color) => {
+const pinIcon = (index, color) => {
   return new L.DivIcon({
     //iconUrl: mapIcon,
     html: `
@@ -20,4 +20,4 @@ const iconLocation = (index, color) => {
   });
 };
 
-export { iconLocation };
+export { pinIcon };

@@ -22,7 +22,9 @@ import useFormController from "../../../hooks/useFormController";
 
 const HeaderWrapper = styled(Paper)((props) => {
   // console.log(props);
-  return {};
+  return {
+    marginBottom: "1.25rem",
+  };
 });
 
 const HeaderContainer = styled(Card)({
@@ -163,7 +165,7 @@ export default function ProFileHeader() {
           sx: { maxWidth: "600px", width: "calc(100% - 64px)" },
         }}
       >
-        <DialogTitle id="scroll-dialog-title">Subscribe</DialogTitle>
+        <DialogTitle id="scroll-dialog-title">資料修改</DialogTitle>
 
         <DialogContent>
           <ProfileEditDialogForm
@@ -185,10 +187,8 @@ export default function ProFileHeader() {
           <CancelButton onClick={handleClose}>取消</CancelButton>
           <DefaultButton
             onClick={() => {
-              console.log("Submit");
               handleClose();
               handleSubmit(onSubmit)();
-              console.log("Submit2");
             }}
           >
             修改

@@ -1,0 +1,23 @@
+
+.recommendSwiper {
+    width: 100%;
+    height: 100%;
+  }
+  
+  .recommendSwiper-slide {
+    text-align: center;
+    font-size: 18px;
+    background: #463636;
+  
+    /* Center slide text vertically */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .recommendSwiper-slide img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }

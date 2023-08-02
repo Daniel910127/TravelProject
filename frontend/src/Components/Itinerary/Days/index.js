@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import produce from "immer";
 import { TravelInfoStateContext } from "..";
-import styled from "styled-components";
+
 import {
   Link,
   DirectLink,
@@ -12,14 +12,29 @@ import {
   scroller,
 } from "react-scroll";
 import { useEffect } from "react";
+import { styled } from "@mui/material/styles";
+import { grey } from "@mui/material/colors";
 
-const DaysWrapper = styled.div`
-  width: 100px;
-`;
+const DaysWrapper = styled("div")(({ theme }) => ({
+  width: "100px",
+}));
 
-const DaysContainer = styled.div`
-  position: fixed;
-`;
+const DaysContainer = styled("div")(({ theme }) => ({
+  
+  
+}));
+
+const Day = styled("div")(({ theme }) => ({
+  borderRadius: "50%",
+  width: "40px",
+  height: "40px",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  backgroundColor: grey[200],
+  fontSize: ".6rem",
+}));
+
 export default function Days() {
   const { travelInfo, setTravelInfo, days, setDays } = useContext(
     TravelInfoStateContext
@@ -71,7 +86,7 @@ export default function Days() {
       <ul>
         {days.map((day) => {
           return (
-            <li key={day}>
+            <li key={day} style={{ marginBottom: ".6rem" }}>
               <Link
                 to={day}
                 containerId="scroll-container"
@@ -80,17 +95,8 @@ export default function Days() {
                 smooth={true}
                 duration={500}
               >
-                {day}
+                <Day>{day}</Day>
               </Link>
-              {/* <a
-                  className="test1"
-                  to="test1"
-                  onClick={() => {
-                    scrollToWithContainer(day);
-                  }}
-                >
-                  {day}
-                </a> */}
             </li>
           );
         })}

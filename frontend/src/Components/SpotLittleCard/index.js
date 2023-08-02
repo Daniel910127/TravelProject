@@ -33,7 +33,14 @@ export default function RecipeReviewCard(props) {
     onLikeClick = () => {},
   } = props;
 
+  console.log(isLike,'ISLIKE')
+
   const [like, setLike] = React.useState(false);
+
+
+  React.useEffect(() => {
+    setLike(isLike);
+  }, []);
 
   React.useEffect(() => {
     setLike(isLike);
@@ -41,7 +48,7 @@ export default function RecipeReviewCard(props) {
 
   const updateLike = () => {
     setLike(!like);
-    //ajs like
+    //ajax like
   };
 
   // console.log(s_Pictures);

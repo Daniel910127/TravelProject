@@ -2,12 +2,21 @@ import React from "react";
 import { useState, createContext } from "react";
 
 import { nanoid } from "nanoid";
-import {grey} from "@mui/material/colors";
+
 import { useEffect } from "react";
 import ItineraryHeader from "./Header";
 import Days from "./Days";
 import Plan from "./Plan";
 import "./style.css";
+import {
+  Link,
+  DirectLink,
+  Element as ScrollElement,
+  Events,
+  animateScroll as scroll,
+  scrollSpy,
+  scroller,
+} from "react-scroll";
 import Map from "./Map";
 import SearchSpot from "./SearchSpot";
 import { styled } from "@mui/material/styles";
@@ -17,76 +26,42 @@ const ItineraryContainer = styled("div")(({ theme }) => ({
   display: "flex",
   width: "100%",
   height: "calc(100vh - 0px)",
-  
+  overflowY: "scroll",
+  overflowX: "hidden",
 }));
 
+const DaysWrapper = styled("div")(({ theme }) => ({
+  width: "50px",
+  display: "flex",
+  justifyContent: "center",
+  position:'relative',
+  // borderRight: "1px solid rgba(0, 0, 0, 0.4)",
+  boxShadow: theme.shadows[6],
+}));
+
+const PlanWrapper = styled("div")(({ theme }) => ({
+  width: "600px",
+}));
+
+const PlanContainer = styled("div")(({ theme }) => ({
+  width: "100%",
+  height: "100%",
+}));
+
+const MapWrapper = styled("div")(({ theme }) => ({
+  position: "relative",
+  flexGrow: "1",
+}));
 const ItineraryHeaderContainer = styled("div")(({ theme }) => {
   console.log(theme);
   return {};
 });
 
-const SideContainer = styled("div")(({ theme }) => ({
-  position: "sticky",
-  display: "flex",
-  height: "100%",
-  top: 0,
-  flex: "1",
-  background: "orange",
-  overflowY: "scroll",
-}));
-
-const LeftSideWrapper = styled("div")(({ theme }) => ({
-  position: "relative",
-  flex: "1.35",
-  background: grey[50],
-  height: "max-content",
-  minWidth: "0",
-  maxWidth: "600px",
-}));
-
-const RightSideWrapper = styled("div")(({ theme }) => ({
-  position: "sticky",
-  alignSelf: "flex-start",
-  flex: "1",
-  top: 0,
-  bottom: 0,
-  height: "100%",
-}));
-
-const DaysWrapper = styled("div")(({ theme }) => ({
-  position: "sticky",
-  flex: "0 0 48px",
-  background: grey[50],
-  borderRight:`1px solid ${grey[200]}`,
-  top: 0,
-}));
-
-
-
-const DaysContainer = styled("div")(({ theme }) => ({
-  position: "relative",
-  display: "flex",
-  justifyContent: "center",
-
-  boxShadow: theme.shadows[6],
-  minHeight: "100%",
-  maxHeight: "100%",
-  width: "48px",
-  overflowY: "scroll",
-  overflowX: "hidden",
-  "::-webkit-scrollbar": {
-    display: "none",
-  },
-}));
-
-
-
 const MapContainer = styled("div")(({ theme }) => ({
-  // width:'100%'
-
-  // minWidth: "460px",
-  backgroundColor: "black",
-  top: 0,
+  position: "fixed",
+  height: "calc(100% - 0px)",
+  width: "calc(100% - 650px)",
+  backgroundColor: "#666",
 }));
 
 const TravelInfoStateContext = createContext({
@@ -131,7 +106,7 @@ function Itinerary() {
           s_Address: "727 臺南市北門區鯤江976號",
           tls_Day: 1,
           tl_Order: 1,
-          tl_Id: 1,
+          tl_Id:1,
           tl_TransportMode: 0, //0開車  1走路  2腳踏車
           tl_StayTime: 3600,
           tl_TransportTime: 1600,
@@ -168,7 +143,7 @@ function Itinerary() {
           s_Address: "727 臺南市北門區三光里三寮灣127-3號",
           tls_Day: 1,
           tl_Order: 2,
-          tl_Id: 2,
+          tl_Id:2,
           tl_TransportMode: 1, //0開車  1走路  2腳踏車
           tl_StayTime: 3600,
           tl_TransportTime: 1600,
@@ -205,7 +180,7 @@ function Itinerary() {
           s_Address: "724 臺南市七股區三股里",
           tls_Day: 2,
           tl_Order: 3,
-          tl_Id: 3,
+          tl_Id:3,
           tl_TransportMode: 0, //0開車  1走路  2腳踏車
           tl_StayTime: 3600,
           tl_TransportTime: 1600,
@@ -242,7 +217,7 @@ function Itinerary() {
           s_Address: "724 臺南市七股區鹽埕里52號",
           tls_Day: 2,
           tl_Order: 4,
-          tl_Id: 4,
+          tl_Id:4,
           tl_TransportMode: 0, //0開車  1走路  2腳踏車
           tl_StayTime: 3600,
           tl_TransportTime: 1600,
@@ -280,7 +255,7 @@ function Itinerary() {
           s_Address: "726 臺南市學甲區頂州里75-25號",
           tls_Day: 3,
           tl_Order: 6,
-          tl_Id: 6,
+          tl_Id:6,
           tl_TransportMode: 0, //0開車  1走路  2腳踏車
           tl_StayTime: 3600,
           tl_TransportTime: 1600,
@@ -317,7 +292,7 @@ function Itinerary() {
           s_Address: "721 臺南市麻豆區南勢里關帝廟60號",
           tls_Day: 3,
           tl_Order: 7,
-          tl_Id: 7,
+          tl_Id:7,
           tl_TransportMode: 0, //0開車  1走路  2腳踏車
           tl_StayTime: 3600,
           tl_TransportTime: 1600,
@@ -382,26 +357,24 @@ function Itinerary() {
           setFocusSpot,
         }}
       >
-        <ItineraryContainer>
+        <ItineraryContainer id="scroll-container">
           <DaysWrapper>
-            <DaysContainer>
-              <Days></Days>
-            </DaysContainer>
+            <Days></Days>
           </DaysWrapper>
-          <SideContainer id="scroll-container">
-            <LeftSideWrapper>
+          <PlanWrapper>
+            <PlanContainer>
               <ItineraryHeaderContainer>
                 <ItineraryHeader />
               </ItineraryHeaderContainer>
-              
-                <Plan></Plan>
-             
-            </LeftSideWrapper>
+              <Plan></Plan>
+            </PlanContainer>
+          </PlanWrapper>
 
-            <RightSideWrapper>
+          <MapWrapper>
+            <MapContainer>
               <Map></Map>
-            </RightSideWrapper>
-          </SideContainer>
+            </MapContainer>
+          </MapWrapper>
         </ItineraryContainer>
       </TravelInfoStateContext.Provider>
     )

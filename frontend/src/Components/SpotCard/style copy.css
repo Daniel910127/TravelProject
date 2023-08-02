@@ -40,12 +40,12 @@
   height: 350px;
 }
 
-.mySwiper2 {
+.swiper {
   width: 100%;
   height: 100%;
 }
 
-.mySwiper2 .swiper-slide {
+.swiper-slide {
   text-align: center;
   font-size: 18px;
   background: #fff;
@@ -56,7 +56,7 @@
   align-items: center;
 }
 
-.mySwiper2 .swiper-slide img {
+.swiper-slide img {
   display: block;
   width: 100%;
   height: 100%;
@@ -64,14 +64,14 @@
   user-select: none;
 }
 
-.mySwiper2 {
+.swiper {
   width: 100%;
   height: 100px;
   margin-left: auto;
   margin-right: auto;
 }
 
-.mySwiper2 .swiper-slide {
+.swiper-slide {
   height: auto;
   background-size: cover;
   background-position: center;
@@ -108,32 +108,32 @@
   opacity: 1;
 }
 
-.mySwiper2 .swiper-slide img {
+.swiper-slide img {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.mySwiper2 .pre-slide,
-.mySwiper2 .next-slide {
+.pre-slide,
+.next-slide {
   position: absolute;
   background: none;
   border: none;
 }
-.mySwiper2 .pre-slide {
+.pre-slide {
   top: 50%;
   left: 0px;
   transform: translateY(-50%);
 }
 
-.mySwiper2 .next-slide {
+.next-slide {
   top: 50%;
   right: 0px;
   transform: translateY(-50%);
 }
 
-.mySwiper2 .arrow-icon {
+.arrow-icon {
   transform: scale(1, 1.2);
   font-weight: 200;
   color:rgb(60, 33, 0);

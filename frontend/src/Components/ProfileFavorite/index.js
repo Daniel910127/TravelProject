@@ -149,6 +149,7 @@ export default function ProfileFavorite() {
         s_Stars: 5,
         s_Reviews: 1,
         s_Likes: null,
+        s_IsLike: true,
       },
     ]);
   }, []);
@@ -165,7 +166,7 @@ export default function ProfileFavorite() {
       }
     });
 
-    console.log(nextState);
+    // console.log(nextState);
     setItems(nextState);
   };
 
@@ -191,18 +192,19 @@ export default function ProfileFavorite() {
       <Grid
         container
         spacing={{ xs: 2, md: 3 }}
-        columns={{ xs: 2, sm: 9, md: 16 }}
+        columns={{ xs: 2, sm: 12, md: 16 }}
         alignItems="stretch"
-        justifyItems={"center"}
+        justifyContent={'center'}
+
       >
         {items.map((item) => (
           <Grid
             key={item.s_Id}
             xs={2}
-            sm={3}
+            sm={4}
             md={4}
             display={"flex"}
-            flexBasis={300}
+            
             justifyContent={"center"}
             flexGrow={1}
           >
@@ -211,7 +213,7 @@ export default function ProfileFavorite() {
               s_Name={item.s_Name}
               s_Pictures={item.s_picture}
               s_District={item.s_District}
-              isLiked={item.s_IsLike}
+              isLike={item.s_IsLike}
               onLikeClick={onDislikeClick}
             ></SpotLittleCard>
           </Grid>

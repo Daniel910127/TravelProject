@@ -7,7 +7,7 @@ import Box from "@mui/material/Box";
 export default function Home() {
   return (
     <>
-      <NavBar />
+    
 
       <Container fixed>
         <Box sx={{ marginBottom: 3 }}>

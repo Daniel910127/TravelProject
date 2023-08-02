@@ -1,4 +1,4 @@
-import styled from "styled-components";
+
 import { Draggable } from "react-beautiful-dnd";
 import { TravelInfoStateContext } from "../index";
 import { useState, useContext } from "react";
@@ -7,83 +7,95 @@ import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import produce, { setAutoFreeze, setUseProxies } from "immer";
+import secToClock from "../../../utils/secToClock";
+import toStrClock from "../../../utils/toStrClock";
+import PinIcon from "./PinIcon";
+import CustomMuiTypography from "../../CustomMuiTypography";
+import { styled } from "@mui/material/styles";
+const DragItem = styled("div")(({ theme }) => ({
+  userSelect: 'none',
 
-const DragItem = styled.div`
-  user-select: none;
-  ${"" /* min-height: 50px; */}
-  padding: 16px;
-  font-size: 1em;
-  text-align: center;
-  ${"" /* background-color: #7895b2; */}
-  margin-bottom: 20px;
-  position: relative;
-`;
+  padding:'16px 52px',
+  fontSize: '1em',
+  textAlign: 'center',
 
-const Item = styled.div`
-  display: flex;
-  ${"" /* padding: 16px; */}
-  width: 100%;
-  gap: 24px;
-`;
+  marginBottom: '20px',
+  position: 'relative',
+  textAlign: 'left',
+  width: '100%',
+}))
 
-const IntroductionContainer = styled.div`
-  position: relative;
-  background-color: #f3f4f5;
-  width: 320px;
-  padding: 12px;
-  border-radius: 12px;
-  z-index: 1;
-`;
+const Item = styled("div")(({ theme }) => ({
+  display: 'flex',
+  width: '100%',
+  gap: '1rem',
+}))
 
-const Title = styled.h3`
-  color: #545454;
-`;
+const IntroductionContainer = styled("div")(({ theme }) => ({
+  position: 'relative',
+  backgroundColor: 'white',
+  padding: '20px',
+  width:'100%',
+  borderRadius: '12px',
+  display:'flex',
+  gap:'8px',
+  flexDirection: 'column-reverse',
+  [`@media screen and (min-width: ${theme.breakpoints.values.md}px)`]: {
+    flexDirection: 'row'
+    
+ },
+}))
 
-const Summary = styled.p`
-  color: #989898;
-`;
+const IntroPanel = styled("div")(({ theme }) => ({
+  flex: '1.3 1',
+}))
 
-const IntroductionHead = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-`;
+const ImgContainer = styled("div")(({ theme }) => ({
+  borderRadius: '12px',
+  overflow: 'hidden',
+  flex: '1 1',
+  aspectRatio: '4 / 3',
+  [`@media screen and (min-width: ${theme.breakpoints.values.md}px)`]: {
+    alignSelf: 'start',
+ },
+}))
 
-const ImgContainer = styled.div`
-  flex-grow: 1;
-  width: 200px;
-  height: 120px;
-  border-radius: 12px;
-  overflow: hidden;
-`;
+const IntroductionHead = styled("div")(({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  marginBottom: '8px',
+}))
 
-const Img = styled.img`
-  object-fit: cover;
-  height: 100%;
-  width: 100%;
-`;
+const Img = styled("img")(({ theme }) => ({
+  objectFit: 'cover',
+  width:'100%',
+  height:'100%',
+  
+}))
 
-const Transport = styled.div`
-  position: relative;
-  display: flex;
-  left: 50px;
-  ${"" /* height: 100px; */}
-  ${"" /* border-left: 1px solid black; */}
-  align-items: center;
+const Transport = styled("div")(({ theme }) => ({
+  position: 'relative',
+  display: 'flex',
+  left: '50px',
+  alignItems: 'center',
 
-  ::before {
-    content: "";
-    position: absolute;
-    ${"" /* top: -40px; */}
-    left: 0;
-    width: 1px;
-    height: 100px;
-    background-color: red;
-    opacity: 0.5;
+  '::before': {
+    content: '""',
+    position: 'absolute',
+    left: 0,
+    width: '1px',
+    height: '100px',
+    backgroundColor: 'red',
+    opacity: 0.5,
   }
-`;
-const Card = ({ item, startTime, index, count }) => {
+}));
+
+
+
+
+const color = ["#FFBE0B", "#FB5607", "#FF006E", "#8338EC", "#3A86FF"];
+const Card = ({ item, startTime, index, orderIndex }) => {
   const { s_Name, tl_StayTime, tl_TransportTime, s_Summary, s_Picture } = item;
 
   // console.log(item, item.s_Picture);
@@ -95,28 +107,16 @@ const Card = ({ item, startTime, index, count }) => {
   // console.log('startTime',startTime)
 
   const [hover, setHover] = useState(false);
-  // console.log('@@@@',travelInfo);
-  // console.log(startTime)
-  const secToClock = {
-    getHour: function (sec) {
-      const hour = Math.floor(sec / 3600); // Divide seconds by 3600 to get the number of hours
-      return hour < 10 ? "0" + hour : hour.toString();
-    },
-
-    getMin: function (sec) {
-      const min = Math.floor((sec % 3600) / 60); // Calculate the remaining seconds after getting hours, divide by 60 to get minutes
-      return min < 10 ? "0" + min : min.toString();
-    },
-  };
 
   return (
     <Draggable draggableId={`${item.s_Id}`} index={index}>
       {(provided, snapshot) => {
+        // console.log(provided, "provider");
         const style = {
           ...provided.draggableProps.style,
-          backgroundColor: snapshot.isDragging ? "blue" : "white",
+          borderLeft: snapshot.isDragging ? "4px solid blue" : "4px solid transparent",
           fontSize: 18,
-          marginBottom:0
+          marginBottom: 0,
         };
 
         return (
@@ -136,34 +136,36 @@ const Card = ({ item, startTime, index, count }) => {
               setFocusSpot(item);
             }}
           >
-            <Transport>
-              <span>{tl_TransportTime}</span>
-            </Transport>
+            {index !== 0 ? (
+              <Transport>
+                <span>
+                  {toStrClock(
+                    secToClock.getHour(tl_TransportTime),
+                    secToClock.getMin(tl_TransportTime)
+                  )}
+                </span>
+              </Transport>
+            ) : null}
 
             <Item>
               <IntroductionContainer>
-                <IntroductionHead>
-                  <Title>
-                    {s_Name}
-                    {/* {count} */}
-                  </Title>
-                  {/* <span>{`${startTime.getHours()} : ${startTime.getMinutes()}`}</span> */}
-                  {/* <p>
-                    停留時間:{secToClock.getHour(tl_StayTime)} :{" "}
-                    {secToClock.getMin(tl_StayTime)}
-                  </p> */}
-                  <StayTime item={item} startTime={startTime} />
-                  {/* <p>
-                    到下個景點的時間:{secToClock.getHour(tl_TransportTime)} :
-                    {secToClock.getMin(tl_TransportTime)}
-                  </p> */}
-                </IntroductionHead>
-                <Summary>{s_Summary}</Summary>
-              </IntroductionContainer>
+                <IntroPanel>
+                  <PinIcon index={orderIndex} color={color[item.tls_Day % 4]} />
+                  <IntroductionHead>
+                    <CustomMuiTypography variant={"h6"}>
+                      {s_Name}
+                    </CustomMuiTypography>
+                    <StayTime item={item} startTime={startTime} />
+                  </IntroductionHead>
+                  <CustomMuiTypography variant={"body2"}>
+                    {s_Summary}
+                  </CustomMuiTypography>
+                </IntroPanel>
 
-              <ImgContainer>
-                <Img src={`http://127.0.0.1:8000${s_Picture[0].sp_URL}`}></Img>
-              </ImgContainer>
+                <ImgContainer>
+                  <Img src={`https://picsum.photos/300/200`}></Img>
+                </ImgContainer>
+              </IntroductionContainer>
 
               <IconButton
                 aria-label="delete"
@@ -184,7 +186,12 @@ const Card = ({ item, startTime, index, count }) => {
                   visibility: hover ? "visible" : "hidden",
                   opacity: hover ? "1" : "0",
                   transition: "all .2s ease-in-out",
-                }}
+                  height: "40px",
+                  width: "40px",
+                  position: "absolute",
+                  top: "16px",
+                  right: "6px",
+                  }}
               >
                 <DeleteOutlineIcon />
               </IconButton>

@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import CancelButton from "../../Button/CancelButton";
 import DangerButton from "../../Button/DangerButton";
-import deleteItineraryAPI from "../../../util/apis/deleteItinerary";
+// import deleteItineraryAPI from "../../../util/apis/deleteItinerary";
 import ItineraryListContext from "../../../contexts/ItineraryListContext";
 
 import { produce } from "immer";

@@ -10,7 +10,8 @@ import {
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { TravelInfoStateContext } from "..";
-import { iconLocation } from "./icon";
+import {pinIcon} from "./pinIcon";
+
 
 function MyMap(props) {
   const map = useMap();
@@ -60,7 +61,7 @@ export default function Map() {
           <Marker
             position={[spot.location.s_Latitude, spot.location.s_Longitude]}
             key={spot.s_Id}
-            icon={iconLocation(index, color[spot.tls_Day % 4])}
+            icon={pinIcon(index, color[spot.tls_Day % 4])}
             eventHandlers={{
               click: (event) => {
                 // console.log(event.containerPoint);

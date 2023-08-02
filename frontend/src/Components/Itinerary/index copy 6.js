@@ -2,22 +2,33 @@ import React from "react";
 import { useState, createContext } from "react";
 
 import { nanoid } from "nanoid";
-import {grey} from "@mui/material/colors";
+
 import { useEffect } from "react";
 import ItineraryHeader from "./Header";
 import Days from "./Days";
 import Plan from "./Plan";
 import "./style.css";
+import {
+  Link,
+  DirectLink,
+  Element as ScrollElement,
+  Events,
+  animateScroll as scroll,
+  scrollSpy,
+  scroller,
+} from "react-scroll";
 import Map from "./Map";
 import SearchSpot from "./SearchSpot";
 import { styled } from "@mui/material/styles";
+import { Padding } from "@mui/icons-material";
 
 const ItineraryContainer = styled("div")(({ theme }) => ({
   position: "relative",
   display: "flex",
   width: "100%",
   height: "calc(100vh - 0px)",
-  
+  overflowY: "scroll",
+  overflowX: "hidden",
 }));
 
 const ItineraryHeaderContainer = styled("div")(({ theme }) => {
@@ -28,43 +39,41 @@ const ItineraryHeaderContainer = styled("div")(({ theme }) => {
 const SideContainer = styled("div")(({ theme }) => ({
   position: "sticky",
   display: "flex",
-  height: "100%",
-  top: 0,
   flex: "1",
   background: "orange",
-  overflowY: "scroll",
 }));
 
 const LeftSideWrapper = styled("div")(({ theme }) => ({
   position: "relative",
   flex: "1.35",
-  background: grey[50],
+  background: "pink",
   height: "max-content",
   minWidth: "0",
   maxWidth: "600px",
+  padding: "80px",
 }));
 
 const RightSideWrapper = styled("div")(({ theme }) => ({
+  
   position: "sticky",
-  alignSelf: "flex-start",
+  alignSelf: 'flex-start',
   flex: "1",
   top: 0,
-  bottom: 0,
   height: "100%",
+  background: "yellow",
+  padding: "8px",
 }));
+
+
 
 const DaysWrapper = styled("div")(({ theme }) => ({
-  position: "sticky",
+  position: "relative",
   flex: "0 0 48px",
-  background: grey[50],
-  borderRight:`1px solid ${grey[200]}`,
-  top: 0,
+  background: "red",
 }));
 
-
-
 const DaysContainer = styled("div")(({ theme }) => ({
-  position: "relative",
+  position: "fixed",
   display: "flex",
   justifyContent: "center",
 
@@ -79,14 +88,38 @@ const DaysContainer = styled("div")(({ theme }) => ({
   },
 }));
 
+const PlanWrapper = styled("div")(({ theme }) => ({
+  // minWidth: "0",
+  width: "100%",
+  // width: "300px",
+}));
+
+const PlanContainer = styled("div")(({ theme }) => ({
+  // position: "relative",
+  height: "100%",
+  width: "100%",
+  background: "aqua",
+  border: "1px solid black",
+}));
+
+const Side = styled("div")(({ theme }) => ({}));
+
+const MapWrapper = styled("div")(({ theme }) => ({
+  position: "relative",
+  
+  // background: "pink",s
+}));
+
 
 
 const MapContainer = styled("div")(({ theme }) => ({
-  // width:'100%'
 
+  // width:'100%'
+  
   // minWidth: "460px",
   backgroundColor: "black",
   top: 0,
+  
 }));
 
 const TravelInfoStateContext = createContext({
@@ -382,24 +415,26 @@ function Itinerary() {
           setFocusSpot,
         }}
       >
-        <ItineraryContainer>
+        <ItineraryContainer id="scroll-container">
           <DaysWrapper>
             <DaysContainer>
               <Days></Days>
             </DaysContainer>
           </DaysWrapper>
-          <SideContainer id="scroll-container">
+          <SideContainer>
             <LeftSideWrapper>
               <ItineraryHeaderContainer>
                 <ItineraryHeader />
               </ItineraryHeaderContainer>
-              
-                <Plan></Plan>
-             
+              <Plan></Plan>
+            
             </LeftSideWrapper>
 
             <RightSideWrapper>
-              <Map></Map>
+                            
+               
+                  <Map></Map>
+               
             </RightSideWrapper>
           </SideContainer>
         </ItineraryContainer>

@@ -1,4 +1,5 @@
-import * as React from "react";
+import React from "react";
+
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
@@ -16,7 +17,6 @@ import { useState, useContext } from "react";
 
 import secToClock from "../../../utils/secToClock";
 import toStrClock from "../../../utils/toStrClock";
-
 setAutoFreeze(false);
 setUseProxies(true);
 const minutes = [
@@ -38,96 +38,52 @@ const MenuProps = {
     },
   },
 };
-
-export default function StayTime(props) {
-  const { item, startTime } = props;
-  const { travelInfo, setTravelInfo } = useContext(TravelInfoStateContext);
-  const startTimer = toStrClock(startTime.getHours(),startTime.getMinutes())  ;
-  const endTime = new Date(startTime.getTime() + item.tl_StayTime * 1000);
-  const endTimer = toStrClock(endTime.getHours(),endTime.getMinutes())
-
-  // console.log('@@@@@@@', travelInfo.travelList, item);
-
-  // console.log(hour);
+export default function DayStartTime({ day, time }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [open, setOpen] = React.useState(false);
+
+  const { travelInfo, setTravelInfo } = useContext(TravelInfoStateContext);
+
   const handleClick = (event) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
     setOpen(!open);
   };
 
-  const [hour, setHour] = React.useState(
-    secToClock.getHour(
-      travelInfo.travelList.find((i) => {
-        // console.log(i.id, item.id)
-        return i.s_Id === item.s_Id;
-      }).tl_StayTime
-    )
-  );
+  const [hour, setHour] = React.useState(secToClock.getHour(time));
 
   const handleHourChange = (event) => {
     setHour(event.target.value);
   };
 
-  const [min, setMin] = React.useState(
-    secToClock.getMin(
-      travelInfo.travelList.find((i) => {
-        // console.log(i.id, item.id)
-        return i.s_Id === item.s_Id;
-      }).tl_StayTime
-    )
-  );
+  const [min, setMin] = React.useState(secToClock.getMin(time));
 
   const handleMinChange = (event) => {
     setMin(event.target.value);
   };
 
-  const handleChangeStayTime = () => {
+  const handleChangeStartTime = () => {
     setTravelInfo(
       produce((draft) => {
-        const targetItem = draft.travelList.find((i) => i.s_Id === item.s_Id);
-        const newStayTime = hour * 60 * 60 + min * 60;
-        if (targetItem) {
-          targetItem.tl_StayTime = newStayTime;
-        }
+        const newStartTime = hour * 60 * 60 + min * 60;
+        draft.t_StartTime[day] = newStartTime;
       })
     );
   };
 
   const handleCancelChangeStayTime = () => {
-    setMin(
-      secToClock.getMin(
-        travelInfo.travelList.find((i) => {
-          // console.log(i.id, item.id)
-          return i.s_Id === item.s_Id;
-        }).tl_StayTime
-      )
-    );
+    setMin(secToClock.getMin(time));
 
-    setHour(
-      secToClock.getHour(
-        travelInfo.travelList.find((i) => {
-          // console.log(i.id, item.id)
-          return i.s_Id === item.s_Id;
-        }).tl_StayTime
-      )
-    );
+    setHour(secToClock.getHour(time));
   };
 
   const handleClose = () => setOpen(false);
 
   const id = open ? "simple-popper" : undefined;
-
   return (
-    <Stack direction="row" spacing={1}>
-      <Chip
-        label={`${startTimer} ~ ${endTimer}`}
-        aria-describedby={id}
-        type="button"
-        size="small"
-        onClick={handleClick}
-      />
-
+    <div>
+      <span onClick={handleClick}>
+        開始時間 {toStrClock(secToClock.getHour(time), secToClock.getMin(time))}
+      </span>
       <Modal
         open={open}
         onClose={handleClose}
@@ -146,7 +102,7 @@ export default function StayTime(props) {
             p: 1,
           }}
         >
-          <h3>停留時間</h3>
+          <h3>開始時間</h3>
           <Box
             sx={{
               display: "flex",
@@ -220,7 +176,8 @@ export default function StayTime(props) {
               color="primary"
               onClick={() => {
                 handleClick();
-                handleChangeStayTime();
+                handleChangeStartTime();
+                // handleChangeStayTime();
               }}
             >
               完成
@@ -228,6 +185,6 @@ export default function StayTime(props) {
           </Box>
         </Box>
       </Modal>
-    </Stack>
+    </div>
   );
 }
