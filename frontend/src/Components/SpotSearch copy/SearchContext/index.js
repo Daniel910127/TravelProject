@@ -22,18 +22,18 @@ export default function SearchContext(props) {
         checkedCategoryTitles.length === 0
           ? true
           : checkedCategoryTitles.some((title) =>
-              spot.Category.includes(title)
+              spot.s_Category.includes(title)
             );
       // console.log('checkedRegionsTitles',checkedRegionsTitles)
       const isRegionMatch =
         checkedRegionsTitles.length === 0
           ? true
           : checkedRegionsTitles.some((region) =>
-              spot.District.includes(region)
+              spot.s_District.includes(region)
             );
 
       const isKeywordMatch =
-        keyword.length === 0 ? true : spot.Name.includes(keyword);
+        keyword.length === 0 ? true : spot.s_Name.includes(keyword);
       return isCategoryMatch && isRegionMatch && isKeywordMatch;
     });
 
@@ -46,25 +46,13 @@ export default function SearchContext(props) {
   /* first load  */
   useEffect(() => {
     axios
-      .get(`http://127.0.0.1:8000/api/${props.type}`)
+      .get("http://127.0.0.1:8000/api/spot")
       .then((response) => response.data)
       .then((data) => {
         data.sort(function(spot1, spot2) {
-          return spot2.Reviews - spot1.Reviews;
+          return spot2.s_Reviews - spot1.s_Reviews;
         });
-
-        const newData = data.map((originalObject) => {
-          const newObject = {};
-          for (const key in originalObject) {
-            if (originalObject.hasOwnProperty(key)) {
-              const newKey = key.replace(/^(s|f|h)_/, ''); // 使用正则表达式去掉 s_
-              newObject[newKey] = originalObject[key];
-            }
-          }
-          return newObject;
-        });
-        console.log(newData);
-        setSpots(newData);
+        setSpots(data);
       });
   }, []);
 

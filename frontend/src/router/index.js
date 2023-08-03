@@ -9,7 +9,7 @@ import Profile from "../Views/Profile2";
 import Spot from "../Views/Spot";
 import Register from "../Views/Register";
 import Interest from "../Views/interest";
-import SearchSpot from "../Views/SearchSpot";
+import Search from "../Views/Search";
 import Itinerary from "../Components/Itinerary";
 import MyItineraryList from "../Views/MyItineraryList";
 import NewItinerary from "../Views/NewItinerary";
@@ -22,7 +22,13 @@ export default function TravelRouter() {
       {/* <Route index element={<Film />} />   與父組件的/ 匹配    */}
       <Route path="/home" element={<Home />} />
 
-      <Route path="/searchSpot" element={<SearchSpot />} />
+      
+      <Route path="/search" >
+        <Route index element={<Redirect to="/search/spot" />} />
+        <Route path="/search/spot" element={<Search type={'spot'}/> } />
+        <Route path="/search/food" element={<Search type={'food'}/> } />
+        <Route path="/search/hotel" element={<Search type={'hotel'}/>} />
+      </Route>
       {/* <Route index element={<NowPlaying />} />  */}
       {/* <Route index element={<Redirect to="/film/nowplaying" />} />  */}
       {/* <Route path="/film/nowplaying" element={<NowPlaying />} />

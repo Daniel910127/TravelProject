@@ -10,7 +10,7 @@ import zIndex from "@mui/material/styles/zIndex";
 import { SearchStateContext } from "../SearchContext";
 import { set } from "react-hook-form";
 
-export default function SearchForm(props) {
+export default function SearchForm() {
   // let [searchParams, setSearchParams] = useSearchParams();
   const {
     searchParams,
@@ -20,61 +20,27 @@ export default function SearchForm(props) {
     setFilterSpots,
     spots,
   } = useContext(SearchStateContext);
-
-  let categoryType;
-
-  switch (props.type) {
-    case "spot":
-      categoryType = [
-        { title: "歷史古蹟", isChecked: false },
-        { title: "生態教育", isChecked: false },
-        { title: "觀光工廠", isChecked: false },
-        { title: "宗教廟宇", isChecked: false },
-        { title: "自然景觀", isChecked: false },
-        { title: "地方展館", isChecked: false },
-        { title: "在地藝文", isChecked: false },
-        { title: "戶外運動", isChecked: false },
-        { title: "夜市夜遊", isChecked: false },
-        { title: "公園綠地", isChecked: false },
-        { title: "休閒農漁", isChecked: false },
-        { title: "溫泉度假", isChecked: false },
-        { title: "主題園區", isChecked: false },
-        { title: "消費娛樂", isChecked: false },
-        { title: "無障礙設施", isChecked: false },
-        { title: "景觀吊橋", isChecked: false },
-        { title: "風景區", isChecked: false },
-      ];
-      break;
-    case "food":
-      categoryType = [
-        { title: "飲料冰品", isChecked: false },
-        { title: "地方小吃", isChecked: false },
-        { title: "中式美食", isChecked: false },
-        { title: "伴手好禮", isChecked: false },
-        { title: "麵食醬料", isChecked: false },
-        { title: "甜點糕餅", isChecked: false },
-        { title: "咖啡茶鋪", isChecked: false },
-        { title: "農產好物", isChecked: false },
-        { title: "柑仔店", isChecked: false },
-        { title: "異國料理", isChecked: false },
-        { title: "景觀餐廳", isChecked: false },
-        { title: "素食主義", isChecked: false },
-        { title: "穆斯林友善", isChecked: false },
-        { title: "安心餐廳", isChecked: false },
-      ];
-      break;
-    case "hotel":
-      categoryType = [
-        { title: "旅館", isChecked: false },
-        { title: "民宿", isChecked: false },
-      ];
-    default:
-      break;
-  }
-
   const [isOpen, setIsOpen] = useState(false);
 
-  const [category, setCategory] = useState(categoryType);
+  const [category, setCategory] = useState([
+    { title: "歷史古蹟", isChecked: false },
+    { title: "生態教育", isChecked: false },
+    { title: "觀光工廠", isChecked: false },
+    { title: "宗教廟宇", isChecked: false },
+    { title: "自然景觀", isChecked: false },
+    { title: "地方展館", isChecked: false },
+    { title: "在地藝文", isChecked: false },
+    { title: "戶外運動", isChecked: false },
+    { title: "夜市夜遊", isChecked: false },
+    { title: "公園綠地", isChecked: false },
+    { title: "休閒農漁", isChecked: false },
+    { title: "溫泉度假", isChecked: false },
+    { title: "主題園區", isChecked: false },
+    { title: "消費娛樂", isChecked: false },
+    { title: "無障礙設施", isChecked: false },
+    { title: "景觀吊橋", isChecked: false },
+    { title: "風景區", isChecked: false },
+  ]);
 
   const [regions, setRegions] = useState([
     { region: "中西區", isChecked: false },

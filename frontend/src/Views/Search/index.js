@@ -12,7 +12,7 @@ import SpotSearch from "../../Components/SpotSearch";
 
 import axios from "axios";
 
-export default function SearchSpot() {
+export default function Search({type}) {
   return (
     <>
       <NavBar />
@@ -31,7 +31,7 @@ export default function SearchSpot() {
           }}
         ></span>
 
-        <SpotSearch></SpotSearch>
+        <SpotSearch type={type}></SpotSearch>
       </Container>
     </>
   );

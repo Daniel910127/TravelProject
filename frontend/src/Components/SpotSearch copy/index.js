@@ -4,11 +4,11 @@ import SearchForm from "./SearchForm";
 import SearchContext from "./SearchContext";
 
 import SearchDivider from "./SearchDivider";
-export default function SpotSearch({type}) {
+export default function SpotSearch() {
   
   return (
-    <SearchContext type={type}>
-      <SearchForm type={type}></SearchForm>
+    <SearchContext>
+      <SearchForm></SearchForm>
       <SearchDivider />
       <SearchResult></SearchResult>
     </SearchContext>

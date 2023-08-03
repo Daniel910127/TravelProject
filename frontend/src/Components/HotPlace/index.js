@@ -3,64 +3,50 @@ import axios from "axios";
 import Grid from "@mui/material/Unstable_Grid2";
 import SpotLittleCard from "../SpotLittleCard";
 import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+import Box from "@mui/material/Box";
 export default function HotPlace() {
-  // const [hotPlace, setHotPlace] = useState([]);
-  // useEffect(() => {
-  //   axios
-  //     .get("http://localhost:3000/hot-place?_limit=10&_page=1")
-  //     .then((response) => {
-  //       setHotPlace(response.data);
-  //     });
-  // }, []);
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // return <div>HotPlace2</div>
-
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [pageNumber, setPageNumber] = useState(1);
-  let init = false;
   useEffect(() => {
-    if (init) return;
-    if (loading) return;
-    setLoading(true);
-    console.log(pageNumber);
-    //http://localhost:3000/hot-place?_limit=10&_page=${pageNumber}
-    fetch(`http://127.0.0.1:8000/api/high_rating_spots/`)
-      .then((response) => response.json())
-      .then((data) => {
-        setItems((prevItems) => [...prevItems, ...data]);
+    // 使用axios進行資料請求
+    axios
+      .get("http://127.0.0.1:8000/api/spot/hot")
+      .then((response) => {
+        // 資料請求成功時，將資料更新到狀態中，並設置loading為false
+        setData(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        // 請求失敗時，你可能想要處理錯誤或給予使用者錯誤訊息
+        console.error("Error fetching data:", error);
         setLoading(false);
       });
-    return () => {
-      init = true;
-    };
-  }, [pageNumber]);
+  }, []); // 空的依賴陣列，表示只會在組件初始化時執行一次
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const firstEntry = entries[0];
-        if (firstEntry.isIntersecting) {
-          setPageNumber((prevPageNumber) => prevPageNumber + 1);
-          // console.log(pageNumber);
-        }
-      }
-      // { threshold: 1 }
-    );
-    observer.observe(document.querySelector("#sentinel"));
+  // useEffect(() => {
+  //   const observer = new IntersectionObserver(
+  //     (entries) => {
+  //       const firstEntry = entries[0];
+  //       if (firstEntry.isIntersecting) {
+  //         setPageNumber((prevPageNumber) => prevPageNumber + 1);
+  //         // console.log(pageNumber);
+  //       }
+  //     }
+  //     // { threshold: 1 }
+  //   );
+  //   observer.observe(document.querySelector("#sentinel"));
 
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
+  //   return () => {
+  //     observer.disconnect();
+  //   };
+  // }, []);
 
   return (
     <>
-      <Typography
-        variant="h4"
-        color={"#444"}
-        sx={{ textAlign: "center", }}
-      >
+      <Typography variant="h4" color={"#444"} sx={{ textAlign: "center" }}>
         熱門景點
       </Typography>
       <span
@@ -75,30 +61,43 @@ export default function HotPlace() {
       <Grid
         container
         spacing={{ xs: 2, md: 3 }}
-        columns={{ xs: 2, sm: 9, md: 16 }}
+        columns={{ xs: 1, sm: 2 }}
         alignItems="stretch"
         justifyItems={"center"}
       >
-        {items.map((item) => (
-          <Grid
-            key={item.s_Id}
-            xs={2}
-            sm={3}
-            md={4}
-            display={"flex"}
-            flexBasis={300}
-            justifyContent={"center"}
-            flexGrow={1}
-          >
-            <SpotLittleCard
-              s_Id={item.s_Id}
-              s_Name={item.s_Name}
-              s_Pictures={item.s_picture}
-              s_District={item.s_District}
-            ></SpotLittleCard>
-          </Grid>
-        ))}
+        {data.map((item, index) => {
+          if (index < 4) {
+            return (
+              <Grid
+                key={item.s_Id}
+                xs={1}
+                md={1}
+                display={"flex"}
+                flexBasis={300}
+                justifyContent={"center"}
+                flexGrow={1}
+              >
+                <SpotLittleCard
+                  s_Id={item.s_Id}
+                  s_Name={item.s_Name}
+                  s_Pictures={item.s_picture}
+                  s_District={item.s_District}
+                ></SpotLittleCard>
+              </Grid>
+            );
+          }
+        })}
       </Grid>
+      <Box sx={{display:'flex',justifyContent:'center',marginTop:'1rem'}}>
+        <Button
+          variant="outlined"
+          endIcon={<ArrowRightIcon />}
+          
+        >
+          查看更多熱門景點
+        </Button>
+      </Box>
+
       <div>
         {loading && <div>Loading...</div>}
         <div id="sentinel"></div>

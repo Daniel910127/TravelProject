@@ -72,7 +72,7 @@ export default function SearchResult() {
       >
         {items.map((item) => (
           <Grid
-            key={item.Id}
+            key={item.s_Id}
             xs={2}
             sm={3}
             md={4}
@@ -82,10 +82,10 @@ export default function SearchResult() {
             flexGrow={1}
           >
             <SpotLittleCard
-              s_Id={item.Id}
-              s_Name={item.Name}
-              s_Pictures={item.picture}
-              s_District={item.District}
+              s_Id={item.s_Id}
+              s_Name={item.s_Name}
+              s_Pictures={item.s_picture}
+              s_District={item.s_District}
             ></SpotLittleCard>
           </Grid>
         ))}
