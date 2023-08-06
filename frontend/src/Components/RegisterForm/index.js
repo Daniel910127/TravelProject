@@ -87,11 +87,9 @@ function RegisterForm() {
     mode: "onBlur",
     reValidateMode: "onBlur",
     defaultValues: {
+      account: form.steps.info.value.account,
       username: form.steps.info.value.username,
       password: form.steps.info.value.password,
-      gender: form.steps.info.value.gender,
-      birthday: form.steps.info.value.birthday,
-      phone: form.steps.info.value.phone,
       email: form.steps.info.value.email,
     },
   });
