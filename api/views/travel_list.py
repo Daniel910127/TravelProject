@@ -26,10 +26,12 @@ def travel_List_Total(request):
     return Response(serializer.data)
 
 
-@api_view(['POST'])#創建主行程表
+@api_view(['POST'])  # 創建主行程表
 def CreateTravelList(request):
     permission_classes = (IsAuthenticated,)
-    account_id = request.data.get('id')
+   
+    account_id = request.user.id 
+    
     try:
         account = Account.objects.get(id=account_id)
     except Account.DoesNotExist:
@@ -50,7 +52,7 @@ def CreateTravelList(request):
     t_score = 0
 
     travellist = Travel_List.objects.create(
-        id=account, t_Name=t_Name, t_Description=t_Description, 
+        account=account, t_Name=t_Name, t_Description=t_Description, 
         t_StartDate=t_StartDate, t_StayDay=t_StayDay, t_Privacy=t_Privacy,
         t_Views=t_Views, t_Likes=t_Likes, t_score=t_score
     )
@@ -78,7 +80,6 @@ def CreateTravelList(request):
             "message": "行程表創建失敗"
         }
         return Response(response_data, status=status.HTTP_401_UNAUTHORIZED)
-
 
 @api_view(['POST'])##行程表細項創立
 def CreateTravelListDetail(request,t_Id):
