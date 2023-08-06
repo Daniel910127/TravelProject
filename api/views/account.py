@@ -16,18 +16,16 @@ from rest_framework.permissions import IsAuthenticated
 from datetime import datetime
 
 
+from ..serializers import AccountSerializer, LoginSerializer
 
-
-from ..serializers import  AccountSerializer,LoginSerializer
-
-from ..models import  Account
+from ..models import Account, AccountManager
 from ..utils import spot_data
 from rest_framework.views import APIView
 import json
 
 
 # Create your views here.
-class CreateAccountView(APIView):#創建帳號
+class CreateAccountView(APIView):  # 創建帳號
     def post(self, request, format=None):
         serializer = AccountSerializer(data=request.data)
         if serializer.is_valid():
@@ -35,14 +33,21 @@ class CreateAccountView(APIView):#創建帳號
             password = serializer.validated_data['password']
             username = serializer.validated_data['username']
             if Account.objects.filter(username=username).exists():
-                return Response({'error': '該名稱已被使用'}, status=status.HTTP_400_BAD_REQUEST)
+                response_data = {
+                    'message': '該名稱已被使用'
+                }
+                return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
             email = serializer.validated_data['email']
             if Account.objects.filter(email=email).exists():
-                return Response({'error': '該電子郵件地址已被使用'}, status=status.HTTP_400_BAD_REQUEST)
+                response_data = {
+                    'meaasge': '該名稱已被使用'
+                }
+                return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
             rank = serializer.validated_data.get('rank', 0)
 
             # 使用AccountManager的create_user方法创建账户
-            account = Account.objects.create_user(account=account, password=password, rank=rank,email=email,username=username)
+            account = Account.objects.create_user(
+                account=account, password=password, username=username, email=email, rank=rank)
 
             response_data = {
                 "status": "201",
@@ -59,49 +64,46 @@ class CreateAccountView(APIView):#創建帳號
                 "error": serializer.errors
             }
             return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
-class LoginView(APIView):#登入帳號
+
+
+class LoginView(APIView):  # 登入帳號
     def post(self, request):
-        serializer = LoginSerializer(data=request.data)
-        if serializer.is_valid():
-            account = serializer.validated_data['account']
-            password = serializer.validated_data['password']
-
-            try:
-                user = Account.objects.get(account=account)
-                if user.check_password(password):
-                    user.last_login = datetime.now()  
-                    user.save()
-                    refresh = RefreshToken.for_user(user)
-                    data = {
-                        'status': "201",
-                        'message': "帳號登入成功",
-                        'refresh': str(refresh),
-                        'access': str(refresh.access_token),
-                        'id': user.id,
-                        'account': user.account,
-                        'username': user.username,
-                        'email': user.email
-                    }
-                    return Response(data, status=status.HTTP_201_CREATED)
-                else:
-                    data = {
-                        'status': "401",
-                        'error': "密碼錯誤",
-                    }
-                    return Response(data, status=status.HTTP_401_UNAUTHORIZED)
-            except Account.DoesNotExist:
+        data = json.loads(request.body)
+        account = data.get('account')
+        password = data.get('password')
+        try:
+            user = Account.objects.get(account=account)
+            if user.check_password(password):
+                user.last_login = datetime.now()
+                user.save()
+                refresh = RefreshToken.for_user(user)
                 data = {
-                        'status': "401",
-                        'error': "帳號不存在",
-                    }
-                return Response(data, status=status.HTTP_401_UNAUTHORIZED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                    'status': "201",
+                    'message': "帳號登入成功",
+                    'refresh': str(refresh),
+                    'access': str(refresh.access_token),
+                    'id': user.id,
+                    'account': user.account,
+                    'username': user.username,
+                    'email': user.email
+                }
+                return JsonResponse(data=data)
+            else:
+                data = {
+                    'status': "401",
+                    'error': "密碼錯誤",
+                }
+                return JsonResponse(data=data)
+        except Account.DoesNotExist:
+            data = {
+                'status': "401",
+                'error': "帳號不存在",
+            }
+            return JsonResponse(data=data)
 
 
-
-class UpdateAccountView(APIView):#更改帳號資訊
-    permission_classes = (IsAuthenticated,) 
+class UpdateAccountView(APIView):  # 更改帳號資訊
+    permission_classes = (IsAuthenticated,)
 
     def get_object(self, id):
         try:
@@ -163,7 +165,6 @@ class UpdateAccountView(APIView):#更改帳號資訊
 
     def update(self, request, id, format=None):
         return self.put(request, id, format)
-
 
 
 @api_view(['GET'])
