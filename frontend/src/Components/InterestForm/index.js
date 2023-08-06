@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState,useEffect } from "react";
+import { Button, Grid, Box, Typography, } from "@mui/material";
 import axios from 'axios';
 import { useSession } from '../../contexts/SessionContext';
-import './interest.css'
-
 import {
   ParkOutlined,
   HikingOutlined,
@@ -19,35 +18,94 @@ import {
   AttractionsOutlined,
 } from "@mui/icons-material";
 
+import Slider from "@mui/material/Slider";
+import { styled } from "@mui/material/styles";
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme) => ({
+	page: {
+		marginTop: theme.spacing(12),
+		display: 'flex',
+		flexDirection: 'column',
+		alignItems: 'center',
+	},
+}));
+const PrettoSlider = styled(Slider)({
+
+  "& .airbnb-bar": {
+    height: 9,
+    width: 1,
+    backgroundColor: "currentColor",
+    marginLeft: 1,
+    marginRight: 1,
+  },
+
+  "& .MuiSlider-track": {
+    border: "none",
+  },
+  "& .MuiSlider-thumb": {
+    height: 28,
+    width: 28,
+    backgroundColor: "#fff",
+    border: "2px solid currentColor",
+    "&:focus, &:hover, &.Mui-active, &.Mui-focusVisible": {
+      boxShadow: "inherit",
+    },
+
+    "&:hover": {
+      boxShadow: "0 0 0 7px rgba(25, 118, 210, 0.36)",
+    },
+
+    "&:before": {
+      display: "none",
+    },
+  },
+  "& .MuiSlider-valueLabel": {
+    lineHeight: 1.2,
+    fontSize: 12,
+    background: "unset",
+    padding: 0,
+    width: 32,
+    height: 32,
+    borderRadius: "50% 50% 50% 0",
+    backgroundColor: "#1976d2",
+    transformOrigin: "bottom left",
+    transform: "translate(50%, -100%) rotate(-45deg) scale(0)",
+    "&:before": { display: "none" },
+    "&.MuiSlider-valueLabelOpen": {
+      transform: "translate(50%, -100%) rotate(-45deg) scale(1)",
+    },
+    "& > *": {
+      transform: "rotate(45deg)",
+    },
+  },
+});
+
+
 function Interest() {
-  const { a_Id, m_Id, a_Account, a_Level, logout } = useSession();
-  const [user, setUser] = useState(null);
+  const {id,account,username,access,refresh, login, logout } = useSession();
+  axios.defaults.headers.common['Authorization'] = `Bearer ${access}`;
+  const classes = useStyles();
   const [editing, setEditing] = useState(false);
   const [formData, setFormData] = useState({
-    m_Id:'',
-    si_pg: '',
-    si_os: '',
-    si_tp: '',
-    si_ee: '',
-    si_ff: '',
-    si_la: '',
-    si_le: '',
-    si_ns: '',
-    si_np: '',
-    si_rt: '',
-    si_se: '',
-    si_ha: '',
-    si_tf: ''
+    si_pg: 0,
+    si_os: 0,
+    si_tp: 0,
+    si_ee: 0,
+    si_ff: 0,
+    si_la: 0,
+    si_le: 0,
+    si_ns: 0,
+    si_np: 0,
+    si_rt: 0,
+    si_se: 0,
+    si_ha: 0,
+    si_tf: 0
   });
-
-  useEffect(() => {
-    axios
-      .post('http://127.0.0.1:8000/api/interest/', { m_Id })
-      .then(response => {
-        console.log(response.data);
-        setUser(response.data);
+   useEffect(() => {
+    axios.post('http://127.0.0.1:8000/api/interest-list/',{ id }).then(response => {
         setFormData({
-            m_Id: response.data.m_Id,
+          id:id,
             si_pg: response.data.si_pg,
             si_os: response.data.si_os,
             si_tp: response.data.si_tp,
@@ -66,250 +124,73 @@ function Interest() {
       .catch(error => console.error(error));
   }, []);
 
-  const handleInputChange = event => {
-    setEditing(true)
-    setFormData({
-      ...formData,
-      [event.target.name]: event.target.value
-    });
-  };
-// const handleEmailChange = event => {
-//     setFormData({
-//       ...formData,
-//       m_Email: event.target.value
-//     });
-//   };
-  
-  const handleSubmit = event => {
+  const interests = [
+    {
+      i_Key: "si_pg",
+      i_Name: "公園綠地",
+      i_Icon: ParkOutlined,
+      value:formData.si_pg
+    },
+    { i_Key: "si_os", i_Name: "戶外運動", i_Icon: HikingOutlined },
+    { i_Key: "si_tp", i_Name: "主題園區", i_Icon: AttractionsOutlined},
+    { i_Key: "si_ee", i_Name: "生態教育", i_Icon: EmojiNatureOutlined },
+    { i_Key: "si_ff", i_Name: "休閒農漁", i_Icon: YardOutlined},
+    { i_Key: "si_la", i_Name: "在地藝文", i_Icon: ColorLensOutlined},
+    { i_Key: "si_le", i_Name: "地方展館", i_Icon: MuseumOutlined},
+    { i_Key: "si_ns", i_Name: "自然景觀", i_Icon: LandscapeOutlined},
+    { i_Key: "si_np", i_Name: "夜市夜遊", i_Icon: StorefrontOutlined},
+    { i_Key: "si_rt", i_Name: "宗教廟宇", i_Icon: TempleBuddhistOutlined},
+    { i_Key: "si_se", i_Name: "消費娛樂", i_Icon: Shop2Outlined },
+    { i_Key: "si_ha", i_Name: "歷史古蹟", i_Icon: TempleHinduOutlined},
+    { i_Key: "si_tf", i_Name: "觀光工廠", i_Icon: FactoryOutlined },
+  ];
+
+
+  const handleSubmit= event => {
     event.preventDefault();
     axios
       .post('http://127.0.0.1:8000/api/interest-update/', formData)
       .then(response => {
-        console.log(response.data);
-        setUser(response.data);
+        console.log(response.data['message']);
+        setEditing(false);
       })
       .catch(error => console.error(error));
-      setEditing(false);
   };
-
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="interest">
-        <h1 >個人興趣</h1>
-        <input
-        name="m_Id"
-        type="hidden"
-        value={formData.m_Id}
-                />
-        <div className="personal-interest">
-          <div>
-                <div>
-                  <ParkOutlined className="icon" />
-                <label>公園綠地</label>
-              <input
-                type="range"
-                min="0"
-                max="10"
-                name="si_pg"
-                value={formData.si_pg}
-                onChange={handleInputChange}
-                
-                />
-            <span>{formData.si_pg}</span>
-            </div>
-            
-          </div>
-          <div>
-                <div>
-                  <HikingOutlined className="icon" />
-                <label>戶外運動</label>
-              <input
-                type="range"
-                min="0"
-                max="10"
-                name="si_os"
-                value={formData.si_os}
-                onChange={handleInputChange}
-                />
-            <span>{formData.si_os}</span>
-            </div>
-          </div>
-          <div>
-                <div>
-                  <AttractionsOutlined className="icon" />
-                <label>主題園區</label>
-              <input
-                type="range"
-                min="0"
-                max="10"
-                name="si_tp"
-                value={formData.si_tp}
-                onChange={handleInputChange}
-                />
-            <span>{formData.si_tp}</span>
-            </div>
-          </div>
-          <div>
-                <div>
-                  <EmojiNatureOutlined className="icon" />
-                <label>生態教育</label>
-              <input
-                type="range"
-                min="0"
-                max="10"
-                name="si_ee"
-                value={formData.si_ee}
-                onChange={handleInputChange}
-                />
-            <span>{formData.si_ee}</span>
-            </div>
-          </div>
-          <div>
-                <div>
-                  <YardOutlined className="icon" />
-                <label>休閒農漁</label>
-              <input
-                type="range"
-                min="0"
-                max="10"
-                name="si_ff"
-                value={formData.si_ff}
-                onChange={handleInputChange}
-                />
-            <span>{formData.si_ff}</span>
-            </div>
-          </div>
-          <div>
-                <div>
-                  <ColorLensOutlined className="icon" />
-                <label>在地藝文</label>
-              <input
-                type="range"
-                min="0"
-                max="10"
-                name="si_la"
-                value={formData.si_la}
-                onChange={handleInputChange}
-                />
-            <span>{formData.si_la}</span>
-            </div>
-          </div>
-          <div>
-                <div>
-                  <MuseumOutlined className="icon" />
-                <label>地方展館</label>
-              <input
-                type="range"
-                min="0"
-                max="10"
-                name="si_le"
-                value={formData.si_le}
-                onChange={handleInputChange}
-                />
-            <span>{formData.si_le}</span>
-            </div>
-          </div>
-          <div>
-                <div>
-                  <LandscapeOutlined className="icon" />
-                <label>自然景觀</label>
-              <input
-                type="range"
-                min="0"
-                max="10"
-                name="si_ns"
-                value={formData.si_ns}
-                onChange={handleInputChange}
-                />
-            <span>{formData.si_ns}</span>
-            </div>
-          </div>
-          <div>
-                <div>
-                  <StorefrontOutlined className="icon" />
-                <label>夜市夜遊</label>
-              <input
-                type="range"
-                min="0"
-                max="10"
-                name="si_np"
-                value={formData.si_np}
-                onChange={handleInputChange}
-                />
-            <span>{formData.si_np}</span>
-            </div>
-          </div>
-          <div>
-                <div>
-                  <TempleBuddhistOutlined className="icon" />
-                <label>宗教廟宇</label>
-              <input
-                type="range"
-                min="0"
-                max="10"
-                name="si_rt"
-                value={formData.si_rt}
-                onChange={handleInputChange}
-                />
-            <span>{formData.si_rt}</span>
-            </div>
-          </div>
-          <div>
-                <div>
-                  <Shop2Outlined  className="icon" />
-                <label>消費娛樂</label>
-              <input
-                type="range"
-                min="0"
-                max="10"
-                name="si_se"
-                value={formData.si_se}
-                onChange={handleInputChange}
-                />
-            <span>{formData.si_se}</span>
-            </div>
-          </div>
-          <div>
-                <div>
-                  <TempleHinduOutlined className="icon" />
-                <label>歷史古蹟</label>
-              <input
-                type="range"
-                min="0"
-                max="10"
-                name="si_ha"
-                value={formData.si_ha}
-                onChange={handleInputChange}
-                />
-            <span>{formData.si_ha}</span>
-            </div>
-          </div>
-          <div>
-                <div>
-                  <FactoryOutlined className="icon" />
-                <label>觀光工廠</label>
-              <input
-                type="range"
-                min="0"
-                max="10"
-                name="si_tf"
-                value={formData.si_tf}
-                onChange={handleInputChange}
-                />
-            <span>{formData.si_tf}</span>
-            </div>
-          </div>
-        <div className="button-container">
-          {editing ? (
-            <button className='button' type="submit">儲存</button>
-          ) : (
-            <div></div>
-          )}
-        </div>
-      </div>
-      </div>
-    </form>
+    <Box
+      component="form"
+      noValidate
+      className={classes.page}
+      onSubmit={handleSubmit}
+    >
+      <Grid container spacing={2}>
+        {interests.map((interest) => (
+          <Grid item xs={6} key={interest.i_Key}>
+            <interest.i_Icon color="primary"/>
+            <Typography gutterBottom>{interest.i_Name}</Typography>
+            <PrettoSlider
+              valueLabelDisplay="auto"
+              min={0}
+              max={10}
+              value={formData[interest.i_Key]} 
+              onChange={(event, data) => {
+              const updatedFormData = {
+              ...formData,
+              [interest.i_Key]: data
+              };
+            setFormData(updatedFormData);
+            setEditing(true);
+        }}
+    />
+          </Grid>
+        ))}
+        
+      </Grid>
+      {editing ? (
+      <Button type="submit" size="medium"variant="contained" color="primary">儲存</Button>):
+      (<Typography></Typography>)
+    }
+    </Box>
   );
 }
-
 export default Interest;
