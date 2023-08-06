@@ -83,7 +83,7 @@ const setting1 = [
 ];
 
 function NavBar() {
-  const { a_Id, m_Id, a_Account, a_Level,logout } = useSession();
+  const {id,account,username,access,refresh, login, logout } = useSession();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -231,7 +231,7 @@ function NavBar() {
           {/* <Box sx={{ display: { md: "none", xs: "block" }, mr: 2 }}>
            
           </Box> */}
-          {a_Account?(
+          {account?(
             <Box sx={{ flexGrow: 0, display: "flex" }}>
             <IconButton
               size="large"
@@ -246,7 +246,7 @@ function NavBar() {
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
                 { (
                 <div>
-                  {a_Account}
+                  {username}
                 </div>
               )}
               </IconButton>
