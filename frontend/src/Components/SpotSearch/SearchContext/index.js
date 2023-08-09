@@ -9,6 +9,8 @@ const SearchStateContext = createContext({});
 export default function SearchContext(props) {
   const [searchParams, setSearchParams] = useSearchParams();
   const [spots, setSpots] = useState([]);
+  
+  
 
   const [filterSpots, setFilterSpots] = useState([]);
   const [resultSpots, setResultSpots] = useState([]);
@@ -63,10 +65,10 @@ export default function SearchContext(props) {
           }
           return newObject;
         });
-        console.log(newData);
+        // console.log(newData);
         setSpots(newData);
       });
-  }, []);
+  }, [props.type]);
 
   useEffect(() => {
     if (
@@ -90,21 +92,7 @@ export default function SearchContext(props) {
     }
   }, [spots, searchParams]);
 
-  /*---------------------------------------------------------------- */
 
-  // useEffect(() => {
-  //   if (searchParams.getAll("category").length === 0) {
-  //     //   console.log("0000");
-  //     setFilterSpots(spots);
-  //     setResultSpots(spots);
-  //   } else {
-  //     setResultSpots(filterSpots);
-  //   }
-  //   //console.log("searchParams chage");
-  // }, [searchParams]);
-
-  //console.log(searchParams.getAll("category"));
-  //console.log(filterSpots);
   return (
     <SearchStateContext.Provider
       value={{

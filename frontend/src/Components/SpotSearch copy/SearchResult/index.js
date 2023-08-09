@@ -8,6 +8,11 @@ import { SearchStateContext } from "../SearchContext";
 export default function SearchResult() {
   const { resultSpots } = useContext(SearchStateContext);
   const [items, setItems] = useState([]);
+
+
+  console.log(resultSpots)
+
+  // console.log(items)
   // const [loading, setLoading] = useState(false);
   const [pageNumber, setPageNumber] = useState(0);
   // let init = false;
@@ -82,10 +87,10 @@ export default function SearchResult() {
             flexGrow={1}
           >
             <SpotLittleCard
-              s_Id={item.s_Id}
-              s_Name={item.s_Name}
-              s_Pictures={item.s_picture}
-              s_District={item.s_District}
+              s_Id={item.Id}
+              s_Name={item.Name}
+              s_Pictures={item.Picture}
+              s_District={item.District}
             ></SpotLittleCard>
           </Grid>
         ))}

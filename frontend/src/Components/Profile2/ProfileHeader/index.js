@@ -19,7 +19,7 @@ import ProfileEditDialogForm from "../ProfileEditDialogForm";
 import { useForm } from "react-hook-form";
 import CancelButton from "../../Button/CancelButton";
 import useFormController from "../../../hooks/useFormController";
-
+import { useUser } from "../../../contexts/UserContext";
 const HeaderWrapper = styled(Paper)((props) => {
   // console.log(props);
   return {
@@ -69,13 +69,13 @@ export default function ProFileHeader() {
     reValidateMode: "onBlur",
     // resolver: yupResolver(validationSchema),
     defaultValues: {
-      accountField: "",
       passwordField: "",
       usernameField: "",
       emailField: "",
     },
   });
 
+  const {userinfo} = useUser()
   const [open, setOpen] = useState(false);
 
   // const [userInfo, setUserInfo] = useState({
@@ -94,7 +94,6 @@ export default function ProFileHeader() {
     // });
 
     reset({
-      accountField: "account",
       passwordField: "123@gmail.com",
       usernameField: "楊凱浩",
       emailField: "1111111",
@@ -107,7 +106,7 @@ export default function ProFileHeader() {
     console.log(data);
   };
 
-  const accountFieldProps = useFormController(control, "accountField");
+  
   const passwordFieldProps = useFormController(control, "passwordField");
   const usernameFieldProps = useFormController(control, "usernameField");
   const emailFieldProps = useFormController(control, "emailField");
@@ -145,7 +144,7 @@ export default function ProFileHeader() {
                 variant="h4"
                 sx={{ marginBottom: { xs: ".2rem", sm: "0" } }}
               >
-                username
+                {userinfo.username}
               </CustomMuiTypography>
               <DefaultButton onClick={handleClickOpen}>
                 編輯使用者
@@ -170,7 +169,7 @@ export default function ProFileHeader() {
         <DialogContent>
           <ProfileEditDialogForm
             usernameFieldProps={usernameFieldProps}
-            accountFieldProps={accountFieldProps}
+            
             passwordFieldProps={passwordFieldProps}
             emailFieldProps={emailFieldProps}
           />

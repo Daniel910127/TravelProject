@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext,useRef } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import produce from "immer";
 import DetailButton from "./DetailButton";
@@ -10,16 +10,9 @@ import zIndex from "@mui/material/styles/zIndex";
 import { SearchStateContext } from "../SearchContext";
 import { set } from "react-hook-form";
 import { Category } from "@mui/icons-material";
-import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
-import {
-  TextField,
-  InputAdornment,
-  Input,
-  OutlinedInput,
-  Button,
-  Paper,
-} from "@mui/material";
-import CustomMuiTypography from "../../CustomMuiTypography";
+
+import { TextField, InputAdornment, Input, OutlinedInput } from "@mui/material";
+
 const categoryMap = {
   spot: [
     { title: "歷史古蹟", isChecked: false },
@@ -61,23 +54,6 @@ const categoryMap = {
     { title: "民宿", isChecked: false },
   ],
 };
-
-const SearchCheckBox = styled(Paper)(({ theme }) => ({
-  position: "absolute",
-  width: "100%",
-  top: "-10px",
-  // left: -5px,
-  backgroundColor: "white",
-  padding: "4.6rem 1rem 1rem 1rem",
-  paddingTop: "4.6rem",
-}));
-
-const CheckList = styled("ul")(({ theme }) => ({
-  display: "flex",
-  flexWrap: "wrap",
-  gap: "0.4rem",
-  marginBottom: "1.2rem",
-}));
 
 export default function SearchForm(props) {
   // let [searchParams, setSearchParams] = useSearchParams();
@@ -137,8 +113,6 @@ export default function SearchForm(props) {
     { region: "新市區", isChecked: false },
     { region: "安定區", isChecked: false },
   ]);
-
-  const searchFieldRef = useRef(null);
 
   // console.log(type, category,a);
 
@@ -208,7 +182,6 @@ export default function SearchForm(props) {
   };
 
   const handleCompositionEnd = (e) => {
-    console.log('end of composition')
     isOnComposition = false;
     setKeyword(e.target.value);
   };
@@ -248,46 +221,22 @@ export default function SearchForm(props) {
         setIsOpen(false);
       }}
     >
-      <form
-        className={style.searchBox}
-        onSubmit={(e) => {
-          e.preventDefault();
-          setIsOpen(false);
-          
-          searchFieldRef.current.blur()
-        }}
-      >
+      <form className={style.searchBox}>
+        
+
         <OutlinedInput
-          sx={{ zIndex: 9999, margin: "0 1rem" }}
-          inputRef={searchFieldRef}
+          sx={{ zIndex: 9999 }}
           fullWidth
           value={inputKeyword}
           onChange={(e) => {
-            console.log('onchange')
-            // setKeyword(e.target.value);
             setInputKeyword(e.target.value);
             if (!isOnComposition) {
-              setKeyword(e.target.value);
+              setKeyword(inputKeyword);
             }
           }}
           onFocus={() => {
             console.log("is open");
             setIsOpen(true);
-          }}
-
-          onBlur={()=>{
-            const checkedRegions = regions
-            .filter((item) => item.isChecked)
-            .map((item) => item.region);
-          const checkedCategory = category
-            .filter((item) => item.isChecked)
-            .map((item) => item.title);
-          let params = {
-            region: checkedRegions,
-            category: checkedCategory,
-            keyword: keyword,
-          };
-          setSearchParams(params);
           }}
           onCompositionStart={handleCompositionStart}
           onCompositionEnd={handleCompositionEnd}
@@ -297,62 +246,134 @@ export default function SearchForm(props) {
             </InputAdornment>
           }
           endAdornment={
-            <InputAdornment position="end">{resultCount()}</InputAdornment>
+            <InputAdornment position="end">
+              {resultCount()}
+            </InputAdornment>
           }
         />
+        <div className={style.searchInput}>
+          <div className={`input`}>
+            {/* <input
+              type="text"
+              value={inputKeyword}
+              onFocus={() => {
+                setIsOpen(true);
+              }}
+              onCompositionStart={handleCompositionStart}
+              onCompositionEnd={handleCompositionEnd}
+              onChange={(e) => {
+                // console.log("not set keyword");
+                setInputKeyword(e.target.value);
+                if (!isOnComposition) {
+                  // console.log("setkeyord");
+                  setKeyword(inputKeyword);
+                }
+              }}
+            /> */}
+          </div>
+
+          {isOpen ? (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                padding: "0 12px",
+                color: "#666",
+              }}
+            >
+              共
+              {category.some((item) => item.isChecked === true) ||
+              regions.some((item) => item.isChecked === true) ||
+              keyword.length > 0
+                ? filterSpots.length
+                : spots.length}
+              個結果
+            </div>
+          ) : (
+            <button
+              style={{
+                padding: "6px 12px",
+                borderRadius: "16px",
+                border: "none",
+                backgroundColor: "#1976d2",
+                color: "white",
+                cursor: "pointer",
+              }}
+              onClick={(e) => {
+                e.preventDefault();
+                setIsOpen(!isOpen);
+                const checkedRegions = regions
+                  .filter((item) => item.isChecked)
+                  .map((item) => item.region);
+
+                const checkedCategory = category
+                  .filter((item) => item.isChecked)
+                  .map((item) => item.title);
+                let params = {
+                  region: checkedRegions,
+                  category: checkedCategory,
+                  keyword: keyword,
+                };
+                setSearchParams(params);
+                //console.log(searchParams.getAll("category"));
+              }}
+            >
+              進階搜尋
+            </button>
+          )}
+        </div>
 
         {isOpen && (
-          <SearchCheckBox>
-            <CustomMuiTypography variant="h5" gutterBottom>
-              主題類型
-            </CustomMuiTypography>
-            <CheckList>
-              {category.map((categoryItem, index) => {
-                return (
-                  <li
-                    key={index}
-                    onClick={(e) => {
-                      // e.stopPropagation();
-                      const updateCategory = produce(category, (draft) => {
-                        draft[index].isChecked = !categoryItem.isChecked;
-                      });
-                      // console.log('@@@@',updateCategory);
-                      setCategory(updateCategory);
-                    }}
-                  >
-                    <DetailButton
-                      title={categoryItem.title}
-                      isChecked={categoryItem.isChecked}
-                    />
-                  </li>
-                );
-              })}
-            </CheckList>
-
-            <CustomMuiTypography variant="h5" gutterBottom>
-              行政區域
-            </CustomMuiTypography>
-            <CheckList>
-              {regions.map((regionItem, index) => {
-                return (
-                  <li
-                    key={index}
-                    onClick={(e) => {
-                      // e.stopPropagation();
-                      const updateRegions = produce(regions, (draft) => {
-                        draft[index].isChecked = !regionItem.isChecked;
-                      });
-                      setRegions(updateRegions);
-                    }}
-                  >
-                    <DetailButton
-                      title={regionItem.region}
-                      isChecked={regionItem.isChecked}
-                    />
-                  </li>
-                );
-              })}
-            </CheckList>
+          <div className={style.searchDetail}>
+            <div className="detail">
+              <h4>主題類型</h4>
+              <ul className="category">
+                {category.map((categoryItem, index) => {
+                  return (
+                    <li
+                      key={index}
+                      onClick={(e) => {
+                        // e.stopPropagation();
+                        const updateCategory = produce(category, (draft) => {
+                          draft[index].isChecked = !categoryItem.isChecked;
+                        });
+                        // console.log('@@@@',updateCategory);
+                        setCategory(updateCategory);
+                      }}
+                    >
+                      <DetailButton
+                        title={categoryItem.title}
+                        isChecked={categoryItem.isChecked}
+                      />
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+            <div className="detail">
+              <h4>行政區域</h4>
+              <ul className="region">
+                {regions.map((regionItem, index) => {
+                  return (
+                    <li
+                      key={index}
+                      onClick={(e) => {
+                        // e.stopPropagation();
+                        const updateRegions = produce(regions, (draft) => {
+                          draft[index].isChecked = !regionItem.isChecked;
+                        });
+                        setRegions(updateRegions);
+                      }}
+                    >
+                      <DetailButton
+                        title={regionItem.region}
+                        isChecked={regionItem.isChecked}
+                      />
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
 
             <div
               style={{
@@ -362,7 +383,15 @@ export default function SearchForm(props) {
                 borderTop: "1px solid #bbb",
               }}
             >
-              <Button
+              <button
+                style={{
+                  padding: "6px 12px",
+                  borderRadius: "10px",
+                  border: "none",
+                  backgroundColor: "transparent",
+                  color: "#666",
+                  cursor: "pointer",
+                }}
                 onClick={(e) => {
                   // e.stopPropagation();
                   e.preventDefault();
@@ -378,14 +407,19 @@ export default function SearchForm(props) {
                   });
                   setRegions(updateRegions);
                   setCategory(updateCategory);
-                  setKeyword('');
-                  setInputKeyword(''); 
                 }}
               >
                 清除
-              </Button>
-              <Button
-                variant="contained"
+              </button>
+              <button
+                style={{
+                  padding: "6px 12px",
+                  borderRadius: "10px",
+                  border: "none",
+                  backgroundColor: "#1976d2",
+                  color: "white",
+                  cursor: "pointer",
+                }}
                 onClick={(e) => {
                   e.preventDefault();
                   setIsOpen(false);
@@ -411,9 +445,9 @@ export default function SearchForm(props) {
                   ? filterSpots.length
                   : spots.length}
                 個結果
-              </Button>
+              </button>
             </div>
-          </SearchCheckBox>
+          </div>
         )}
 
         {/* <button

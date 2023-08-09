@@ -3,7 +3,7 @@ import { fas } from "@fortawesome/free-solid-svg-icons";
 import { far } from "@fortawesome/free-regular-svg-icons";
 
 import TravelRouter from "./router";
-import { SessionProvider } from "./contexts/SessionContext";
+import { UserProvider } from "./contexts/UserContext";
 import React from "react";
 import NavBar from "./Components/NavBar";
 import { useLocation } from "react-router-dom";
@@ -17,7 +17,7 @@ function App(props) {
   const excludeNavRoutes = ["/itinerary"];
   // console.log(pathname);
   return (
-    <SessionProvider>
+    <UserProvider>
       {!excludeNavRoutes.includes(pathname) && <NavBar />}
       {!excludeNavRoutes.includes(pathname) && (
         <NavBarOffset>
@@ -28,7 +28,7 @@ function App(props) {
       {excludeNavRoutes.includes(pathname) && (
         <TravelRouter></TravelRouter>
       )}
-    </SessionProvider>
+    </UserProvider>
   );
 }
 

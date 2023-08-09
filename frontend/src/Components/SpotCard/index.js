@@ -5,7 +5,7 @@ import "./style.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Tag } from "antd";
 export default function SpotCard(props) {
-  console.log(props);
+  // console.log(props);
   const {
     s_Name,
     s_picture,

@@ -7,7 +7,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import InterestForm2 from "../InterestForm2";
+import InterestForm from "../InterestForm";
 import useFormController from "../../hooks/useFormController";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -109,7 +109,7 @@ export default function ProfileInterest() {
         <DialogTitle id="scroll-dialog-title">Subscribe</DialogTitle>
 
         <DialogContent>
-          <InterestForm2 customInterestFieldProps={customInterestFieldProps} />
+          <InterestForm customInterestFieldProps={customInterestFieldProps} />
         </DialogContent>
         <DialogActions
           sx={{

@@ -78,10 +78,10 @@ export default function HotPlace() {
                 flexGrow={1}
               >
                 <SpotLittleCard
-                  s_Id={item.s_Id}
-                  s_Name={item.s_Name}
-                  s_Pictures={item.s_picture}
-                  s_District={item.s_District}
+                  Id={item.s_Id}
+                  Name={item.s_Name}
+                  Pictures={item.s_picture}
+                  District={item.s_District}
                 ></SpotLittleCard>
               </Grid>
             );

@@ -1,5 +1,7 @@
 import React, { useContext } from "react";
 import { SearchStateContext } from "../SearchContext";
+import CustomMuiTypography from "../../CustomMuiTypography";
+// import { Divider } from "@mui/material";
 export default function SearchDivider() {
   const { resultSpots } = useContext(SearchStateContext);
   return (
@@ -10,7 +12,8 @@ export default function SearchDivider() {
         padding: "10px 0",
       }}
     >
-      <p style={{ color: "#777" }}>共{resultSpots.length}個結果</p>
+      <CustomMuiTypography variant="caption" >共{resultSpots.length}個結果</CustomMuiTypography>
+      {/* <Divider variant="middle" /> */}
     </div>
   );
 }

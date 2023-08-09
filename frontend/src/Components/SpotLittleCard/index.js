@@ -24,19 +24,20 @@ const ImageCardWrapper = styled("div")(({ theme }) => ({
 
 export default function RecipeReviewCard(props) {
   const {
-    s_Id,
-    s_Name,
-    s_Pictures,
-    s_District,
+    Id,
+    Name,
+    Pictures,
+    District,
     isLike = false,
     setItems,
     onLikeClick = () => {},
   } = props;
 
-  console.log(isLike,'ISLIKE')
+  // console.log(props)
+
+  // console.log(isLike,'ISLIKE')
 
   const [like, setLike] = React.useState(false);
-
 
   React.useEffect(() => {
     setLike(isLike);
@@ -51,7 +52,15 @@ export default function RecipeReviewCard(props) {
     //ajax like
   };
 
-  // console.log(s_Pictures);
+  const p_URL = Pictures[0]?.sp_URL
+    ? `http://localhost:8000${Pictures[0].sp_URL}`
+    : Pictures[0]?.fp_URL
+    ? `http://localhost:8000${Pictures[0].fp_URL}`
+    : Pictures[0]?.hp_URL
+    ? `http://localhost:8000${Pictures[0].hp_URL}`
+    : "";
+
+  // console.log(p_URL);
   return (
     <Card
       sx={{
@@ -73,7 +82,7 @@ export default function RecipeReviewCard(props) {
           component="img"
           height="140"
           image={
-            s_Pictures[0] ? `http://localhost:8000${s_Pictures[0].sp_URL}` : ""
+            p_URL
           }
           alt="Paella dish"
         />
@@ -90,10 +99,10 @@ export default function RecipeReviewCard(props) {
             fontSize: "1.2rem",
           }}
         >
-          {s_Name}
+          {Name}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {s_District}
+          {District}
         </Typography>
       </CardContent>
 
@@ -105,7 +114,7 @@ export default function RecipeReviewCard(props) {
             event.stopPropagation();
             event.preventDefault();
             updateLike();
-            onLikeClick(s_Id);
+            onLikeClick(Id);
           }}
         >
           {like ? <FavoriteIcon /> : <FavoriteBorderIcon />}

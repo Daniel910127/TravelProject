@@ -12,9 +12,8 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
-import { useNavigate } from "react-router-dom";
 
-import { useUser } from "../../contexts/UserContext";
+import { useSession } from "../../contexts/UserContext";
 
 import { styled, alpha } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
@@ -85,10 +84,9 @@ const setting1 = [
 ];
 
 function NavBar() {
-  const { userinfo, logout } = useUser();
+  const { a_Id, m_Id, a_Account, a_Level, logout } = useSession();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const navigate = useNavigate();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -193,7 +191,7 @@ function NavBar() {
               textDecoration: "none",
             }}
           >
-            台南走透透
+            AI旅遊
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
@@ -208,17 +206,32 @@ function NavBar() {
                 }}
               >
                 <Typography textAlign="center">{page.linkName} </Typography>
+
+                {/* <Button
+                  
+                  
+                  sx={{ my: 2, color: "white", display: "block" }}
+                >
+                  {page}
+                </Button> */}
               </Link>
             ))}
           </Box>
 
-          {userinfo ? (
+          {a_Account ? (
             <Box sx={{ flexGrow: 0, display: "flex" }}>
-              
+              <IconButton
+                size="large"
+                color="inherit"
+                sx={{ display: { md: "none", xs: "block" } }}
+              >
+                <SearchIcon />
+              </IconButton>
 
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                  {<div>{a_Account}</div>}
                 </IconButton>
               </Tooltip>
               <Menu
@@ -254,14 +267,48 @@ function NavBar() {
             </Box>
           ) : (
             <Box sx={{ flexGrow: 0, display: "flex" }}>
-              <Button
-                sx={{ color: "#fff" }}
-                onClick={() => {
-                  navigate("/login");
-                }}
+              <IconButton
+                size="large"
+                color="inherit"
+                sx={{ display: { md: "none", xs: "block" } }}
               >
-                登入
-              </Button>
+                <SearchIcon />
+              </IconButton>
+
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: "45px" }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                {setting1.map((setting) => (
+                  <MenuItem
+                    key={setting.linkURL}
+                    onClick={handleCloseNavMenu}
+                    component={Link}
+                    to={setting.linkURL}
+                  >
+                    <Typography textAlign="center">
+                      {setting.linkName}
+                    </Typography>
+                  </MenuItem>
+                ))}
+              </Menu>
             </Box>
           )}
         </Toolbar>
