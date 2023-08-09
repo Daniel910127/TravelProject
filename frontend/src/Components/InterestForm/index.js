@@ -1,7 +1,8 @@
 import React, { useContext } from "react";
-import { styled } from "@mui/material/styles";
-import { Box, Button, Typography } from "@mui/material";
 
+import { Box, Button, Typography } from "@mui/material";
+import CustomMuiTypography from "../CustomMuiTypography";
+import IconSlider from "../IconSlider";
 import {
   ParkOutlined,
   HikingOutlined,
@@ -20,16 +21,9 @@ import {
 
 import Slider from "@mui/material/Slider";
 import { styled } from "@mui/material/styles";
-import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles((theme) => ({
-	page: {
-		marginTop: theme.spacing(12),
-		display: 'flex',
-		flexDirection: 'column',
-		alignItems: 'center',
-	},
-}));
+
+
 const PrettoSlider = styled(Slider)({
 
   "& .airbnb-bar": {
@@ -82,8 +76,7 @@ const PrettoSlider = styled(Slider)({
 });
 
 
-import CustomMuiTypography from "../CustomMuiTypography";
-import IconSlider from "../IconSlider";
+
 
 const CustomInterestWrapper = styled("div")({
   height: "100%",
