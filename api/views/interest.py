@@ -12,21 +12,40 @@ from rest_framework.permissions import IsAuthenticated
 from django.core.exceptions import ObjectDoesNotExist
 
 
+from ..serializers import s_InterestSerializer
 
-from ..serializers import  s_InterestSerializer
-
-from ..models import  s_Interest
+from ..models import s_Interest
 from ..utils import spot_data
 from rest_framework.views import APIView
 import json
 
-class CreateInterestView(APIView):#帳號興趣創立
+
+class InterestDetail(APIView):
     permission_classes = (IsAuthenticated,)
-    def post(self, request, id):
+
+    def post(self, request):
+        data = json.loads(request.body)
+        id = data.get('id', None)
+        try:
+            member = s_Interest.objects.get(id=id)
+            serializer = s_InterestSerializer(member, many=False)
+            return Response(serializer.data)
+        except s_Interest.DoesNotExist:
+            response_data = {
+                "status": "401",
+                "message": "興趣資料獲取失敗",
+                "error": "指定的id不存在"
+            }
+            return Response(response_data, status=status.HTTP_401_UNAUTHORIZED)
+
+
+class CreateInterestView(APIView):  # 帳號興趣創立
+    def post(self, request):
         serializer = s_InterestSerializer(data=request.data)
         if serializer.is_valid():
             if Account.objects.filter(id=id).exists():
                 return Response({'error': '該帳號已創立興趣'}, status=status.HTTP_400_BAD_REQUEST)
+            id = serializer.validated_data.get('id')
             id = serializer.validated_data.get('id')
             si_pg = serializer.validated_data.get('si_pg')
             si_os = serializer.validated_data.get('si_os')
@@ -77,11 +96,13 @@ class CreateInterestView(APIView):#帳號興趣創立
 
             return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
 
-class UpdateInterestView(APIView):#帳號興趣修改
+
+class UpdateInterestView(APIView):  # 帳號興趣修改
     permission_classes = (IsAuthenticated,)
-    def put(self, request, id):
+
+    def post(self, request):
         try:
-            interest = s_Interest.objects.get(id=id)
+            interest = s_Interest.objects.get(id=request.data['id'])
         except s_Interest.DoesNotExist:
             response_data = {
                 "status": "404",
@@ -106,14 +127,16 @@ class UpdateInterestView(APIView):#帳號興趣修改
             }
             return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
 
-class InterestListView(generics.RetrieveAPIView):##單一帳號興趣
+
+class InterestListView(generics.RetrieveAPIView):  # 單一帳號興趣
     permission_classes = (IsAuthenticated,)
-    serializer_class = s_InterestSerializer
 
     def get(self, request, id):
+        data = json.loads(request.body)
+        id = data.get('id', None)
         try:
             my_models = s_Interest.objects.get(id=id)
-            serializer = self.serializer_class(my_models)
+            serializer = s_InterestSerializer(my_models, many=False)
             response_data = {
                 "status": "201",
                 "message": "興趣資料獲取成功",
@@ -127,4 +150,3 @@ class InterestListView(generics.RetrieveAPIView):##單一帳號興趣
                 "error": "指定的id不存在"
             }
             return Response(response_data, status=status.HTTP_401_UNAUTHORIZED)
-

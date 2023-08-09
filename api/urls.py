@@ -14,13 +14,15 @@ urlpatterns = [
 
     
     path('account-list/', account.accountList, name="account-list"),
-    path('account/', account.CreateAccountView.as_view(), name="account-create"),
+    path('account-create/', account.CreateAccountView.as_view(),
+         name="account-create"),
     path('account-login/', account.LoginView.as_view(), name="account-login"),
     path('account/<int:id>/', account.UpdateAccountView.as_view(), name="account-update"),
 
-    path('account/<int:id>/interest/', interest.InterestListView.as_view(), name="interest-list"),
-    path('account/<int:id>/interest-create/', interest.CreateInterestView.as_view(), name="interest-create"),
-    path('account/<int:id>/interest-update/', interest.UpdateInterestView.as_view(), name="interest-update"),
+    path('interest-list/', interest.InterestDetail.as_view(), name="interest-list"),
+    path('account/<int:id>/interest-list',interest.InterestListView.as_view(), name="interest-list"),
+    path('account/<int:id>/interest-create/',interest.CreateInterestView.as_view(), name="interest-create"),
+    path('interest-update/', interest.UpdateInterestView.as_view(), name="interest-update"),
 
     path('spot-list/', spot.spotList, name="spot-list"),
     path('spot-image-list/', spot.spotWithPictureList, name="spot-image-list"),

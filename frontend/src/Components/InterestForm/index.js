@@ -18,6 +18,70 @@ import {
   AttractionsOutlined,
 } from "@mui/icons-material";
 
+import Slider from "@mui/material/Slider";
+import { styled } from "@mui/material/styles";
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme) => ({
+	page: {
+		marginTop: theme.spacing(12),
+		display: 'flex',
+		flexDirection: 'column',
+		alignItems: 'center',
+	},
+}));
+const PrettoSlider = styled(Slider)({
+
+  "& .airbnb-bar": {
+    height: 9,
+    width: 1,
+    backgroundColor: "currentColor",
+    marginLeft: 1,
+    marginRight: 1,
+  },
+
+  "& .MuiSlider-track": {
+    border: "none",
+  },
+  "& .MuiSlider-thumb": {
+    height: 28,
+    width: 28,
+    backgroundColor: "#fff",
+    border: "2px solid currentColor",
+    "&:focus, &:hover, &.Mui-active, &.Mui-focusVisible": {
+      boxShadow: "inherit",
+    },
+
+    "&:hover": {
+      boxShadow: "0 0 0 7px rgba(25, 118, 210, 0.36)",
+    },
+
+    "&:before": {
+      display: "none",
+    },
+  },
+  "& .MuiSlider-valueLabel": {
+    lineHeight: 1.2,
+    fontSize: 12,
+    background: "unset",
+    padding: 0,
+    width: 32,
+    height: 32,
+    borderRadius: "50% 50% 50% 0",
+    backgroundColor: "#1976d2",
+    transformOrigin: "bottom left",
+    transform: "translate(50%, -100%) rotate(-45deg) scale(0)",
+    "&:before": { display: "none" },
+    "&.MuiSlider-valueLabelOpen": {
+      transform: "translate(50%, -100%) rotate(-45deg) scale(1)",
+    },
+    "& > *": {
+      transform: "rotate(45deg)",
+    },
+  },
+});
+
+
 import CustomMuiTypography from "../CustomMuiTypography";
 import IconSlider from "../IconSlider";
 
