@@ -29,6 +29,14 @@ export const SessionProvider = ({ children }) => {
       return null;
     }
   });
+    const [email, setemail] = useState(() => {
+    const storedusername = sessionStorage.getItem('email');
+    if (storedusername) {
+      return JSON.parse(storedusername);
+    } else {
+      return null;
+    }
+  });
   const [access, setaccess] = useState(() => {
     const storedaccess = sessionStorage.getItem('access');
     if (storedaccess) {
@@ -45,15 +53,17 @@ export const SessionProvider = ({ children }) => {
       return null;
     }
   });
-  const login = (id,account,username,access,refresh) => {
+  const login = (id,account,username,email,access,refresh) => {
     sessionStorage.setItem('id', JSON.stringify(id));
     sessionStorage.setItem('account', JSON.stringify(account));
     sessionStorage.setItem('username', JSON.stringify(username));
+    sessionStorage.setItem('email', JSON.stringify(email));
     sessionStorage.setItem('access', JSON.stringify(access));
     sessionStorage.setItem('refresh', JSON.stringify(refresh));
     setid(id);
     setaccount(account);
     setusername(username);
+    setemail(email);
     setaccess(access);
     setrefresh(refresh);
   };
@@ -62,18 +72,20 @@ export const SessionProvider = ({ children }) => {
     sessionStorage.removeItem('id');
     sessionStorage.removeItem('account');
     sessionStorage.removeItem('username');
+    sessionStorage.removeItem('email');
     sessionStorage.removeItem('access');
     sessionStorage.removeItem('refresh');
     setid(null);
     setaccount(null);
     setusername(null);
+    setemail(null);
     setaccess(null);
     setrefresh(null);
     navigate('/'); 
   };
 
   return (
-    <SessionContext.Provider value={{ id,account,username,access,refresh, login, logout }}>
+    <SessionContext.Provider value={{ id,account,username,email,access,refresh, login, logout }}>
       {children}
     </SessionContext.Provider>
   );
