@@ -54,7 +54,7 @@ export default function SignIn() {
       const response =await axios.post('http://127.0.0.1:8000/api/account-login/', formData);
       if (response.data.id) {
         setRedirect(true);
-       login(response.data.id, response.data.account, response.data.username, response.data.access,response.data.refresh);
+       login(response.data.id, response.data.account, response.data.username, response.data.email,response.data.access,response.data.refresh);
       } else {
         setRedirect(false);
         setError(response.data.error);

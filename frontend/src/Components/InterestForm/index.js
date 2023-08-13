@@ -1,6 +1,6 @@
 import { useState,useEffect } from "react";
 import { Button, Grid, Box, Typography, } from "@mui/material";
-import axios from 'axios';
+import { useAuthorizedAxios } from '../../contexts/axios';
 import { useSession } from '../../contexts/SessionContext';
 import {
   ParkOutlined,
@@ -84,7 +84,7 @@ const PrettoSlider = styled(Slider)({
 
 function Interest() {
   const {id,account,username,access,refresh, login, logout } = useSession();
-  axios.defaults.headers.common['Authorization'] = `Bearer ${access}`;
+   const authorizedAxios = useAuthorizedAxios();
   const classes = useStyles();
   const [editing, setEditing] = useState(false);
   const [formData, setFormData] = useState({
@@ -103,9 +103,9 @@ function Interest() {
     si_tf: 0
   });
    useEffect(() => {
-    axios.post('http://127.0.0.1:8000/api/interest-list/',{ id }).then(response => {
+    authorizedAxios.post('http://127.0.0.1:8000/api/interest-list/',{ id }).then(response => {
         setFormData({
-          id:id,
+            id:id,
             si_pg: response.data.si_pg,
             si_os: response.data.si_os,
             si_tp: response.data.si_tp,
@@ -148,10 +148,9 @@ function Interest() {
 
   const handleSubmit= event => {
     event.preventDefault();
-    axios
+    authorizedAxios
       .post('http://127.0.0.1:8000/api/interest-update/', formData)
       .then(response => {
-        console.log(response.data['message']);
         setEditing(false);
       })
       .catch(error => console.error(error));
