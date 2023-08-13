@@ -18,7 +18,7 @@ from datetime import datetime
 
 from ..serializers import AccountSerializer, LoginSerializer
 
-from ..models import Account, AccountManager
+from ..models import Account
 from ..utils import spot_data
 from rest_framework.views import APIView
 import json
@@ -40,7 +40,7 @@ class CreateAccountView(APIView):  # 創建帳號
             email = serializer.validated_data['email']
             if Account.objects.filter(email=email).exists():
                 response_data = {
-                    'meaasge': '該名稱已被使用'
+                    'meaasge': '該電子郵件已被使用'
                 }
                 return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
             rank = serializer.validated_data.get('rank', 0)
@@ -172,3 +172,43 @@ def accountList(request):
 	accounts = Account.objects.all().order_by('-id')
 	serializer = AccountSerializer(accounts, many=True)
 	return Response(serializer.data)
+
+
+class UpdateMemberView(APIView):  # 會員更新
+    def post(self, request):
+        data = json.loads(request.body)
+        id = data.get('id')
+        account = data.get('account')
+        if Account.objects.filter(account=account).exclude(id=id).exists():
+            data = {
+                'message': '該帳戶已被使用'
+            }
+            return Response(data)
+        username = data.get('username')
+        email = data.get('email')
+        if Account.objects.filter(email=email).exclude(id=id).exists():
+            data = {
+                'message': '該信箱已被使用'
+            }
+            return Response(data)
+        try:
+            user = Account.objects.get(id=id)
+            user.account = account
+            user.username = username
+            user.email = email
+            user.save()
+            data = {
+                'status': "201",
+                'message': "會員更新成功",
+                'id': user.id,
+                'account': user.account,
+                'username': user.username,
+                'email': user.email
+            }
+            return JsonResponse(data=data)
+        except Account.DoesNotExist:
+            data = {
+                'status': "401",
+                'error': "會員更新失敗",
+            }
+            return JsonResponse(data=data, status=status.HTTP_404_NOT_FOUND)

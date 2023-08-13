@@ -33,8 +33,8 @@ class AccountManager(BaseUserManager):
 class Account(AbstractBaseUser, PermissionsMixin):
     id = models.AutoField(primary_key=True)
     account = models.CharField(max_length=20, null=False, unique=True)
-    email = models.EmailField(unique=True, default='', editable=False)
-    username = models.CharField(max_length=100, unique=True, default='', editable=False)
+    email = models.EmailField(unique=True, default='')
+    username = models.CharField(max_length=100, default='')
     rank = models.IntegerField(null=False, default=0)
 
     is_staff = models.BooleanField(default=False)
@@ -83,7 +83,7 @@ class Travel_List_Detail(models.Model):
   h_Id =  models.ForeignKey(to="Hotel",null=True, on_delete=models.CASCADE)  
   tl_TransportMode = models.CharField(max_length=20, null=True)#到該景點交通工具
   tl_TransportTime = models.IntegerField(null=True) #交通工具移動時間
-  tl_StayTime =  models.IntegerField( null=False,default=2)#停留時間
+  tl_StayTime =  models.IntegerField(max_length=10, null=False,default=2)#停留時間
   tl_Day = models.IntegerField(null=False,default=1)#該景點屬於第幾天
   tl_Order = models.IntegerField(null=False)#該景點順序
   tl_Notes = models.CharField(max_length=200, null=True)#景點小筆記
