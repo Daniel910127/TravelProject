@@ -1,5 +1,5 @@
 from json.decoder import JSONDecodeError
-from ..serializers import AccountSerializer, LoginSerializer,s_InterestSerializer
+from ..serializers import AccountSerializer,s_InterestSerializer
 from ..models import Account
 from django.http import Http404
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -67,12 +67,10 @@ class CreateAccountView(APIView):  # 創建帳號
             }
             return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
 
-
 class LoginView(APIView):  # 登入帳號
     def post(self, request):
-        data = json.loads(request.body)
-        account = data.get('account')
-        password = data.get('password')
+        account = request.data.get('account')
+        password = request.data.get('password')
         try:
             user = Account.objects.get(account=account)
             if user.check_password(password):
@@ -89,20 +87,19 @@ class LoginView(APIView):  # 登入帳號
                     'username': user.username,
                     'email': user.email
                 }
-                return JsonResponse(data=data)
+                return Response(data, status=status.HTTP_201_CREATED)
             else:
                 data = {
                     'status': "401",
                     'error': "密碼錯誤",
                 }
-                return JsonResponse(data=data)
+                return Response(data, status=status.HTTP_401_UNAUTHORIZED)
         except Account.DoesNotExist:
             data = {
                 'status': "401",
                 'error': "帳號不存在",
             }
-            return JsonResponse(data=data)
-
+            return Response(data, status=status.HTTP_401_UNAUTHORIZED)
 
 class UpdateAccountView(APIView):  # 更改帳號資訊
     permission_classes = (IsAuthenticated,)
