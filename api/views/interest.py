@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 import json
 
 
-class InterestDetail(APIView):#哲嘉做的
+class InterestDetail(APIView):
     permission_classes = (IsAuthenticated,)
 
     def post(self, request):
