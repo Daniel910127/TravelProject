@@ -1,5 +1,5 @@
 from json.decoder import JSONDecodeError
-from ..serializers import AccountSerializer
+from ..serializers import AccountSerializer, LoginSerializer,s_InterestSerializer
 from ..models import Account
 from django.http import Http404
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -8,60 +8,62 @@ from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 from django.contrib.auth import authenticate
 from rest_framework.decorators import api_view
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.views import APIView
+from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 from datetime import datetime
-
-
-from ..serializers import AccountSerializer, LoginSerializer
-
-from ..models import Account
-from ..utils import spot_data
-from rest_framework.views import APIView
 import json
 
 
 # Create your views here.
 class CreateAccountView(APIView):  # 創建帳號
-    def post(self, request, format=None):
-        serializer = AccountSerializer(data=request.data)
-        if serializer.is_valid():
-            account = serializer.validated_data['account']
-            password = serializer.validated_data['password']
-            username = serializer.validated_data['username']
-            if Account.objects.filter(username=username).exists():
-                response_data = {
-                    'message': '該名稱已被使用'
-                }
-                return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
-            email = serializer.validated_data['email']
-            if Account.objects.filter(email=email).exists():
-                response_data = {
-                    'meaasge': '該電子郵件已被使用'
-                }
-                return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
-            rank = serializer.validated_data.get('rank', 0)
 
-            # 使用AccountManager的create_user方法创建账户
-            account = Account.objects.create_user(
-                account=account, password=password, username=username, email=email, rank=rank)
+    def post(self, request, format=None):
+        account_serializer = AccountSerializer(data=request.data)
+        interest_serializer = s_InterestSerializer(data=request.data)
+
+        if account_serializer.is_valid() and interest_serializer.is_valid():
+            # Check if account with same username or email already exists
+            username = account_serializer.validated_data['username']
+            email = account_serializer.validated_data['email']
+            if Account.objects.filter(username=username).exists():
+                return Response({'error': '該名稱已被使用'}, status=status.HTTP_400_BAD_REQUEST)
+            if Account.objects.filter(email=email).exists():
+                return Response({'error': '該電子郵件地址已被使用'}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Create account
+            account = account_serializer.save()
+
+            # Create account interest
+            interest_serializer.validated_data['id'] = account
+            interest = interest_serializer.save()
+
+            refresh = RefreshToken.for_user(account)
+            access = refresh.access_token
 
             response_data = {
                 "status": "201",
-                "message": "帳號創建成功",
-                "data": serializer.data
+                "message": "帳號和興趣創建成功",
+                "account_data": account_serializer.data,
+                "interest_data": interest_serializer.data,
+                "refresh": str(refresh),
+                "access": str(access),
             }
 
-            # 返回成功响应
             return Response(response_data, status=status.HTTP_201_CREATED)
         else:
+            account_serializer.is_valid()  # Ensure account serializer is validated
+            interest_serializer.is_valid()  # Ensure interest serializer is validated
+            account_errors = account_serializer.errors if account_serializer.errors else {}
+            interest_errors = interest_serializer.errors if interest_serializer.errors else {}
             response_data = {
                 "status": "400",
-                "message": "帳號創建失败",
-                "error": serializer.errors
+                "message": "帳號和興趣創建失敗",
+                "account_errors": account_errors,
+                "interest_errors": interest_errors
             }
             return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
 
