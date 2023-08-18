@@ -27,12 +27,20 @@ class CreateAccountView(APIView):  # 創建帳號
 
         if account_serializer.is_valid() and interest_serializer.is_valid():
             # Check if account with same username or email already exists
-            username = account_serializer.validated_data['username']
+            account = account_serializer.validated_data['account']
             email = account_serializer.validated_data['email']
-            if Account.objects.filter(username=username).exists():
-                return Response({'error': '該名稱已被使用'}, status=status.HTTP_400_BAD_REQUEST)
+            if Account.objects.filter(account=account).exists():
+                response_data = {
+                "status": "404",
+                "error": "已有此帳號存在",
+                }
+                return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
             if Account.objects.filter(email=email).exists():
-                return Response({'error': '該電子郵件地址已被使用'}, status=status.HTTP_400_BAD_REQUEST)
+                response_data = {
+                "status": "404",
+                "error": "該電子郵件地址已被使用",
+                }
+                return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
 
             # Create account
             account = account_serializer.save()
