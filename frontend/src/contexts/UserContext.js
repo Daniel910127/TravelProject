@@ -17,23 +17,21 @@ export const UserProvider = ({ children }) => {
 
   const login = (userinfo_data, access, refresh) => {
     localStorage.setItem("userinfo", JSON.stringify(userinfo_data));
-    localStorage.setItem("jwtToken", access);
+    localStorage.setItem("accessToken", access);
     localStorage.setItem("refreshToken", refresh);
     setUserinfo(userinfo_data);
   };
 
   const logout = () => {
     localStorage.removeItem("userinfo");
-    localStorage.removeItem("jwtToken");
+    localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     setUserinfo(null);
     navigate("/");
   };
 
   return (
-    <UserContext.Provider
-      value={{ userinfo, login, logout }}
-    >
+    <UserContext.Provider value={{ userinfo, login, logout }}>
       {children}
     </UserContext.Provider>
   );

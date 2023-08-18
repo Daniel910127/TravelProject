@@ -9,7 +9,7 @@ import NavBar from "./Components/NavBar";
 import { useLocation } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 const NavBarOffset = styled("div")(({ theme }) => ({
-  paddingTop: "64px",
+  paddingTop: "54px",
 }));
 library.add(fas, far);
 function App(props) {

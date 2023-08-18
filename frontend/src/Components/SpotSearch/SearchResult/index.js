@@ -5,7 +5,7 @@ import SpotLittleCard from "../../SpotLittleCard";
 import Typography from "@mui/material/Typography";
 
 import { SearchStateContext } from "../SearchContext";
-export default function SearchResult() {
+export default function SearchResult({type}) {
   const { resultSpots } = useContext(SearchStateContext);
   const [items, setItems] = useState([]);
 
@@ -89,6 +89,7 @@ export default function SearchResult() {
               Name={item.Name}
               Pictures={item.picture}
               District={item.District}
+              type={type}
             ></SpotLittleCard>
           </Grid>
         ))}

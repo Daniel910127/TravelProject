@@ -6,22 +6,29 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 
 import "./style.css";
-
+import { Link } from "react-router-dom";
 // import required modules
 import { Autoplay, Pagination, Navigation } from "swiper";
 import axios from "axios";
 import { Box } from "@mui/material";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import { authApi } from "../../utils/apis/authApi";
+
 export default function Banner() {
   const [bannerList, setBannerList] = useState([]);
+
   useEffect(() => {
-    axios
-      .get("http://localhost:3000/hot-place/?s_Id=1")
-      .then((response) => response.data[0])
-      .then((data) => {
-        setBannerList(data.s_picture);
+    authApi
+      .get("/spot/1")
+      .then((response) => {
+        // console.log("Response:", response.data);
+        setBannerList(response.data.data.s_picture);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
       });
+
   }, []);
   return (
     <Box sx={{ position: "relative" }}>
@@ -60,11 +67,13 @@ export default function Banner() {
         <Typography variant="h3" color={"white"}>
           發現台南之美
         </Typography>
-        <Typography variant="h5" color={"white"} sx={{marginBottom:2}}>
+        <Typography variant="h5" color={"white"} sx={{ marginBottom: 2 }}>
           AI智能規劃旅程 品味古都風華
         </Typography>
 
-        <Button variant="contained">立即規劃</Button>
+        <Button variant="contained" component={Link} to={"/itinerary/create"}>
+          立即規劃
+        </Button>
       </Box>
     </Box>
   );

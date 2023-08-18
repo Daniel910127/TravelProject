@@ -8,7 +8,7 @@ import { produce } from "immer";
 import { FormStateContext } from ".";
 import dayjs from "dayjs";
 import { DatePicker, Space } from "antd";
-import { Link } from "react-router-dom";
+
 import Lottie from "lottie-react";
 import register_map from "./register_map.json";
 
@@ -78,8 +78,12 @@ function InfoForm(props) {
         <Typography sx={{ mb: 1, textAlign: "center" }}>
           立即體驗AI行程規劃的樂趣，讓你為旅遊輕鬆做準備。
         </Typography>
-        
-        <Button variant="outlined" component={Link} to={'/itinerary/create'} >立即規劃</Button>
+        <RangePicker
+          size={"large"}
+          disabledDate={disabledDate}
+          style={{ border: "1px solid black", maxWidth: "350px" }}
+        />
+        <Button>開始規劃</Button>
       </Box>
     </>
   );

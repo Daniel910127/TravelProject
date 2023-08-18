@@ -14,7 +14,6 @@ import Collapse from "@mui/material/Collapse";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CustomInterest from "./CustomInterest";
 import ItineraryInfo from "./ItineraryInfo";
-import moment from "moment";
 
 const NewItineraryFormWrapper = styled("div")({
   padding: "1.6rem 0 1.6rem 1.6rem",
@@ -43,23 +42,11 @@ const ExpandMore = styled((props) => {
 
 export default function NewItineraryForm() {
   const onSubmit = (data) => {
-    const { startDate, endDate } = data.datesField;
-
-    const modifiedData = {
-      t_StartDate: moment(startDate).format("YYYY-MM-DD"),
-      t_StayDay: moment(endDate).diff(startDate, "days") + 1,
-      t_NameField: data.t_NameField,
-      t_Description: "",
-      playZone: data.playZone,
-      custom: data.custom,
-      customInterestField: data.customInterestField,
-      t_Privacy: data.t_Privacy,
-    };
-    console.log(modifiedData);
+    console.log(data);
   };
 
   const validationSchema = yup.object().shape({
-    t_NameField: yup.string().required("請填入行程名稱"),
+    t_NameField: yup.string().required('請填入行程名稱'),
     datesField: yup
       .object()
       .required("請填入旅遊日期")
@@ -82,7 +69,6 @@ export default function NewItineraryForm() {
       playZone: [],
       datesField: {},
       custom: false,
-      t_Privacy: false,
       customInterestField: {
         si_os: 1,
         si_tp: 1,
@@ -107,9 +93,7 @@ export default function NewItineraryForm() {
     control,
     "customInterestField"
   );
-
   const customFieldProps = useFormController(control, "custom");
-  const t_PrivacyFieldProps = useFormController(control, "t_Privacy");
   // console.log(t_NameFieldProps);
   // console.log(errors);
   return (
@@ -125,7 +109,6 @@ export default function NewItineraryForm() {
           playZoneFieldProps={playZoneFieldProps}
           datesFieldProps={datesFieldProps}
           customFieldProps={customFieldProps}
-          t_PrivacyFieldProps={t_PrivacyFieldProps}
           handleSubmit={handleSubmit(onSubmit)}
         />
       </Box>

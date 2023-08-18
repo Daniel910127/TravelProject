@@ -74,10 +74,7 @@ const pages = [
 ];
 
 const settings = [
-  { linkName: "Profile", linkURL: "/profile" },
-  { linkName: "interest", linkURL: "/interest" },
-  { linkName: "Dashboard", linkURL: "/dashboard" },
-  // { linkName: "Logout", linkURL: "#" , click:"handleLogout"}
+  { linkName: "個人資料", linkURL: "/profile" },
 ];
 const setting1 = [
   { linkName: "login", linkURL: "/login" },
@@ -249,7 +246,7 @@ function NavBar() {
                     </Typography>
                   </MenuItem>
                 ))}
-                <MenuItem onClick={handleLogout}>logout</MenuItem>
+                <MenuItem onClick={()=>{handleLogout();handleCloseUserMenu()}}>登出</MenuItem>
               </Menu>
             </Box>
           ) : (

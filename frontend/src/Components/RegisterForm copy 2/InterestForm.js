@@ -82,7 +82,7 @@ const IconSlider = (props) => {
   const [value, setValue] = useState(0);
   function IconThumbComponent(props) {
     const { children, ...other } = props;
-    console.log(other);
+    console.log(other)
     return (
       <SliderThumb {...other}>
         {children}
@@ -183,9 +183,10 @@ function InfoForm(props) {
 
   useEffect(() => {
     async function createAccountFlow() {
-      console.log(form);
-      if (true) {
-        let infoStatus = await createAccount(form);
+      console.log(form)
+      if (form.steps.info.valid && form.steps.interest.valid) {
+        let infoStatus = await createAccount(form.steps.info.value);
+        let interestStatus = await createAccount(form.steps.interest.value);
 
         const errorMessage = [
           {
@@ -200,13 +201,13 @@ function InfoForm(props) {
           },
         ]; //back end return error msg
 
-        if (infoStatus) {
+        if ((await infoStatus) && (await interestStatus)) {
           handleNext();
         }
 
-        // if (!(await infoStatus) || !(await interestStatus)) {
-        //   handleError(errorMessage);
-        // }
+        if (!(await infoStatus) || !(await interestStatus)) {
+          handleError(errorMessage);
+        }
       }
     }
 
@@ -220,7 +221,10 @@ function InfoForm(props) {
       onSubmit={handleSubmit((data) => {
         setForm(
           produce((state) => {
-            state.interest = data;
+            state.steps.interest = {
+              valid: true,
+              value: data,
+            };
           })
         );
       })}
@@ -258,20 +262,23 @@ function InfoForm(props) {
               setSkipped(skipped.add(activeStep));
               setForm(
                 produce((state) => {
-                  state.interest = {
-                    si_pg: -1,
-                    si_os: -1,
-                    si_tp: -1,
-                    si_ee: -1,
-                    si_ff: -1,
-                    si_la: -1,
-                    si_le: -1,
-                    si_ns: -1,
-                    si_np: -1,
-                    si_rt: -1,
-                    si_se: -1,
-                    si_ha: -1,
-                    si_tf: -1,
+                  state.steps.interest = {
+                    valid: true,
+                    value: {
+                      si_pg: -1,
+                      si_os: -1,
+                      si_tp: -1,
+                      si_ee: -1,
+                      si_ff: -1,
+                      si_la: -1,
+                      si_le: -1,
+                      si_ns: -1,
+                      si_np: -1,
+                      si_rt: -1,
+                      si_se: -1,
+                      si_ha: -1,
+                      si_tf: -1,
+                    },
                   };
                 })
               );

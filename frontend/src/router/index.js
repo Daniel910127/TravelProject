@@ -15,19 +15,23 @@ import MyItineraryList from "../Views/MyItineraryList";
 import NewItinerary from "../Views/NewItinerary";
 import MyInterest from "../Views/MyInterest";
 import MyFavorite from "../Views/MyFavorite";
+import AuthComponent from "./AuthComponent";
 
 export default function TravelRouter() {
   return (
     <Routes>
       {/* <Route index element={<Film />} />   與父組件的/ 匹配    */}
-      <Route path="/home" element={<Home />} />
 
-      
-      <Route path="/search" >
+      <Route
+        path="/home"
+        element={<AuthComponent component={<Home />}></AuthComponent>}
+      />
+
+      <Route path="/search">
         <Route index element={<Redirect to="/search/spot" />} />
-        <Route path="/search/spot" element={<Search type={'spot'}/> } />
-        <Route path="/search/food" element={<Search type={'food'}/> } />
-        <Route path="/search/hotel" element={<Search type={'hotel'}/>} />
+        <Route path="/search/spot" element={<Search type={"spot"} />} />
+        <Route path="/search/food" element={<Search type={"food"} />} />
+        <Route path="/search/hotel" element={<Search type={"hotel"} />} />
       </Route>
       {/* <Route index element={<NowPlaying />} />  */}
       {/* <Route index element={<Redirect to="/film/nowplaying" />} />  */}
@@ -39,7 +43,14 @@ export default function TravelRouter() {
         <Route path="/itinerary/list" element={<MyItineraryList />} />
       </Route>
 
-      <Route path="/spot/:s_Name" element={<Spot />} />
+      <Route path="/attraction">
+        <Route index element={<Redirect to="/search/spot" />} />
+        <Route path="/attraction/spot/:id" element={<Spot type={"spot"} />} />
+        <Route path="/attraction/food/:id" element={<Spot type={"food"} />} />
+        <Route path="/attraction/hotel/:id" element={<Spot type={"hotel"} />} />
+      </Route>
+
+      <Route path="/spot/:s_Id" element={<Spot />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
 

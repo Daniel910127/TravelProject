@@ -26,7 +26,6 @@ export default function ItineraryInfo({
   playZoneFieldProps,
   datesFieldProps,
   customFieldProps,
-  t_PrivacyFieldProps,
   handleSubmit,
   expanded,
 }) {
@@ -126,10 +125,6 @@ export default function ItineraryInfo({
         <FieldContainer sx={{ display: "flex", alignItems: "center" }}>
           <CustomMuiTypography variant={"h6"}>自訂義</CustomMuiTypography>
           <CustomSwitch {...customFieldProps} />
-        </FieldContainer>
-        <FieldContainer sx={{ display: "flex", alignItems: "center" }}>
-          <CustomMuiTypography variant={"h6"}>公開行程表</CustomMuiTypography>
-          <CustomSwitch {...t_PrivacyFieldProps} />
         </FieldContainer>
         <Button
           type="submit"

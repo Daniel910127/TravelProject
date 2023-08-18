@@ -2,7 +2,7 @@ import * as React from "react";
 
 import Box from "@mui/material/Box";
 
-import { useState, createContext } from "react";
+import { useState, createContext} from "react";
 import { useForm } from "react-hook-form";
 import { produce } from "immer";
 import InfoForm from "./Infoform";
@@ -28,26 +28,38 @@ const STEPS_STATE = [
 ];
 
 const FORM_STATE = {
-  info: {
-    account: "",
-    username: "",
-    password: "",
-    email: "",
-  },
-  interest: {
-    si_pg: -1,
-    si_os: -1,
-    si_tp: -1,
-    si_ee: -1,
-    si_ff: -1,
-    si_la: -1,
-    si_le: -1,
-    si_ns: -1,
-    si_np: -1,
-    si_rt: -1,
-    si_se: -1,
-    si_ha: -1,
-    si_tf: -1,
+  selectedIndex: 0,
+  steps: {
+    info: {
+      valid: false,
+
+      value: {
+        username: "",
+        password: "",
+        gender: "",
+        birthday: "",
+        phone: "",
+      },
+    },
+    interest: {
+      valid: false,
+
+      value: {
+        si_pg: -1,
+        si_os: -1,
+        si_tp: -1,
+        si_ee: -1,
+        si_ff: -1,
+        si_la: -1,
+        si_le: -1,
+        si_ns: -1,
+        si_np: -1,
+        si_rt: -1,
+        si_se: -1,
+        si_ha: -1,
+        si_tf: -1,
+      },
+    },
   },
 };
 
@@ -75,10 +87,10 @@ function RegisterForm() {
     mode: "onBlur",
     reValidateMode: "onBlur",
     defaultValues: {
-      account: form.info.account,
-      username: form.info.username,
-      password: form.info.password,
-      email: form.info.email,
+      account: form.steps.info.value.account,
+      username: form.steps.info.value.username,
+      password: form.steps.info.value.password,
+      email: form.steps.info.value.email,
     },
   });
 
@@ -87,57 +99,57 @@ function RegisterForm() {
     reValidateMode: "onSubmit",
     defaultValues: {
       si_pg:
-        form.interest.si_pg === -1
+        form.steps.interest.value.si_pg === -1
           ? 1
-          : form.interest.si_pg,
+          : form.steps.interest.value.si_pg,
       si_os:
-        form.interest.si_os === -1
+        form.steps.interest.value.si_os === -1
           ? 1
-          : form.interest.si_os,
+          : form.steps.interest.value.si_os,
       si_tp:
-        form.interest.si_tp === -1
+        form.steps.interest.value.si_tp === -1
           ? 1
-          : form.interest.si_tp,
+          : form.steps.interest.value.si_tp,
       si_ee:
-        form.interest.si_ee === -1
+        form.steps.interest.value.si_ee === -1
           ? 1
-          : form.interest.si_ee,
+          : form.steps.interest.value.si_ee,
       si_ff:
-        form.interest.si_ff === -1
+        form.steps.interest.value.si_ff === -1
           ? 1
-          : form.interest.si_ff,
+          : form.steps.interest.value.si_ff,
       si_la:
-        form.interest.si_la === -1
+        form.steps.interest.value.si_la === -1
           ? 1
-          : form.interest.si_la,
+          : form.steps.interest.value.si_la,
       si_le:
-        form.interest.si_le === -1
+        form.steps.interest.value.si_le === -1
           ? 1
-          : form.interest.si_le,
+          : form.steps.interest.value.si_le,
       si_ns:
-        form.interest.si_ns === -1
+        form.steps.interest.value.si_ns === -1
           ? 1
-          : form.interest.si_ns,
+          : form.steps.interest.value.si_ns,
       si_np:
-        form.interest.si_np === -1
+        form.steps.interest.value.si_np === -1
           ? 1
-          : form.interest.si_np,
+          : form.steps.interest.value.si_np,
       si_rt:
-        form.interest.si_rt === -1
+        form.steps.interest.value.si_rt === -1
           ? 1
-          : form.interest.si_rt,
+          : form.steps.interest.value.si_rt,
       si_se:
-        form.interest.si_se === -1
+        form.steps.interest.value.si_se === -1
           ? 1
-          : form.interest.si_se,
+          : form.steps.interest.value.si_se,
       si_ha:
-        form.interest.si_ha === -1
+        form.steps.interest.value.si_ha === -1
           ? 1
-          : form.interest.si_ha,
+          : form.steps.interest.value.si_ha,
       si_tf:
-        form.interest.si_tf === -1
+        form.steps.interest.value.si_tf === -1
           ? 1
-          : form.interest.si_tf,
+          : form.steps.interest.value.si_tf,
     },
   });
 
@@ -161,6 +173,7 @@ function RegisterForm() {
 }
 
 const CreateTaskMultiStepForm = () => {
+  
   return (
     <Box sx={{ width: "100%" }}>
       <HorizontalLinearStepper>

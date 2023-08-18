@@ -129,7 +129,7 @@ function InfoForm(props) {
   const [isDuplicate, setIsDuplicate] = useState(false); // 是否重複
   const validateUsername = (value) => {
     setIsDuplicate(true);
-    // const response = await fetch(`/check-account?username=${value}`);
+    // const response = await fetch(`/check-username?username=${value}`);
     // const result = await response.json();
     const result = { isDuplicate: false, error: "用戶名已存在" };
     if (result.isDuplicate) {
@@ -153,7 +153,10 @@ function InfoForm(props) {
       onSubmit={handleSubmit((data) => {
         setForm(
           produce((state) => {
-            state.info = data;
+            state.steps.info = {
+              valid: true,
+              value: data,
+            };
           })
         );
         handleNext();
@@ -183,31 +186,6 @@ function InfoForm(props) {
                   !getFieldState("username").inValid
                 ? " "
                 : "請輸入中英文用戶名"
-            }
-          ></TextField>
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            control={control}
-            name="account"
-            required
-            fullWidth
-            id="account"
-            label="帳號"
-            rules={{
-              required: "帳號必須填",
-              minLength: { value: 2, message: "帳號不得小於2字元" },
-              maxLength: { value: 10, message: "帳號不得超過10字元" },
-              // validate: validateUsername,
-            }}
-            error={errors.username ? true : false}
-            helperText={
-              errors.username
-                ? errors.username.message
-                : getFieldState("username").isTouched &&
-                  !getFieldState("username").inValid
-                ? " "
-                : "請輸入帳號"
             }
           ></TextField>
         </Grid>

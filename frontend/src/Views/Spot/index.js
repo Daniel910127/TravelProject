@@ -3,24 +3,38 @@ import axios from "axios";
 import { useEffect, useState, useRef } from "react";
 import SpotCard from "../../Components/SpotCard";
 import SpotMap from "../../Components/SpotMap";
-import "./style.css";
+// import "./style.css";
+import { styled } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import NotFound from "../../Views/NotFound";
+import { authApi } from "../../utils/apis/authApi";
+import { useParams } from 'react-router-dom';
 
-export default function Spot() {
+const SpotCardWrapper = styled('div')(({ theme }) => ({
+  position: "absolute",
+  marginTop: "2rem",
+  marginLeft: "2rem",
+  zIndex: 999,
+}));
+const SpotMapWrapper = styled('div')(({ theme }) => ({
+  position: "relative",
+  height: "calc(100vh - 54px)",
+  width: "100%",
+  background: "red",
+}));
+export default function Spot({type}) {
   const [spot, setSpot] = useState();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const { id } = useParams();
+  console.log("spot view");
   useEffect(() => {
     console.log("get spot data");
-    axios({
-      url: "http://127.0.0.1:8000/api/spot/七股鹽山/",
-      method: "GET",
-    })
+    authApi
+      .get(`http://127.0.0.1:8000/api/${type}/${id}/`)
       .then((response) => {
         console.log(response);
-        setSpot(response.data);
+        setSpot(response.data.data);
       })
       .catch((err) => {
         setError(err);
@@ -28,13 +42,21 @@ export default function Spot() {
       .finally(() => {
         setLoading(false);
       });
-  },[]);
+  }, []);
 
   return (
     <div className="SpotView">
       {loading && <p>Loading...</p>}
-      {spot && <SpotCard spot={spot} />}
-      {spot && <SpotMap spot={spot} />}
+      {spot && (
+        <SpotCardWrapper >
+          <SpotCard spot={spot}/>
+        </SpotCardWrapper>
+      )}
+      {spot && (
+        <SpotMapWrapper>
+          <SpotMap spot={spot} />
+        </SpotMapWrapper>
+      )}
       {error && <NotFound></NotFound>}
     </div>
   );

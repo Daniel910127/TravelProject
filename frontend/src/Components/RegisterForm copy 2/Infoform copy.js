@@ -3,6 +3,7 @@ import {
   TextField as MuiTextField,
   Button,
   Grid,
+ 
   InputAdornment,
   Box,
   Radio,
@@ -129,7 +130,7 @@ function InfoForm(props) {
   const [isDuplicate, setIsDuplicate] = useState(false); // 是否重複
   const validateUsername = (value) => {
     setIsDuplicate(true);
-    // const response = await fetch(`/check-account?username=${value}`);
+    // const response = await fetch(`/check-username?username=${value}`);
     // const result = await response.json();
     const result = { isDuplicate: false, error: "用戶名已存在" };
     if (result.isDuplicate) {
@@ -153,7 +154,10 @@ function InfoForm(props) {
       onSubmit={handleSubmit((data) => {
         setForm(
           produce((state) => {
-            state.info = data;
+            state.steps.info = {
+              valid: true,
+              value: data,
+            };
           })
         );
         handleNext();
@@ -183,31 +187,6 @@ function InfoForm(props) {
                   !getFieldState("username").inValid
                 ? " "
                 : "請輸入中英文用戶名"
-            }
-          ></TextField>
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            control={control}
-            name="account"
-            required
-            fullWidth
-            id="account"
-            label="帳號"
-            rules={{
-              required: "帳號必須填",
-              minLength: { value: 2, message: "帳號不得小於2字元" },
-              maxLength: { value: 10, message: "帳號不得超過10字元" },
-              // validate: validateUsername,
-            }}
-            error={errors.username ? true : false}
-            helperText={
-              errors.username
-                ? errors.username.message
-                : getFieldState("username").isTouched &&
-                  !getFieldState("username").inValid
-                ? " "
-                : "請輸入帳號"
             }
           ></TextField>
         </Grid>
@@ -291,6 +270,104 @@ function InfoForm(props) {
               ),
             }}
           ></TextField>
+        </Grid>
+
+        <Grid item xs={12}>
+          <Controller
+            name="phone"
+            control={control}
+            rules={{ validate: matchIsValidTel }}
+            render={({ field, fieldState }) => (
+              <MuiTelInput
+                {...field}
+                //onlyCountries={["FR"]}
+                helperText={
+                  fieldState.invalid
+                    ? "號碼格式錯誤"
+                    : fieldState.isTouched && !fieldState.invalid
+                    ? " "
+                    : "請輸入電話號碼"
+                }
+                error={fieldState.invalid}
+                fullWidth
+                defaultCountry="TW"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      {!fieldState.invalid && fieldState.isTouched ? (
+                        <CheckCircle color="success" />
+                      ) : (
+                        <></>
+                      )}
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            )}
+          />
+        </Grid>
+
+        <Grid item xs={6}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Controller
+              name="birthday"
+              control={control}
+              rules={{ required: "請選擇出生日期" }}
+              render={({
+                field: { ref, onBlur, onChange, value, name, ...field },
+                fieldState,
+              }) => (
+                <DatePicker
+                  {...field}
+                  onChange={(date) => {
+                    onChange(date ? date.valueOf() : null);
+                  }}
+                  value={value ? dayjs(value) : null}
+                  inputRef={ref}
+                  label="Date"
+                  slotProps={{
+                    textField: {
+                      error: errors.birthday ? true : false,
+                      helperText: errors.birthday
+                        ? errors.birthday.message
+                        : getFieldState("birthday").isTouched &&
+                          !getFieldState("birthday").inValid
+                        ? " "
+                        : "請選擇生日",
+                    },
+                  }}
+                />
+              )}
+            />
+          </LocalizationProvider>
+        </Grid>
+
+        <Grid item xs={6}>
+          <FormLabel id="demo-row-radio-buttons-group-label">Gender</FormLabel>
+
+          <Controller
+            render={({ field: { ...field } }) => (
+              <RadioGroup row aria-labelledby="gender" name="gender" {...field}>
+                <FormControlLabel
+                  value="female"
+                  control={<Radio />}
+                  label="Female"
+                />
+                <FormControlLabel
+                  value="male"
+                  control={<Radio />}
+                  label="Male"
+                />
+                <FormControlLabel
+                  value="other"
+                  control={<Radio />}
+                  label="Other"
+                />
+              </RadioGroup>
+            )}
+            name="gender"
+            control={control}
+          />
         </Grid>
       </Grid>
 

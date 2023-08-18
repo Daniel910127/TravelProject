@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import Box from "@mui/material/Box";
+import { Link } from "react-router-dom";
 export default function HotPlace() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -82,6 +83,7 @@ export default function HotPlace() {
                   Name={item.s_Name}
                   Pictures={item.s_picture}
                   District={item.s_District}
+                  type={'spot'}
                 ></SpotLittleCard>
               </Grid>
             );
@@ -92,7 +94,8 @@ export default function HotPlace() {
         <Button
           variant="outlined"
           endIcon={<ArrowRightIcon />}
-          
+          component={Link}
+          to='/search/spot'
         >
           查看更多熱門景點
         </Button>

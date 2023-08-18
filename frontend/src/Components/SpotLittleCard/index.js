@@ -1,22 +1,14 @@
 import * as React from "react";
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import Collapse from "@mui/material/Collapse";
-import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import { red } from "@mui/material/colors";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ShareIcon from "@mui/icons-material/Share";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { CardActionArea } from "@mui/material";
-import StarIcon from "@mui/icons-material/Star";
+import StyledLink from "../StyledLink";
 import Box from "@mui/material/Box";
 const ImageCardWrapper = styled("div")(({ theme }) => ({
   overflow: "hidden",
@@ -28,6 +20,7 @@ export default function RecipeReviewCard(props) {
     Name,
     Pictures,
     District,
+    type,
     isLike = false,
     setItems,
     onLikeClick = () => {},
@@ -76,14 +69,14 @@ export default function RecipeReviewCard(props) {
           transition: "transform 0.2s ease-in-out", // 为过渡效果添加0.2秒的动画效果
         },
       }}
+      component={StyledLink}
+      to={`/attraction/${type}/${Id}`}
     >
       <ImageCardWrapper>
         <CardMedia
           component="img"
           height="140"
-          image={
-            p_URL
-          }
+          image={p_URL}
           alt="Paella dish"
         />
       </ImageCardWrapper>
