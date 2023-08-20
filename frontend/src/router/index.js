@@ -4,7 +4,6 @@ import Redirect from "../Components/Redirect";
 import Home from "../Views/Home";
 import Login from "../Views/Login";
 import NotFound from "../Views/NotFound";
-import Profile from "../Views/Profile";
 import Spot from "../Views/Spot";
 import Register from "../Views/Register";
 import Interest from "../Views/interest";
@@ -33,7 +32,6 @@ export default function TravelRouter() {
       <Route path="/spot/:s_Name" element={<Spot />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      <Route path="/profile" element={<Profile />} />
       <Route path="/interest" element={<Interest />} />
       {/* <Route path="*" element={<Navigate to="/film"/>} /> */}
       <Route path="/" element={<Redirect to="/home" />} />

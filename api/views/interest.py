@@ -1,32 +1,39 @@
-from json.decoder import JSONDecodeError
-from ..serializers import AccountSerializer
-from ..models import Account
-from django.http import JsonResponse
-from django.shortcuts import render
-from django.http import JsonResponse, HttpResponse
-from django.contrib.auth import authenticate
-from rest_framework.decorators import api_view
+from ..serializers import s_InterestSerializer,AccountSerializer
+from ..models import Account,s_Interest
 from rest_framework.response import Response
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from django.core.exceptions import ObjectDoesNotExist
-
-
-
-from ..serializers import  s_InterestSerializer
-
-from ..models import  s_Interest
-from ..utils import spot_data
 from rest_framework.views import APIView
 import json
 
-class CreateInterestView(APIView):#帳號興趣創立
+
+class InterestDetail(APIView):
     permission_classes = (IsAuthenticated,)
-    def post(self, request, id):
+
+    def post(self, request):
+        data = json.loads(request.body)
+        id = data.get('id', None)
+        try:
+            member = s_Interest.objects.get(id=id)
+            serializer = s_InterestSerializer(member, many=False)
+            return Response(serializer.data)
+        except s_Interest.DoesNotExist:
+            response_data = {
+                "status": "401",
+                "message": "興趣資料獲取失敗",
+                "error": "指定的id不存在"
+            }
+            return Response(response_data, status=status.HTTP_401_UNAUTHORIZED)
+
+
+class CreateInterestView(APIView):  # 帳號興趣創立
+    def post(self, request):
         serializer = s_InterestSerializer(data=request.data)
         if serializer.is_valid():
             if Account.objects.filter(id=id).exists():
                 return Response({'error': '該帳號已創立興趣'}, status=status.HTTP_400_BAD_REQUEST)
+            id = serializer.validated_data.get('id')
             id = serializer.validated_data.get('id')
             si_pg = serializer.validated_data.get('si_pg')
             si_os = serializer.validated_data.get('si_os')
@@ -77,11 +84,13 @@ class CreateInterestView(APIView):#帳號興趣創立
 
             return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
 
-class UpdateInterestView(APIView):#帳號興趣修改
+
+class UpdateInterestView(APIView):  # 帳號興趣修改
     permission_classes = (IsAuthenticated,)
-    def put(self, request, id):
+
+    def post(self, request):
         try:
-            interest = s_Interest.objects.get(id=id)
+            interest = s_Interest.objects.get(id=request.data['id'])
         except s_Interest.DoesNotExist:
             response_data = {
                 "status": "404",
@@ -106,25 +115,34 @@ class UpdateInterestView(APIView):#帳號興趣修改
             }
             return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
 
-class InterestListView(generics.RetrieveAPIView):##單一帳號興趣
+
+class InterestListView(APIView):  # 單一帳號興趣與帳號資料查詢
     permission_classes = (IsAuthenticated,)
-    serializer_class = s_InterestSerializer
 
     def get(self, request, id):
         try:
-            my_models = s_Interest.objects.get(id=id)
-            serializer = self.serializer_class(my_models)
+            # Retrieve the interest data for the account with the given id
+            account_id = id
+            interest = s_Interest.objects.get(id=account_id)
+            
+            # Retrieve the account data
+            account = Account.objects.get(id=account_id)
+            
+            # Serialize both interest and account data
+            interest_serializer = s_InterestSerializer(interest)
+            account_serializer = AccountSerializer(account)
+            
             response_data = {
-                "status": "201",
-                "message": "興趣資料獲取成功",
-                "data": serializer.data
+                "status": "200",
+                "message": "興趣與帳號資料獲取成功",
+                "interest_data": interest_serializer.data,
+                "account_data": account_serializer.data
             }
             return Response(response_data, status=status.HTTP_200_OK)
         except ObjectDoesNotExist:
             response_data = {
-                "status": "401",
-                "message": "興趣資料獲取失敗",
+                "status": "404",
+                "message": "興趣與帳號資料獲取失敗",
                 "error": "指定的id不存在"
             }
-            return Response(response_data, status=status.HTTP_401_UNAUTHORIZED)
-
+            return Response(response_data, status=status.HTTP_404_NOT_FOUND)

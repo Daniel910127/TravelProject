@@ -32,24 +32,6 @@ class AccountSerializer(serializers.Serializer):
         instance.save()
         return instance
 
-class LoginSerializer(serializers.Serializer):
-    account = serializers.CharField(max_length=20)
-    password = serializers.CharField(max_length=128)
-
-    def validate(self, data):
-        account = data.get('account')
-        password = data.get('password')
-
-        # 进行帐号和密码的验证逻辑
-        try:
-            user = Account.objects.get(account=account)
-            if not user.check_password(password):
-                raise serializers.ValidationError("Invalid credentials")
-        except Account.DoesNotExist:
-            raise serializers.ValidationError("Invalid credentials")
-
-        return data
-
 class SpotSerializer(serializers.ModelSerializer):
     class Meta:
         model = Spot

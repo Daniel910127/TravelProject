@@ -3,8 +3,8 @@ from django.http import JsonResponse, HttpResponse
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import generics, status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import generics
+
 
 
 from ..serializers import   SpotSerializer,spotWithPictureURLSerializer
@@ -42,8 +42,7 @@ def spot_detail(request, s_Name):
     return Response(serializer.data) """
 #http://127.0.0.1:8000/api/spot/七股鹽山/  output:七股鹽山的資料(包含image url)
 
-class SpotDetailView(generics.RetrieveAPIView):
-    permission_classes = (IsAuthenticated,)     
+class SpotDetailView(generics.RetrieveAPIView): 
     serializer_class = spotWithPictureURLSerializer
 
     def get(self, request, s_Id):

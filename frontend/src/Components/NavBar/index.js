@@ -13,6 +13,14 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { useSession } from '../../contexts/SessionContext';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 import { styled, alpha } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
@@ -34,6 +42,7 @@ import { NavLink } from "react-router-dom";
     width: "auto",
   },
 })); */
+
 
 const SearchIconWrapper = styled("div")(({ theme }) => ({
   padding: theme.spacing(0, 2),
@@ -72,7 +81,7 @@ const pages = [
 ];
 
 const settings = [
-  { linkName: "Profile", linkURL: "/profile" },
+  // { linkName: "Profile", linkURL: "/profile" },
   { linkName: "interest", linkURL: "/interest" },
   { linkName: "Dashboard", linkURL: "/dashboard" },
   // { linkName: "Logout", linkURL: "#" , click:"handleLogout"}
@@ -83,9 +92,71 @@ const setting1 = [
 ];
 
 function NavBar() {
-  const { a_Id, m_Id, a_Account, a_Level,logout } = useSession();
+  const [user, setUser] = useState(null);
+  const [editing, setEditing] = useState(false);
+  const [open, setOpen] = React.useState(false);
+  const {id,account,username,email,access,refresh, login, logout } = useSession();
+  const [error, setError] = useState('');
+  const [errors, setErrors] = useState({});
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [formData, setFormData] = useState({
+    id:id,
+    account: account,
+    username: username,
+    email: email,
+  });
+
+  const handleInputChange = event => {
+    setFormData({
+      ...formData,
+      [event.target.name]: event.target.value
+    });
+    setError('');
+    setErrors({});
+  };
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleSubmit = async(e)=> {
+    e.preventDefault();
+    const formErrors = validateForm(formData);
+  if (Object.keys(formErrors).length === 0) {
+    try{
+      const response=await axios.post('http://127.0.0.1:8000/api/account-change/', formData);
+      if (response.data.message==="會員更新成功") {
+       login(response.data.id, response.data.account, response.data.username, response.data.email,access,refresh);
+        setError(response.data.message);
+      } else {
+        setError(response.data.message);
+      }
+    }catch (err) {
+      setError('會員更新失敗');
+    }
+   } else {
+    setErrors(formErrors);
+  }
+  }
+const validateForm = (data) => {
+  	const errors = {};
+  	if (!data.account) {
+    	errors.account = '請輸入帳號';
+ 	 } 
+  	if (!data.username) {
+    	errors.username= '請輸入用戶名';
+  	} 
+    if (!data.email) {
+    	errors.email = '請輸入電子信箱';
+  	} 
+
+  	return errors;
+	};
+
+
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -106,6 +177,7 @@ function NavBar() {
     logout();
   };
   return (
+     
     
     <AppBar position="fixed">
       <Container maxWidth="xl">
@@ -231,7 +303,7 @@ function NavBar() {
           {/* <Box sx={{ display: { md: "none", xs: "block" }, mr: 2 }}>
            
           </Box> */}
-          {a_Account?(
+          {account?(
             <Box sx={{ flexGrow: 0, display: "flex" }}>
             <IconButton
               size="large"
@@ -246,7 +318,7 @@ function NavBar() {
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
                 { (
                 <div>
-                  {a_Account}
+                  {username}
                 </div>
               )}
               </IconButton>
@@ -267,6 +339,63 @@ function NavBar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
+               <MenuItem onClick={handleClickOpen}>profile</MenuItem>
+              <form >
+      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+        <DialogTitle id="form-dialog-title">會員資訊</DialogTitle>
+        <DialogContent>
+            <TextField
+            variant="filled"
+            margin="normal"
+            required
+            fullWidth
+            id="account"
+            label="帳號"
+            name="account"
+            value={formData.account}
+            autoFocus
+            onChange={handleInputChange}
+          />
+          <Typography color="error">{errors.account}</Typography>
+          <TextField
+            variant="filled"
+            margin="normal"
+            required
+            fullWidth
+            id="username"
+            label="用戶名"
+            name="username"
+            value={formData.username}
+            autoFocus
+            onChange={handleInputChange}
+          />
+          <Typography color="error">{errors.username}</Typography>
+          <TextField
+            variant="filled"
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="電子信箱"
+            name="email"
+            value={formData.email}
+            autoFocus
+            onChange={handleInputChange}
+          />
+          <Typography color="error">{errors.email}</Typography>
+           <Typography color="error">{error}</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            關閉
+          </Button>
+          <Button type='submit' onClick={handleSubmit} color="primary">
+            變更
+          </Button>
+         
+        </DialogActions>
+      </Dialog>
+    </form>
                   {settings.map((setting) => (
                 <MenuItem key={setting.linkURL} onClick={handleCloseUserMenu}>
                   <NavLink to={setting.linkURL}>

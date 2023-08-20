@@ -3,8 +3,7 @@ from django.http import JsonResponse,HttpResponse
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import generics, status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import generics
 from ..serializers import HotelSerializer,hotelWithPictureURLSerializer
 
 from ..models import Hotel
@@ -23,8 +22,7 @@ def hotelWithPictureList(request):
 	serializer = hotelWithPictureURLSerializer(queryset, many=True)
 	return Response(serializer.data)
 
-class HotelDetailView(generics.RetrieveAPIView):
-    permission_classes = (IsAuthenticated,)    
+class HotelDetailView(generics.RetrieveAPIView):  
     serializer_class = hotelWithPictureURLSerializer
 
     def get(self, request, h_Id):

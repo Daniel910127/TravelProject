@@ -5,78 +5,91 @@ export const SessionContext = createContext(null);
 
 export const SessionProvider = ({ children }) => {
   const navigate = useNavigate();
-  const [a_Id, setaId] = useState(() => {
-    const storeda_ID = sessionStorage.getItem('a_Id');
-    if (storeda_ID) {
-      return JSON.parse(storeda_ID);
+  const [id, setid] = useState(() => {
+    const storedid = sessionStorage.getItem('id');
+    if (storedid) {
+      return JSON.parse(storedid);
     } else {
       return null;
     }
   });
-  const [m_Id, setmId] = useState(() => {
-    const storedm_Id = sessionStorage.getItem('m_Id');
-    if (storedm_Id) {
-      return JSON.parse(storedm_Id);
+  const [account, setaccount] = useState(() => {
+    const storedaccount = sessionStorage.getItem('account');
+    if (storedaccount) {
+      return JSON.parse(storedaccount);
     } else {
       return null;
     }
   });
-  const [a_Account, setaccount] = useState(() => {
-    const storedAccount = sessionStorage.getItem('a_Account');
-    if (storedAccount) {
-      return JSON.parse(storedAccount);
+  const [username, setusername] = useState(() => {
+    const storedusername = sessionStorage.getItem('username');
+    if (storedusername) {
+      return JSON.parse(storedusername);
     } else {
       return null;
     }
   });
-  // const [a_Password, setpassword] = useState(() => {
-  //   const storedPassword = sessionStorage.getItem('a_Password');
-  //   if (storedPassword) {
-  //     return JSON.parse(storedPassword);
-  //   } else {
-  //     return null;
-  //   }
-  // });
-  const [a_Level, setLevel] = useState(() => {
-    const storedLevel = sessionStorage.getItem('a_Level');
-    if (storedLevel) {
-      return JSON.parse(storedLevel);
+    const [email, setemail] = useState(() => {
+    const storedusername = sessionStorage.getItem('email');
+    if (storedusername) {
+      return JSON.parse(storedusername);
     } else {
       return null;
     }
   });
-  const login = (a_Id,m_Id,a_Account,a_Level) => {
-    sessionStorage.setItem('a_Id', JSON.stringify(a_Id));
-    sessionStorage.setItem('m_Id', JSON.stringify(m_Id));
-    sessionStorage.setItem('a_Account', JSON.stringify(a_Account));
-    // sessionStorage.setItem('a_Password', JSON.stringify(a_Password));
-    sessionStorage.setItem('a_Level', JSON.stringify(a_Level));
-    setaId(a_Id);
-    setmId(m_Id);
-    setaccount(a_Account);
-    // setpassword(a_Password);
-    setLevel(a_Level);
+  const [access, setaccess] = useState(() => {
+    const storedaccess = sessionStorage.getItem('access');
+    if (storedaccess) {
+      return JSON.parse(storedaccess);
+    } else {
+      return null;
+    }
+  });
+  const [refresh, setrefresh] = useState(() => {
+    const storedrefresh = sessionStorage.getItem('refresh');
+    if (storedrefresh) {
+      return JSON.parse(storedrefresh);
+    } else {
+      return null;
+    }
+  });
+  const login = (id,account,username,email,access,refresh) => {
+    sessionStorage.setItem('id', JSON.stringify(id));
+    sessionStorage.setItem('account', JSON.stringify(account));
+    sessionStorage.setItem('username', JSON.stringify(username));
+    sessionStorage.setItem('email', JSON.stringify(email));
+    sessionStorage.setItem('access', JSON.stringify(access));
+    sessionStorage.setItem('refresh', JSON.stringify(refresh));
+    setid(id);
+    setaccount(account);
+    setusername(username);
+    setemail(email);
+    setaccess(access);
+    setrefresh(refresh);
   };
 
   const logout = () => {
-    sessionStorage.removeItem('a_Id');
-    sessionStorage.removeItem('m_Id');
-    sessionStorage.removeItem('a_Account');
-    // sessionStorage.removeItem('a_Password');
-    sessionStorage.removeItem('a_Level');
-    setaId(null);
-    setmId(null);
+    sessionStorage.removeItem('id');
+    sessionStorage.removeItem('account');
+    sessionStorage.removeItem('username');
+    sessionStorage.removeItem('email');
+    sessionStorage.removeItem('access');
+    sessionStorage.removeItem('refresh');
+    setid(null);
     setaccount(null);
-    // setpassword(null);
-    setLevel(null);
+    setusername(null);
+    setemail(null);
+    setaccess(null);
+    setrefresh(null);
     navigate('/'); 
   };
 
   return (
-    <SessionContext.Provider value={{ a_Id,m_Id,a_Account,a_Level, login, logout }}>
+    <SessionContext.Provider value={{ id,account,username,email,access,refresh, login, logout }}>
       {children}
     </SessionContext.Provider>
   );
 };
 
 export const useSession = () => useContext(SessionContext);
+

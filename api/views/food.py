@@ -3,8 +3,7 @@ from django.http import JsonResponse,HttpResponse
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import generics, status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import generics
 from ..serializers import FoodSerializer,foodWithPictureURLSerializer
 
 from ..models import Food
@@ -23,7 +22,6 @@ def foodWithPictureList(request):
 	return Response(serializer.data)
 
 class FoodDetailView(generics.RetrieveAPIView):
-    permission_classes = (IsAuthenticated,)   
     serializer_class = foodWithPictureURLSerializer
 
     def get(self, request, f_Id):
