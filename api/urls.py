@@ -37,6 +37,10 @@ urlpatterns = [
 
     path('account/<int:account_id>/like/',like_record.likeList, name="like_record_spot-create"),
 
+    path('account/<int:account_id>/spot-like/', like_record.AccountSpotLikeView.as_view(), name='account-spot-like'),
+    path('account/<int:account_id>/food-like/', like_record.AccountFoodLikeView.as_view(), name='account-food-like'),
+    path('account/<int:account_id>/hotel-like/', like_record.AccountHotelLikeView.as_view(), name='account-hotel-like'),
+
     path('account/<int:account_id>/likespot/<int:s_Id>/',like_record.LikeSpotCreateView.as_view(), name="like_record_spot-create"),
     path('account/<int:account_id>/likespot/<int:s_Id>/delete/',like_record.LikeSpotDeleteView.as_view(), name="like_record_spot-delete"),
 
@@ -55,15 +59,15 @@ urlpatterns = [
     path('account/<int:id>/itinerary/',travel_list.travel_List_detail_view, name="itinerary"),
     path('itinerary/', travel_list.CreateTravelList, name="itinerary-create"),
     path('itinerary/<int:t_Id>/', travel_list.UpdateTravelList,name="itinerary-update"),
-    path('itinerary/<int:t_Id>/delete/',travel_list.DeleteTravelList, name="itinerary-delete"),
+    path('itinerary/<int:t_Id>/delete/',travel_list.DeleteTravelList.as_view(), name="itinerary-delete"),
 
     path('itinerary/<int:t_Id>/detail/',travel_list.CreateTravelListDetail, name="itinerary-detail-create"),
     path('itinerary/<int:t_Id>/detail/<int:tl_Id>/',travel_list.UpdateTravelListDetail, name="itinerary-detail-update"),
-    path('itinerary/<int:t_Id>/detail/<int:tl_Id>/delete/',travel_list.DeleteTravelListDetail, name="itinerary-detail-delete"),
+    path('itinerary/<int:t_Id>/detail/<int:tl_Id>/delete/',travel_list.DeleteTravelListDetail.as_view(), name="itinerary-detail-delete"),
 
     path('itinerary/<int:t_Id>/starttime/',travel_list.CreateTravelListStartTime, name="itinerary-starttime-create"),
     path('itinerary/<int:t_Id>/starttime/<int:tls_Id>/',travel_list.UpdateTravelListStartTime, name="itinerary-starttime-update"),
-    path('itinerary/<int:t_Id>/starttime/<int:tls_Id>/delete/',travel_list.DeleteTravelListStartTime, name="itinerary-starttime-delete"),
+    path('itinerary/<int:t_Id>/starttime/<int:tls_Id>/delete/',travel_list.DeleteTravelListStartTime.as_view(), name="itinerary-starttime-delete"),
 
 
     path('init-spotData/', init_data.spotInit, name="init-spotData"),
