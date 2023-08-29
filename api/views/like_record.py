@@ -8,41 +8,45 @@ from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from ..models import Like_Record,Account,Spot,Food,Hotel,Travel_List
 from ..serializers import Like_RecordSerializer,Like_Record_Detail_Serializer,SpotSerializer
-
+from ..serializers import hotelWithPictureURLSerializer,foodWithPictureURLSerializer,spotWithPictureURLSerializer
 
 class AccountSpotLikeView(APIView):#景點加上該帳號是否按讚
     def get(self, request, account_id):
         try:
-            spots = Spot.objects.all()  # 獲取所有景點
+            queryset = Spot.objects.all()
+            serializer = spotWithPictureURLSerializer(queryset, many=True)
+            spots = serializer.data  # 獲取所有景點
             
             liked_spots = []  # 用於存儲帳號按讚的景點
             for spot in spots:
-                like_record = Like_Record.objects.filter(id=account_id, s_Id=spot.s_Id).exists()
+                like_record = Like_Record.objects.filter(id=account_id, s_Id=spot['s_Id']).exists()
                 liked_spots.append({
-                    "s_Id": spot.s_Id,
-                    "s_Name": spot.s_Name,
-                    "s_Summary": spot.s_Summary,
-                    "s_Introduction": spot.s_Introduction,
-                    "s_OpenTime": spot.s_OpenTime,
-                    "s_District": spot.s_District,
-                    "s_Address": spot.s_Address,
-                    "s_Tel": spot.s_Tel,
-                    "s_Fax": spot.s_Fax,
-                    "s_Latitude": spot.s_Latitude,
-                    "s_Longitude": spot.s_Longitude,
-                    "s_Services": spot.s_Services,
-                    "s_Category": spot.s_Category,
-                    "s_UpdateTime": spot.s_UpdateTime,
-                    "s_Stars": spot.s_Stars,
-                    "s_Reviews": spot.s_Reviews,
-                    "s_Likes": spot.s_Likes,
-                    "like_or_dislike": like_record
+                    "s_Id": spot['s_Id'],
+                    "s_Name": spot['s_Name'],
+                    "s_Summary": spot['s_Summary'],
+                    "s_Introduction": spot['s_Introduction'],
+                    "s_OpenTime": spot['s_OpenTime'],
+                    "s_District": spot['s_District'],
+                    "s_Address": spot['s_Address'],
+                    "s_Tel": spot['s_Tel'],
+                    "s_Fax": spot['s_Fax'],
+                    "s_Latitude": spot['s_Latitude'],
+                    "s_Longitude": spot['s_Longitude'],
+                    "s_Services": spot['s_Services'],
+                    "s_Category": spot['s_Category'],
+                    "s_UpdateTime": spot['s_UpdateTime'],
+                    "s_Stars": spot['s_Stars'],
+                    "s_Reviews": spot['s_Reviews'],
+                    "s_Likes": spot['s_Likes'],
+                    "s_picture":spot['s_picture'],
+                    "like_or_dislike": like_record,
+                    # "s_picture":spot.s_picture
                 })
             
             response_data = {
                 "success": True,
                 "message": "景點按讚資料回傳成功",
-                "spot_data": liked_spots
+                "data": liked_spots
             }
             
             return Response(response_data, status=status.HTTP_200_OK)
@@ -56,36 +60,41 @@ class AccountSpotLikeView(APIView):#景點加上該帳號是否按讚
 class AccountFoodLikeView(APIView):#食物加上該帳號是否按讚
     def get(self, request, account_id):
         try:
-            foods = Food.objects.all()  # 獲取所有景點
-            
+
+            queryset = Food.objects.all()
+            serializer = foodWithPictureURLSerializer(queryset, many=True)
+            foods = serializer.data  # 獲取所有景點
             liked_foods = []  # 用於存儲帳號按讚的景點
+          
             for food in foods:
-                like_record = Like_Record.objects.filter(id=account_id, f_Id=food.f_Id).exists()
+                like_record = Like_Record.objects.filter(id=account_id, f_Id=food['f_Id']).exists()
                 liked_foods.append({
-                    "f_Id": food.f_Id,
-                    "f_Name": food.f_Name,
-                    "f_Summary": food.f_Summary,
-                    "f_Introduction": food.f_Introduction,
-                    "f_OpenTime": food.f_OpenTime,
-                    "f_District": food.f_District,
-                    "f_Address": food.f_Address,
-                    "f_Tel": food.f_Tel,
-                    "f_Fax": food.f_Fax,
-                    "f_Latitude": food.f_Latitude,
-                    "f_Longitude": food.f_Longitude,
-                    "f_Services": food.f_Services,
-                    "f_Category": food.f_Category,
-                    "f_UpdateTime": food.f_UpdateTime,
-                    "f_Stars": food.f_Stars,
-                    "f_Reviews": food.f_Reviews,
-                    "f_Likes": food.f_Likes,
-                    "like_or_dislike": like_record
+                    "f_Id": food['f_Id'],
+                    "f_Name": food['f_Name'],
+                    "f_Summary": food['f_Summary'],
+                    "f_Introduction": food['f_Introduction'],
+                    "f_OpenTime": food['f_OpenTime'],
+                    "f_District": food['f_District'],
+                    "f_Address": food['f_Address'],
+                    "f_Tel": food['f_Tel'],
+                    "f_Fax": food['f_Fax'],
+                    "f_Latitude": food['f_Latitude'],
+                    "f_Longitude": food['f_Longitude'],
+                    "f_Services": food['f_Services'],
+                    "f_Category": food['f_Category'],
+                    "f_UpdateTime": food['f_UpdateTime'],
+                    "f_Stars": food['f_Stars'],
+                    "f_Reviews": food['f_Reviews'],
+                    "f_Likes": food['f_Likes'],
+                    "f_picture":food['f_picture'],
+                    "like_or_dislike": like_record,
+                    # "f_picture":food['f_picture
                 })
             
             response_data = {
                 "success": True,
                 "message": "食物按讚資料回傳成功",
-                "food_data": liked_foods
+                "data": liked_foods
             }
             
             return Response(response_data, status=status.HTTP_200_OK)
@@ -100,36 +109,38 @@ class AccountFoodLikeView(APIView):#食物加上該帳號是否按讚
 class AccountHotelLikeView(APIView):#飯店加上該帳號是否按讚
     def get(self, request, account_id):
         try:
-            hotels = Hotel.objects.all()  # 獲取所有景點
-            
+            queryset = Hotel.objects.all()
+            serializer = hotelWithPictureURLSerializer(queryset, many=True)
+            hotels = serializer.data  # 獲取所有景點
             liked_hotels = []  # 用於存儲帳號按讚的景點
             for hotel in hotels:
-                like_record = Like_Record.objects.filter(id=account_id, h_Id=hotel.h_Id).exists()
+                like_record = Like_Record.objects.filter(id=account_id, h_Id=hotel['h_Id']).exists()
                 liked_hotels.append({
-                    "h_Id": hotel.h_Id,
-                    "h_Name": hotel.h_Name,
-                    "h_Summary": hotel.h_Summary,
-                    "h_Introduction": hotel.h_Introduction,
-                    "h_OpenTime": hotel.h_OpenTime,
-                    "h_District": hotel.h_District,
-                    "h_Address": hotel.h_Address,
-                    "h_Tel": hotel.h_Tel,
-                    "h_Fax": hotel.h_Fax,
-                    "h_Latitude": hotel.h_Latitude,
-                    "h_Longitude": hotel.h_Longitude,
-                    "h_Services": hotel.h_Services,
-                    "h_Category": hotel.h_Category,
-                    "h_UpdateTime": hotel.h_UpdateTime,
-                    "h_Stars": hotel.h_Stars,
-                    "h_Reviews": hotel.h_Reviews,
-                    "h_Likes": hotel.h_Likes,
-                    "like_or_dislike": like_record
+                    "h_Id": hotel['h_Id'],
+                    "h_Name": hotel['h_Name'],
+                    "h_Summary": hotel['h_Summary'],
+                    "h_Introduction": hotel['h_Introduction'],
+                    "h_OpenTime": hotel['h_OpenTime'],
+                    "h_District": hotel['h_District'],
+                    "h_Address": hotel['h_Address'],
+                    "h_Tel": hotel['h_Tel'],
+                    "h_Fax": hotel['h_Fax'],
+                    "h_Latitude": hotel['h_Latitude'],
+                    "h_Longitude": hotel['h_Longitude'],
+                    "h_Services": hotel['h_Services'],
+                    "h_Category": hotel['h_Category'],
+                    "h_UpdateTime": hotel['h_UpdateTime'],
+                    "h_Stars": hotel['h_Stars'],
+                    "h_Reviews": hotel['h_Reviews'],
+                    "h_Likes": hotel['h_Likes'],
+                    "like_or_dislike": like_record,
+                    "h_picture":hotel['h_picture']
                 })
             
             response_data = {
                 "success": True,
                 "message": "住宿按讚資料回傳成功",
-                "food_data": liked_hotels
+                "data": liked_hotels
             }
             
             return Response(response_data, status=status.HTTP_200_OK)
