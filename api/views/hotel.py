@@ -3,7 +3,7 @@ from django.http import JsonResponse,HttpResponse
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import generics
+from rest_framework import generics,status
 from ..serializers import HotelSerializer,hotelWithPictureURLSerializer
 
 from ..models import Hotel
@@ -20,7 +20,14 @@ def hotelList(request):
 def hotelWithPictureList(request):
 	queryset = Hotel.objects.all()
 	serializer = hotelWithPictureURLSerializer(queryset, many=True)
-	return Response(serializer.data)
+	response_data = {
+                "success": True,
+                "message": "旅宿資料回傳成功",
+                "data": serializer.data
+            }
+    
+	return Response(response_data, status=status.HTTP_200_OK)
+
 
 class HotelDetailView(generics.RetrieveAPIView):  
     serializer_class = hotelWithPictureURLSerializer

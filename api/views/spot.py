@@ -3,7 +3,7 @@ from django.http import JsonResponse, HttpResponse
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import generics
+from rest_framework import generics,status
 
 
 
@@ -17,14 +17,25 @@ from ..models import Spot
 def spotList(request):
     spots = Spot.objects.all().order_by('-s_Id')
     serializer = SpotSerializer(spots, many=True)
-    return Response(serializer.data)
+    response_data = {
+                "success": True,
+                "message": "景點資料回傳成功",
+                "data": serializer.data
+            }
+    return Response(response_data, status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
 def spotWithPictureList(request):
     queryset = Spot.objects.all()
     serializer = spotWithPictureURLSerializer(queryset, many=True)
-    return Response(serializer.data)
+    response_data = {
+                "success": True,
+                "message": "景點資料回傳成功",
+                "data": serializer.data
+            }
+    return Response(response_data, status=status.HTTP_200_OK)
+    # return Response(serializer.data)
 
 @api_view(['GET'])
 def high_rating_spots(request):
