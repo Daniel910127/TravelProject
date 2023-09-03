@@ -344,10 +344,10 @@ class LikeHotelCreateView(APIView):#按讚住宿新增
 class LikeHotelDeleteView(APIView):#按讚住宿刪除
     permission_classes = (IsAuthenticated,)
 
-    def delete(self, request, id, h_Id):
+    def delete(self, request, account_id, h_Id):
         try:
             # 獲取 id 和 h_Id
-            id = int(id)
+            id = int(account_id)
             h_Id = int(h_Id)
 
             account = Account.objects.get(pk=id)  # 使用相應的方法獲取 Member 對象
