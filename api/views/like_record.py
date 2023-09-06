@@ -13,8 +13,8 @@ from ..serializers import hotelWithPictureURLSerializer,foodWithPictureURLSerial
 class AccountSpotLikeView(APIView):#景點加上該帳號是否按讚
     def get(self, request, account_id):
         try:
-            queryset = Spot.objects.all()
-            serializer = spotWithPictureURLSerializer(queryset, many=True)
+            high_rating_spots = Spot.objects.order_by( '-s_Reviews','-s_Stars')
+            serializer = spotWithPictureURLSerializer(high_rating_spots, many=True)
             spots = serializer.data  # 獲取所有景點
             
             liked_spots = []  # 用於存儲帳號按讚的景點
@@ -61,8 +61,8 @@ class AccountFoodLikeView(APIView):#食物加上該帳號是否按讚
     def get(self, request, account_id):
         try:
 
-            queryset = Food.objects.all()
-            serializer = foodWithPictureURLSerializer(queryset, many=True)
+            high_rating_foods = Food.objects.order_by( '-f_Reviews','-f_Stars')
+            serializer = foodWithPictureURLSerializer(high_rating_foods, many=True)
             foods = serializer.data  # 獲取所有景點
             liked_foods = []  # 用於存儲帳號按讚的景點
           
@@ -109,8 +109,8 @@ class AccountFoodLikeView(APIView):#食物加上該帳號是否按讚
 class AccountHotelLikeView(APIView):#飯店加上該帳號是否按讚
     def get(self, request, account_id):
         try:
-            queryset = Hotel.objects.all()
-            serializer = hotelWithPictureURLSerializer(queryset, many=True)
+            high_rating_hotels = Hotel.objects.order_by( '-h_Reviews','-h_Stars')
+            serializer = hotelWithPictureURLSerializer(high_rating_hotels, many=True)
             hotels = serializer.data  # 獲取所有景點
             liked_hotels = []  # 用於存儲帳號按讚的景點
             for hotel in hotels:
