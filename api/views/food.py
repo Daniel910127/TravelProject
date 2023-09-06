@@ -25,6 +25,12 @@ def foodWithPictureList(request):
                     "data": serializer.data
                 }
 	return Response(response_data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def high_rating_foods(request):
+    high_rating_foods = Food.objects.order_by( '-f_Reviews','-f_Stars')
+    serializer = foodWithPictureURLSerializer(high_rating_foods, many=True)
+    return Response(serializer.data)
 	
 
 class FoodDetailView(generics.RetrieveAPIView):

@@ -30,9 +30,11 @@ urlpatterns = [
 
     path('food/', food.foodWithPictureList, name="food-image-list"),
     path('food/<int:f_Id>/', food.food_detail_view, name="food-detail"),
+    path('food/hot/', food.high_rating_foods, name="food-hot"),
 
     path('hotel/', hotel.hotelWithPictureList, name="hotel-image-list"),
     path('hotel/<int:h_Id>/', hotel.hotel_detail_view, name="hotel-detail"),
+    path('hotel/hot/', hotel.high_rating_hotels, name="hotel-hot"),
 
 
     path('account/<int:account_id>/like/',like_record.likeList, name="like_record_spot-create"),

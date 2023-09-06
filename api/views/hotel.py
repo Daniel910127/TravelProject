@@ -28,6 +28,11 @@ def hotelWithPictureList(request):
     
 	return Response(response_data, status=status.HTTP_200_OK)
 
+@api_view(['GET'])
+def high_rating_hotels(request):
+    high_rating_hotels = Hotel.objects.order_by( '-h_Reviews','-h_Stars')
+    serializer = hotelWithPictureURLSerializer(high_rating_hotels, many=True)
+    return Response(serializer.data)
 
 class HotelDetailView(generics.RetrieveAPIView):  
     serializer_class = hotelWithPictureURLSerializer
