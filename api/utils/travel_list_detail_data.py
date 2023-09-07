@@ -25,7 +25,7 @@ def travel_list_detail_data_add():
         h_Id =  ['NULL']
         tl_TransportMode = ['car']
         tl_TransportTime = travel_list_detail_data_list[i]['tl_TransportTime']  
-        tl_StayTime =  ['3600']
+        tl_StayTime =  ['7200']
         tl_Day = travel_list_detail_data_list[i]['tl_Day']
         tl_Order = [i+1]
         tl_Notes = ['NULL']
