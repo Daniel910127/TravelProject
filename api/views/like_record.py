@@ -10,6 +10,143 @@ from ..models import Like_Record,Account,Spot,Food,Hotel,Travel_List
 from ..serializers import Like_RecordSerializer,Like_Record_Detail_Serializer,SpotSerializer
 from ..serializers import hotelWithPictureURLSerializer,foodWithPictureURLSerializer,spotWithPictureURLSerializer
 
+class AccountSingleSpotLikeView(APIView):#單一景點加上該帳號是否按讚
+    def get(self, request, account_id, s_id):
+        try:
+            # 檢查帳號是否按讚特定的景點
+            like_record = Like_Record.objects.filter(id=account_id, s_Id=s_id).exists()
+
+            # 獲取特定景點的資料
+            spot = Spot.objects.get(pk=s_id)
+            serializer = spotWithPictureURLSerializer(spot)
+
+            # 構建回傳數據
+            response_data = {
+                "success": True,
+                "message": "景點按讚資料回傳成功",
+                "data": {
+                    "s_Id": serializer.data['s_Id'],
+                    "s_Name": serializer.data['s_Name'],
+                    "s_Summary": serializer.data['s_Summary'],
+                    "s_Introduction": serializer.data['s_Introduction'],
+                    "s_OpenTime": serializer.data['s_OpenTime'],
+                    "s_District": serializer.data['s_District'],
+                    "s_Address": serializer.data['s_Address'],
+                    "s_Tel": serializer.data['s_Tel'],
+                    "s_Fax": serializer.data['s_Fax'],
+                    "s_Latitude": serializer.data['s_Latitude'],
+                    "s_Longitude": serializer.data['s_Longitude'],
+                    "s_Services": serializer.data['s_Services'],
+                    "s_Category": serializer.data['s_Category'],
+                    "s_UpdateTime": serializer.data['s_UpdateTime'],
+                    "s_Stars": serializer.data['s_Stars'],
+                    "s_Reviews": serializer.data['s_Reviews'],
+                    "s_Likes": serializer.data['s_Likes'],
+                    "s_picture": serializer.data['s_picture'],
+                    "like_or_dislike": like_record,
+                }
+            }
+
+            return Response(response_data, status=status.HTTP_200_OK)
+        except Spot.DoesNotExist:
+            response_data = {
+                "success": False,
+                "message": "景點不存在",
+            }
+            return Response(response_data, status=status.HTTP_404_NOT_FOUND)
+
+class AccountSingleFoodLikeView(APIView):#單一食物加上該帳號是否按讚
+    def get(self, request, account_id,f_id):
+        try:
+            # 檢查帳號是否按讚特定的景點
+            like_record = Like_Record.objects.filter(id=account_id, f_Id=f_id).exists()
+
+            # 獲取特定景點的資料
+            food = Food.objects.get(pk=f_id)
+            serializer = foodWithPictureURLSerializer(food)
+
+            # 構建回傳數據
+            response_data = {
+                "success": True,
+                "message": "景點按讚資料回傳成功",
+                "data": {
+                    "f_Id": serializer.data['f_Id'],
+                    "f_Name": serializer.data['f_Name'],
+                    "f_Summary": serializer.data['f_Summary'],
+                    "f_Introduction": serializer.data['f_Introduction'],
+                    "f_OpenTime": serializer.data['f_OpenTime'],
+                    "f_District": serializer.data['f_District'],
+                    "f_Address": serializer.data['f_Address'],
+                    "f_Tel": serializer.data['f_Tel'],
+                    "f_Fax": serializer.data['f_Fax'],
+                    "f_Latitude": serializer.data['f_Latitude'],
+                    "f_Longitude": serializer.data['f_Longitude'],
+                    "f_Services": serializer.data['f_Services'],
+                    "f_Category": serializer.data['f_Category'],
+                    "f_UpdateTime": serializer.data['f_UpdateTime'],
+                    "f_Stars": serializer.data['f_Stars'],
+                    "f_Reviews": serializer.data['f_Reviews'],
+                    "f_Likes": serializer.data['f_Likes'],
+                    "f_picture": serializer.data['f_picture'],
+                    "like_or_dislike": like_record, 
+                }
+            }
+
+            return Response(response_data, status=status.HTTP_200_OK)
+        except Food.DoesNotExist:
+            response_data = {
+                "success": True,
+                "message": "食物不存在",
+                "data": []
+            }
+            return Response(response_data, status=status.HTTP_200_OK)
+
+class AccountSingleHotelLikeView(APIView):#單一住宿加上該帳號是否按讚
+    def get(self, request, account_id,h_id):
+        try:
+            # 檢查帳號是否按讚特定的景點
+            like_record = Like_Record.objects.filter(id=account_id, h_Id=h_id).exists()
+
+            # 獲取特定景點的資料
+            hotel = Hotel.objects.get(pk=h_id)
+            serializer = hotelWithPictureURLSerializer(hotel)
+
+            # 構建回傳數據
+            response_data = {
+                "success": True,
+                "message": "景點按讚資料回傳成功",
+                "data": {
+                    "h_Id": serializer.data['h_Id'],
+                    "h_Name": serializer.data['h_Name'],
+                    "h_Summary": serializer.data['h_Summary'],
+                    "h_Introduction": serializer.data['h_Introduction'],
+                    "h_OpenTime": serializer.data['h_OpenTime'],
+                    "h_District": serializer.data['h_District'],
+                    "h_Address": serializer.data['h_Address'],
+                    "h_Tel": serializer.data['h_Tel'],
+                    "h_Fax": serializer.data['h_Fax'],
+                    "h_Latitude": serializer.data['h_Latitude'],
+                    "h_Longitude": serializer.data['h_Longitude'],
+                    "h_Services": serializer.data['h_Services'],
+                    "h_Category": serializer.data['h_Category'],
+                    "h_UpdateTime": serializer.data['h_UpdateTime'],
+                    "h_Stars": serializer.data['h_Stars'],
+                    "h_Reviews": serializer.data['h_Reviews'],
+                    "h_Likes": serializer.data['h_Likes'],
+                    "h_picture": serializer.data['h_picture'],
+                    "like_or_dislike":like_record, 
+               }
+            }
+
+            return Response(response_data, status=status.HTTP_200_OK)
+        except Hotel.DoesNotExist:
+            response_data = {
+                "success": True,
+                "message": "住宿不存在",
+                "data": []
+            }
+            return Response(response_data, status=status.HTTP_200_OK)
+
 class AccountSpotLikeView(APIView):#景點加上該帳號是否按讚
     def get(self, request, account_id):
         try:

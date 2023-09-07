@@ -45,6 +45,11 @@ urlpatterns = [
     path('account/<int:account_id>/food-like/', like_record.AccountFoodLikeView.as_view(), name='account-food-like'),
     path('account/<int:account_id>/hotel-like/', like_record.AccountHotelLikeView.as_view(), name='account-hotel-like'),
 
+    path('account/<int:account_id>/spot-like/<int:s_id>/', like_record.AccountSingleSpotLikeView.as_view(), name='account-single-spot-like'),
+    path('account/<int:account_id>/food-like/<int:f_id>/', like_record.AccountSingleFoodLikeView.as_view(), name='account-single-food-like'),
+    path('account/<int:account_id>/hotel-like/<int:h_id>/', like_record.AccountSingleHotelLikeView.as_view(), name='account-single-hotel-like'),
+
+
     path('account/<int:account_id>/likespot/<int:s_Id>/',like_record.LikeSpotCreateView.as_view(), name="like_record_spot-create"),
     path('account/<int:account_id>/likespot/<int:s_Id>/delete/',like_record.LikeSpotDeleteView.as_view(), name="like_record_spot-delete"),
 
