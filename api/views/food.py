@@ -3,7 +3,7 @@ from django.http import JsonResponse,HttpResponse
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import generics
+from rest_framework import generics,status
 from ..serializers import FoodSerializer,foodWithPictureURLSerializer
 
 from ..models import Food
@@ -19,7 +19,19 @@ def foodList(request):
 def foodWithPictureList(request):
 	queryset = Food.objects.all()
 	serializer = foodWithPictureURLSerializer(queryset, many=True)
-	return Response(serializer.data)
+	response_data = {
+                    "success": True,
+                    "message": "食物資料回傳成功",
+                    "data": serializer.data
+                }
+	return Response(response_data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def high_rating_foods(request):
+    high_rating_foods = Food.objects.order_by( '-f_Reviews','-f_Stars')
+    serializer = foodWithPictureURLSerializer(high_rating_foods, many=True)
+    return Response(serializer.data)
+	
 
 class FoodDetailView(generics.RetrieveAPIView):
     serializer_class = foodWithPictureURLSerializer

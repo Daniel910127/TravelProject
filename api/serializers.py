@@ -181,4 +181,3 @@ class Travel_List_TotalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Travel_List
         fields = '__all__'
-

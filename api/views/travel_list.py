@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
@@ -297,69 +298,71 @@ def UpdateTravelListStartTime(request,t_Id,tls_Id):
         }
         return Response(response_data, status=status.HTTP_401_UNAUTHORIZED)
 
-@api_view(['DELETE'])##主行程刪除
-def DeleteTravelList(request):
+class DeleteTravelList(APIView): # 主行程刪除
     permission_classes = (IsAuthenticated,)
-    serializer = Travel_ListSerializer(data=request.data)
-    if serializer.is_valid():
-        t_Id = request.data.get('t_Id')
 
+    def delete(self, request, t_Id): # 注意這裡的參數名稱是 t_Id
         try:
-            # 使用 get() 獲取符合條件的記錄
-            travellist = Travel_List.objects.get(t_Id=request.data['t_Id'])
-            
-            # 執行刪除操作
-            travellist.delete()
+            # 獲取 id 和 s_Id
+            t_Id = int(t_Id) # 使用 t_Id 而不是 t_id
 
-            response_data = {
-                "status": "204",
-                "message": "主行程刪除成功",
-            }
-            return Response(response_data, status=status.HTTP_204_NO_CONTENT)
+            travellist = Travel_List.objects.get(pk=t_Id)
+
+            # 刪除 Travel_List 對象
+            if travellist:
+                travellist.delete()
+
+                response_data = {
+                    "status": "204",
+                    "message": "主行程刪除成功"
+                }
+                return Response(response_data, status=status.HTTP_204_NO_CONTENT)
+            else:
+                response_data = {
+                    "status": "404",
+                    "message": "主行程刪除失敗"
+                }
+                return Response(response_data, status=status.HTTP_404_NOT_FOUND)
+
         except Travel_List.DoesNotExist:
             response_data = {
                 "status": "404",
                 "message": "主行程不存在",
                 "errors": "指定的t_Id不存在"
             }
-            return Response(response_data, status=status.HTTP_404_NOT_FOUND)
-    else:
-        response_data = {
-            "status": "401",
-            "message": "主行程刪除失敗",
-            "errors": serializer.errors
-        }
-        return Response(response_data, status=status.HTTP_401_UNAUTHORIZED)
+            return Response(response_data, status=status.HTTP_401_UNAUTHORIZED)
 
 
-@api_view(['DELETE'])##行程細節刪除
-def DeleteTravelListDetail(request,tl_Id,t_Id):
+
+class DeleteTravelListDetail(APIView):##行程細節刪除
     permission_classes = (IsAuthenticated,)
-    try:
-        # 使用 get() 獲取符合條件的記錄
-        travellist = Travel_List_Detail.objects.get(tl_Id=tl_Id,t_Id=t_Id)
-            
-        # 執行刪除操作
-        travellist.delete()
+    def delete(self,request,tl_Id,t_Id): 
+        try:
+            # 使用 get() 獲取符合條件的記錄
+            travellist = Travel_List_Detail.objects.get(tl_Id=tl_Id,t_Id=t_Id)
+                
+            # 執行刪除操作
+            travellist.delete()
 
-        response_data = {
-            "status": "204",
-            "message": "行程細節刪除成功",
-        }
-        return Response(response_data, status=status.HTTP_204_NO_CONTENT)
-    except Travel_List_Detail.DoesNotExist:
-        response_data = {
-            "status": "204",
-            "message": "行程細節不存在",
-            "errors": "指定的tl_Id不存在"
-        }
-        return Response(response_data, status=status.HTTP_404_NOT_FOUND)
+            response_data = {
+                "status": "204",
+                "message": "行程細節刪除成功",
+            }
+            return Response(response_data, status=status.HTTP_204_NO_CONTENT)
+        except Travel_List_Detail.DoesNotExist:
+            response_data = {
+                "status": "204",
+                "message": "行程細節不存在",
+                "errors": "指定的tl_Id不存在"
+            }
+            return Response(response_data, status=status.HTTP_404_NOT_FOUND)
 
 
 
-@api_view(['DELETE'])  ##行程表開始時間刪除
-def DeleteTravelListStartTime(request,tls_Id,t_Id):
-        permission_classes = (IsAuthenticated,)
+class DeleteTravelListStartTime(APIView):
+    permission_classes = (IsAuthenticated,)
+    
+    def delete(self, request, tls_Id, t_Id):
         try:
             # 使用 get() 獲取符合條件的記錄
             travellist = Travel_List_StartTime.objects.get(tls_Id=tls_Id)
