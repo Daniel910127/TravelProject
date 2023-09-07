@@ -31,6 +31,8 @@ urlpatterns = [
     path('food/', food.foodWithPictureList, name="food-image-list"),
     path('food/<int:f_Id>/', food.food_detail_view, name="food-detail"),
     path('food/hot/', food.high_rating_foods, name="food-hot"),
+    path('spot/<int:s_Id>/food-recommend/', travel_list.FoodRecommendationView.as_view(), name="food-recommend"),
+    path('spot/<int:s_Id>/hotel-recommend/', travel_list.HotelRecommendationView.as_view(), name="hotel-recommend"),
 
     path('hotel/', hotel.hotelWithPictureList, name="hotel-image-list"),
     path('hotel/<int:h_Id>/', hotel.hotel_detail_view, name="hotel-detail"),

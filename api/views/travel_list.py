@@ -10,14 +10,100 @@ from django.shortcuts import get_object_or_404
 from datetime import datetime, timedelta
 from ..utils import ai
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import F, ExpressionWrapper, FloatField
 
 
 
-from ..serializers import  Travel_List_TotalSerializer,Travel_ListSerializer,Travel_List_DetailSerializer_o,Travel_List_StartTimeSerializer_o
 
-from ..models import Travel_List,Travel_List_Detail,Travel_List_StartTime,Account
+from ..serializers import  Travel_List_TotalSerializer,Travel_ListSerializer,Travel_List_DetailSerializer_o,Travel_List_StartTimeSerializer_o,foodWithPictureURLSerializer,hotelWithPictureURLSerializer
+
+from ..models import Travel_List,Travel_List_Detail,Travel_List_StartTime,Account,Spot,Food,Hotel
 
 # Create your views here.
+class FoodRecommendationView(APIView):#推薦離該景點最近且最佳前五名食物
+    def get(self, request, s_Id):
+        try:
+            # 獲取特定景點的資訊，包括經緯度、星級和評論
+            spot = Spot.objects.get(pk=s_Id)
+
+            s_latitude = spot.s_Latitude
+            s_longitude = spot.s_Longitude
+
+            # 查找最接近的食物建議，限制為 5 個結果
+            recommended_food = Food.objects.annotate(
+                distance=ExpressionWrapper(
+                    (F('f_Latitude') - s_latitude) ** 2 + (F('f_Longitude') - s_longitude) ** 2,
+                    output_field=FloatField()
+                )
+            ).order_by('distance', '-f_Stars', '-f_Reviews')[:5]
+
+            if recommended_food:
+                serializer = foodWithPictureURLSerializer(recommended_food, many=True)
+                serialized_data = serializer.data
+
+                response_data = {
+                    "success": True,
+                    "message": "食物建議成功",
+                    "recommended_food": serialized_data
+                }
+                return JsonResponse(response_data, safe=False, json_dumps_params={'ensure_ascii': False})
+            else:
+                response_data = {
+                    "success": True,
+                    "message": "找不到食物建議",
+                    "recommended_food": None
+                }
+                return JsonResponse(response_data)
+
+        except Spot.DoesNotExist:
+            response_data = {
+                "success": False,
+                "message": "景點不存在"
+            }
+            return JsonResponse(response_data, status=404)
+
+class HotelRecommendationView(APIView):#推薦離該景點最近且最佳前五名住宿
+    def get(self, request, s_Id):
+        try:
+            # 獲取特定景點的資訊，包括經緯度、星級和評論
+            spot = Spot.objects.get(pk=s_Id)
+
+            s_latitude = spot.s_Latitude
+            s_longitude = spot.s_Longitude
+
+            # 查找最接近的食物建議，限制為 5 個結果
+            recommended_hotel = Hotel.objects.annotate(
+                distance=ExpressionWrapper(
+                    (F('h_Latitude') - s_latitude) ** 2 + (F('h_Longitude') - s_longitude) ** 2,
+                    output_field=FloatField()
+                )
+            ).order_by('distance', '-h_Stars', '-h_Reviews')[:5]
+
+            if recommended_hotel:
+                serializer = hotelWithPictureURLSerializer(recommended_hotel, many=True)
+                serialized_data = serializer.data
+
+                response_data = {
+                    "success": True,
+                    "message": "住宿建議成功",
+                    "recommended_hotel": serialized_data
+                }
+                return JsonResponse(response_data, safe=False, json_dumps_params={'ensure_ascii': False})
+            else:
+                response_data = {
+                    "success": True,
+                    "message": "找不到食物建議",
+                    "recommended_hotel": None
+                }
+                return JsonResponse(response_data)
+
+        except Spot.DoesNotExist:
+            response_data = {
+                "success": False,
+                "message": "景點不存在"
+            }
+            return JsonResponse(response_data, status=404)
+
 
 @api_view(['GET'])##全部的行程表
 def travel_List_Total(request):
@@ -81,6 +167,8 @@ def CreateTravelList(request):
     )
 
     if travellist:
+        # 在這裡獲取t_Id
+        t_Id = travellist.t_Id
         response_data = {
             "status": "201",
             "message": "行程表創建成功",
@@ -96,6 +184,7 @@ def CreateTravelList(request):
                 "t_score": t_score
             }
         }
+        ai.get_t_Id(t_Id)
         return Response(response_data, status=status.HTTP_201_CREATED)
     else:
         response_data = {

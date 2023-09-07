@@ -8,6 +8,9 @@ interest_data = {}
 playzone_data={}
 custom = True
 
+def get_t_Id(data):
+    t_Id=data
+    print(t_Id)
 
 def process_interest_data(data):
     global interest_data
