@@ -9,17 +9,34 @@ from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from datetime import datetime, timedelta
 from ..utils import ai
-from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import F, ExpressionWrapper, FloatField
 
-
-
-
-from ..serializers import  Travel_List_TotalSerializer,Travel_ListSerializer,Travel_List_DetailSerializer_o,Travel_List_StartTimeSerializer_o,foodWithPictureURLSerializer,hotelWithPictureURLSerializer
+from ..serializers import  Travel_List_TotalSerializer,Travel_ListSerializer,Travel_List_DetailSerializer_o,Travel_List_StartTimeSerializer_o,foodWithPictureURLSerializer,hotelWithPictureURLSerializer,spotWithPictureURLSerializer
 
 from ..models import Travel_List,Travel_List_Detail,Travel_List_StartTime,Account,Spot,Food,Hotel
 
 # Create your views here.
+class NameSearchView(APIView):
+    def get(self, request, search_term):
+        # 在食物、飯店和景點中進行名稱相似性搜索
+        food_results = Food.objects.filter(f_Name__icontains=search_term)[:5]
+        hotel_results = Hotel.objects.filter(h_Name__icontains=search_term)[:5]
+        spot_results = Spot.objects.filter(s_Name__icontains=search_term)[:5]
+
+        # 將搜索結果序列化為 JSON 格式
+        food_serializer = foodWithPictureURLSerializer(food_results, many=True)
+        hotel_serializer = hotelWithPictureURLSerializer(hotel_results, many=True)
+        spot_serializer = spotWithPictureURLSerializer(spot_results, many=True)
+
+        response_data = {
+            "food_results": food_serializer.data,
+            "hotel_results": hotel_serializer.data,
+            "spot_results": spot_serializer.data,
+        }
+
+        return Response(response_data)
+
+
 class FoodRecommendationView(APIView):#推薦離該景點最近且最佳前五名食物
     def get(self, request, s_Id):
         try:

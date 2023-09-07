@@ -10,6 +10,7 @@ urlpatterns = [
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
+    path('name-search/<str:search_term>/', travel_list.NameSearchView.as_view(), name='name-search'),
 
     path('account-list/', account.accountList, name="account-list"),
     path('account-change/', account.UpdateMemberView.as_view(),name="account-change"),
