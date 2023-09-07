@@ -51,11 +51,33 @@ def CreateTravelList(request):
     t_Views = 0
     t_Likes = 0
     t_score = 0
+    # 獲取request.data中的數據
+    custom = request.data.get('custom')
+    if custom:
+        interest_data = request.data.get('interest')
+        # 調用ai.py中的函数進行處理
+        ai.process_interest_data(interest_data)
+    else:
+        ai.custom = False
+        
+    playzone_data = request.data.get('playZone')
+    ai.process_playzone_data(playzone_data)
+    # 獲取當前時間
+    current_time = datetime.now()
+    # 格式化為所需的日期時間字符串
+    t_FormTime = current_time.strftime('%Y-%m-%d %H:%M:%S.%f')
+    # 將 t_StartDate 轉換為日期對象
+    start_date = datetime.strptime(t_StartDate, '%Y-%m-%d')
+    # 計算 t_EndDate
+    end_date = start_date + timedelta(days=int(t_StayDay))
+    # 將 t_EndDate 格式化為字符串
+    t_EndDate = end_date.strftime('%Y-%m-%d')
 
     travellist = Travel_List.objects.create(
         account=account, t_Name=t_Name, t_Description=t_Description, 
-        t_StartDate=t_StartDate, t_StayDay=t_StayDay, t_Privacy=t_Privacy,
-        t_Views=t_Views, t_Likes=t_Likes, t_score=t_score
+        t_FormTime=t_FormTime, t_StartDate=t_StartDate, t_EndDate=t_EndDate,
+        t_StayDay=t_StayDay, t_Privacy=t_Privacy, t_Views=t_Views, t_Likes=t_Likes,
+        t_score=t_score
     )
 
     if travellist:
