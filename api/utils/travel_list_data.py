@@ -27,7 +27,7 @@ def travel_list_detail_data_add():
         tl_TransportTime = travel_list_detail_data_list[i]['tl_TransportTime']  
         tl_StayTime =  ['3600']
         tl_Day = travel_list_detail_data_list[i]['tl_Day']
-        tl_Order = travel_list_detail_data_list[i]['tl_Orde']
+        tl_Order = [i+1]
         tl_Notes = ['NULL']
         tl_score = [0]
 
