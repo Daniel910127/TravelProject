@@ -225,19 +225,30 @@ class Question(models.Model):
 class s_Interest(models.Model):
   si_Id = models.AutoField( primary_key=True) 
   id = models.ForeignKey(to="Account", null=True,on_delete=models.CASCADE)
-  si_pg = models.IntegerField( null=False) #公園綠地
+  si_hv = models.IntegerField( null=False) #溫泉渡假
+  si_sa = models.IntegerField( null=False) #風景區
   si_os = models.IntegerField( null=False) #戶外運動
-  si_tp = models.IntegerField( null=False) #主題園區、風景區
-  si_ee = models.IntegerField( null=False) #生態教育
-  si_ff = models.IntegerField( null=False) #休閒農漁
   si_la = models.IntegerField( null=False) #在地藝文
-  si_le = models.IntegerField( null=False) #地方展館
+  si_mf = models.IntegerField( null=False) #無障礙設施
+  si_ee = models.IntegerField( null=False) #生態教育
   si_ns = models.IntegerField( null=False) #自然景觀
-  si_np = models.IntegerField( null=False) #夜市夜遊、消費娛樂
-  si_rt = models.IntegerField( null=False) #宗教廟宇
-  si_se = models.IntegerField( null=False) #消費娛樂
-  si_ha = models.IntegerField( null=False) #歷史古蹟
+  si_ff = models.IntegerField( null=False) #休閒農漁
+  si_pg = models.IntegerField( null=False) #公園綠地
   si_tf = models.IntegerField( null=False) #觀光工廠
+  si_pd = models.IntegerField( null=False) #熱門景點
+  si_ha = models.IntegerField( null=False) #歷史古蹟
+  si_np = models.IntegerField( null=False) #夜市夜遊
+  si_tp = models.IntegerField( null=False) #主題園區
+  si_se = models.IntegerField( null=False) #消費娛樂
+  si_rt = models.IntegerField( null=False) #宗教廟宇
+  si_lb = models.IntegerField( null=False) #景觀吊橋
+  si_le = models.IntegerField( null=False) #地方展館
+  
+  
+  
+  
+  
+  
 
   def __str__(self):
     return self.id

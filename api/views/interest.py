@@ -34,23 +34,38 @@ class CreateInterestView(APIView):  # 帳號興趣創立
             if Account.objects.filter(id=id).exists():
                 return Response({'error': '該帳號已創立興趣'}, status=status.HTTP_400_BAD_REQUEST)
             id = serializer.validated_data.get('id')
-            id = serializer.validated_data.get('id')
-            si_pg = serializer.validated_data.get('si_pg')
+            si_hv = serializer.validated_data.get('si_hv')
+            si_sa = serializer.validated_data.get('si_sa')
             si_os = serializer.validated_data.get('si_os')
-            si_tp = serializer.validated_data.get('si_tp')
-            si_ee = serializer.validated_data.get('si_ee')
-            si_ff = serializer.validated_data.get('si_ff')
             si_la = serializer.validated_data.get('si_la')
-            si_le = serializer.validated_data.get('si_le')
+            si_mf = serializer.validated_data.get('si_mf')
+            si_ee = serializer.validated_data.get('si_ee')
             si_ns = serializer.validated_data.get('si_ns')
-            si_np = serializer.validated_data.get('si_np')
-            si_rt = serializer.validated_data.get('si_rt')
-            si_se = serializer.validated_data.get('si_se')
-            si_ha = serializer.validated_data.get('si_ha')
+            si_ff = serializer.validated_data.get('si_ff')
+            si_pg = serializer.validated_data.get('si_pg')
             si_tf = serializer.validated_data.get('si_tf')
+            si_pd = serializer.validated_data.get('si_pd')
+            si_ha = serializer.validated_data.get('si_ha')
+            si_np = serializer.validated_data.get('si_np')
+            si_tp = serializer.validated_data.get('si_tp')
+            si_se = serializer.validated_data.get('si_se')
+            si_rt = serializer.validated_data.get('si_rt')
+            si_lb = serializer.validated_data.get('si_lb')
+            si_le = serializer.validated_data.get('si_le')
+            
+            
+           
+            
+            
+            
 
             interest = s_Interest.objects.create(
                 id=id,
+                si_hv=si_hv,
+                si_sa=si_sa,
+                si_mf=si_mf,
+                si_pd=si_pd,
+                si_lb=si_lb,
                 si_pg=si_pg,
                 si_os=si_os,
                 si_tp=si_tp,
