@@ -201,7 +201,8 @@ def CreateTravelList(request):
                 "t_Privacy": t_Privacy,
                 "t_Views": t_Views,
                 "t_Likes": t_Likes,
-                "t_score": t_score
+                "t_score": t_score,
+                "t_Id" : t_Id
             }
         }
         ai.main(t_Id, interest_data, playzone_data).schedule_list()
