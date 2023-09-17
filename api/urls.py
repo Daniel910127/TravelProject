@@ -67,6 +67,8 @@ urlpatterns = [
     path('question/<int:s_Id>/', question.question_detail_view, name="question-detail"),
 
     path('account/<int:id>/itinerary/',travel_list.travel_List_detail_view, name="itinerary"),
+    path('account/<int:id>/itinerary/<int:t_Id>/',travel_list.travel_List_detail_singleview, name="itinerary-single"),
+
     path('itinerary/', travel_list.CreateTravelList, name="itinerary-create"),
     path('itinerary/<int:t_Id>/', travel_list.UpdateTravelList,name="itinerary-update"),
     path('itinerary/<int:t_Id>/delete/',travel_list.DeleteTravelList.as_view(), name="itinerary-delete"),

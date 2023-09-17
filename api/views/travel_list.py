@@ -515,7 +515,7 @@ class DeleteTravelListStartTime(APIView):
             }
             return Response(response_data, status=status.HTTP_404_NOT_FOUND)
 
-class TravelListView(generics.ListAPIView):  # 更改繼承類別為ListAPIView
+class TravelListView(generics.ListAPIView):  # 列出某一帳號所有行程表
     permission_classes = (IsAuthenticated,)
     serializer_class = Travel_List_TotalSerializer
 
@@ -535,3 +535,25 @@ class TravelListView(generics.ListAPIView):  # 更改繼承類別為ListAPIView
         return Response(response_data, status=status.HTTP_200_OK)
 
 travel_List_detail_view = TravelListView.as_view()
+
+class TravelListSingleView(generics.ListAPIView):  #列出某一帳號單一行程表
+    permission_classes = (IsAuthenticated,)
+    serializer_class = Travel_List_TotalSerializer
+
+    def get_queryset(self):
+        account_id = self.kwargs['id']  # Get the account ID from the URL kwargs
+        t_Id = self.kwargs['t_Id']  # Get the account ID from the URL kwargs
+        queryset = Travel_List.objects.filter(account_id=account_id, t_Id=t_Id)
+        return queryset
+
+    def list(self, request, *args, **kwargs):  # 更改方法名稱為list
+        queryset = self.get_queryset()
+        serializer = self.serializer_class(queryset, many=True)
+        response_data = {
+            "status": "200",
+            "message": "行程表資料獲取成功",
+            "data": serializer.data
+        }
+        return Response(response_data, status=status.HTTP_200_OK)
+
+travel_List_detail_singleview = TravelListSingleView.as_view()
