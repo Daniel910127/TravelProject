@@ -98,6 +98,7 @@ WSGI_APPLICATION = 'TravelProject.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 """
+
 #誌軒
 DATABASES = {
      'default': {
@@ -110,7 +111,10 @@ DATABASES = {
      'OPTIONS':{'charset':'utf8mb4'}
      }
  }
+
 """
+
+
 #凱皓的資料庫
 
 DATABASES = {
@@ -123,6 +127,7 @@ DATABASES = {
      'PORT': '4433',
      }
  }
+
 
 '''
 
