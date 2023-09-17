@@ -154,17 +154,20 @@ def CreateTravelList(request):
     t_Views = 0
     t_Likes = 0
     t_score = 0
+    interest_data = None
+    playzone_data = None
+    start_location = (22.9908, 120.2033)
+    custom=True
     # 獲取request.data中的數據
     custom = request.data.get('custom')
     if custom:
         interest_data = request.data.get('interest')
         # 調用ai.py中的函数進行處理
-        ai.process_interest_data(interest_data)
+
     else:
-        ai.custom = False
+        custom = False
         
     playzone_data = request.data.get('playZone')
-    ai.process_playzone_data(playzone_data)
     # 獲取當前時間
     current_time = datetime.now()
     # 格式化為所需的日期時間字符串
@@ -201,7 +204,7 @@ def CreateTravelList(request):
                 "t_score": t_score
             }
         }
-        ai.get_t_Id(t_Id)
+        ai.main(t_Id, interest_data, playzone_data, start_location).schedule_list()
         return Response(response_data, status=status.HTTP_201_CREATED)
     else:
         response_data = {
