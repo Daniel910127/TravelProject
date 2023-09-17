@@ -97,6 +97,20 @@ WSGI_APPLICATION = 'TravelProject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+"""
+#誌軒
+DATABASES = {
+     'default': {
+     'ENGINE': 'django.db.backends.mysql',
+     'NAME': 'djangosite2', #here is import
+     'USER': 'root',
+     'PASSWORD': 'tim910410',
+     'HOST': 'localhost',
+     'PORT': '3306',
+     'OPTIONS':{'charset':'utf8mb4'}
+     }
+ }
+"""
 #凱皓的資料庫
 
 DATABASES = {
@@ -109,6 +123,7 @@ DATABASES = {
      'PORT': '4433',
      }
  }
+
 '''
 
 #能靖的資料庫
