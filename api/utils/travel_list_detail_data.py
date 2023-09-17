@@ -16,10 +16,11 @@ def get_travel_list_detail_data():
 
 def travel_list_detail_data_add(data):
     travel_list_detail_data_list = json.loads(data)
-
+    
     #travel_list_detail_data_list = get_travel_list_detail_data()
     for i in range(len(travel_list_detail_data_list)):
-        print(travel_list_detail_data_list[i])
+        #print(travel_list_detail_data_list[i])
+        
         t_Id  = travel_list_detail_data_list[i]['t_id']
         s_Id =  travel_list_detail_data_list[i]['s_id']  
         f_Id =  None#['NULL']

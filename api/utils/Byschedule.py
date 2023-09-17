@@ -39,8 +39,9 @@ class schedule():
             # opening_hours_list += [spot["spot_id"]]
             ifmorning = self.opentime2list(method.getspotbyid(-spot, "s_OpenTime"))
             opening_hours_list.append(ifmorning + [spot])
-
+        #print("hello",opening_hours_list)
         filtered_spots = self.filter_opening_hours(opening_hours_list, user_play_time)
+        
         morning_only_spots = []
         afternoon_only_spots = []
         allday_opening_spots = []
@@ -157,6 +158,7 @@ class schedule():
 
         pattern = r'\“w\d+\”:\s?\[(.*?)\]'
         matches = re.findall(pattern, opentim)
+        
 
         filtered_hours = []
 
@@ -180,10 +182,10 @@ class schedule():
             filtered_hours.append(is_open)
 
         return filtered_hours
-    
+
     def filter_opening_hours(self, opening_hours_list, days_to_check):
         filtered_spots = []
-        
+        #print(opening_hours_list,days_to_check)
         for spot_hours in opening_hours_list:
             spot_opening_days = [i for i, is_open in enumerate(spot_hours) if is_open is not None]
             if any(day in days_to_check for day in spot_opening_days):

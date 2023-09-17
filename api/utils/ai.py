@@ -42,7 +42,7 @@ import json
 
 class main():
     #play = main(t_id, user_id, interest_list, play_zone)    
-    def __init__(self, t_id, interest_list, play_zone, benchmark_pos) -> None:
+    def __init__(self, t_id, interest_list, play_zone, benchmark_pos=(22.998601, 120.187817)) -> None:
 
         self.spot_json, self.spots_name, self.topic_matrix= method.get_spot_json(play_zone)
 
@@ -50,9 +50,10 @@ class main():
 
         self.playtime, self.user_id= method.get_tl_INFO(t_id)
 
+        #print("1",interest_list)
         self.user_interest = method.get_interest_json(self.user_id, interest_list) 
+        #print("2",self.user_interest)
 
-        print(self.user_interest)
         
         self.interest_pick_method = Byinterest.interest_pick(self.user_interest, self.spots_name, self.topic_matrix)
         self.popular_pick_method = Bypopular.popular_pick(self.spot_json, self.spots_name)
@@ -80,6 +81,7 @@ class main():
     def spot_schedule(self, topspotid, playtime):
         morning_only_spots, afternoon_only_spots, allday_opening_spots = self.Schedule.bytime(topspotid, playtime)
         morn_sorted_locations, other_sorted_locations, afternoon_sorted_locations = self.Schedule.byposition(morning_only_spots, afternoon_only_spots, allday_opening_spots, self.benchmark_pos)
+
         # if morn_sorted_locations != None:
         #     if afternoon_sorted_locations != None:
                 
@@ -119,7 +121,7 @@ class main():
         for i in range(len(self.playtime_day)):
             popular_pick, popular_id = self.recom_spot(self.playtime_hours[i], havebeen2)
             sc = self.spot_schedule(popular_id, [self.playtime_day[i]])
-            #sc = self.recom_food(sc)
+            #print(self.playtime_day)
             #recom_hotel_id , recom_hotel = self.recom_hotel(sc)
             recom_hotel_id = None
             #schedule_dic[str(i)] = sc
@@ -136,19 +138,19 @@ class main():
             havebeen2 += popular_id
         
         schedule_dic = json.dumps(schedule_dic, indent=4)
-        # print(schedule_dic)
+        #print(schedule_dic)
         travel_list_detail_data.travel_list_detail_data_add(schedule_dic)
         return "done"
 
 #Data
-t_id = 1
-start_location = (22.9908, 120.2033)
+# t_id = 1
+# start_location = (22.9908, 120.2033)
 
-play_zone = ["北門區", "七股區", "鹽水區"]
+# play_zone = ["北門區", "七股區", "鹽水區"]
 
-interest_list = None
+# interest_list = None
 
-schedule_dic = main(t_id, interest_list, play_zone, start_location).schedule_list() # input:  t_id: travel list id
+#schedule_dic = main(t_id, interest_list, play_zone, start_location).schedule_list() # input:  t_id: travel list id
                                                                                             # interest_list 這是客製化才有的
                                                                                             # playzone: list of zones
                                                                                             # start_location: 

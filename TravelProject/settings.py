@@ -100,6 +100,7 @@ WSGI_APPLICATION = 'TravelProject.wsgi.application'
 
 
 #誌軒
+"""
 DATABASES = {
      'default': {
      'ENGINE': 'django.db.backends.mysql',
@@ -111,22 +112,24 @@ DATABASES = {
      'OPTIONS':{'charset':'utf8mb4'}
      }
  }
+"""
+
 
 
 
 
 #凱皓的資料庫
 
-# DATABASES = {
-#      'default': {
-#      'ENGINE': 'django.db.backends.mysql',
-#      'NAME': 'database', #here is import
-#      'USER': 'root',
-#      'PASSWORD': 'aabb3210$',
-#      'HOST': 'localhost',
-#      'PORT': '4433',
-#      }
-#  }
+DATABASES = {
+      'default': {
+      'ENGINE': 'django.db.backends.mysql',
+      'NAME': 'database', #here is import
+      'USER': 'root',
+      'PASSWORD': 'aabb3210$',
+      'HOST': 'localhost',
+      'PORT': '4433',
+      }
+  }
 
 
 '''

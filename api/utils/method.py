@@ -9,17 +9,17 @@ from datetime import datetime
 import math
 
 def get_interest_json(user_id, interest_list = None):
+    user_interest = []
     if interest_list == None:
         Interests = s_Interest.objects.all().order_by('-si_Id')
         serializer = s_InterestSerializer(Interests, many=True)
         s_Interest_json = serializer.data
-        
         for index, order_dict in enumerate(s_Interest_json):
             if order_dict['id'] == user_id:
                 user_interest = [value for key, value in order_dict.items() if key != 'id' and key != 'si_Id']
     else:
-        user_interest = []
-        for keys, values in interest_list:
+        
+        for keys, values in interest_list.items():
             if keys != "si_Id":
                 user_interest.append(values)
 

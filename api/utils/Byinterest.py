@@ -21,7 +21,9 @@ class interest_pick():
 
     def pick(self, top_n):
         sumofinterest = sum(self.user_interest)
+        #print(sumofinterest,self.user_interest)
         self.user_interest = np.array([i / sumofinterest for i in self.user_interest])
+
 
 
         # todo 3. 取比例前三高，並且根據實際比例做推薦(需有個基本門檻 ex: >= 0.33)

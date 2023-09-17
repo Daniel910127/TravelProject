@@ -156,7 +156,7 @@ def CreateTravelList(request):
     t_score = 0
     interest_data = None
     playzone_data = None
-    start_location = (22.9908, 120.2033)
+    
     custom=True
     # 獲取request.data中的數據
     custom = request.data.get('custom')
@@ -204,7 +204,7 @@ def CreateTravelList(request):
                 "t_score": t_score
             }
         }
-        ai.main(t_Id, interest_data, playzone_data, start_location).schedule_list()
+        ai.main(t_Id, interest_data, playzone_data).schedule_list()
         return Response(response_data, status=status.HTTP_201_CREATED)
     else:
         response_data = {
