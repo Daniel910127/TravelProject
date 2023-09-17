@@ -50,10 +50,7 @@ class main():
 
         self.playtime, self.user_id= method.get_tl_INFO(t_id)
 
-        if interest_list == None:
-            self.user_interest = method.get_interest_json(self.user_id) 
-        else:
-            self.user_interest = interest_list
+        self.user_interest = method.get_interest_json(self.user_id, interest_list) 
 
 
         self.interest_pick_method = Byinterest.interest_pick(self.user_interest, self.spots_name, self.topic_matrix)
@@ -149,12 +146,6 @@ start_location = (22.9908, 120.2033)
 play_zone = ["北門區", "七股區", "鹽水區"]
 
 interest_list = None
-# play = main(t_id, user_id, playtimedic, start_location, play_zone)
-#play = main(t_id, interest_list, play_zone)
-#t_id : Starttime from tl_starttime
-#       default play time: 8~21
-# user_id : get from t_id 
-#interest_list 可能為None
 
 schedule_dic = main(t_id, interest_list, play_zone, start_location).schedule_list() # input:  t_id: travel list id
                                                                                             # interest_list 這是客製化才有的

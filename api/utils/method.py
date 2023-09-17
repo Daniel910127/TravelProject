@@ -8,14 +8,20 @@ import numpy as np
 from datetime import datetime
 import math
 
-def get_interest_json(user_id):
-    Interests = s_Interest.objects.all().order_by('-si_Id')
-    serializer = s_InterestSerializer(Interests, many=True)
-    s_Interest_json = serializer.data
-
-    for index, order_dict in enumerate(s_Interest_json):
-        if order_dict['id'] == user_id:
-            user_interest = [value for key, value in order_dict.items() if key != 'id' and key != 'si_Id']
+def get_interest_json(user_id, interest_list = None):
+    if interest_list == None:
+        Interests = s_Interest.objects.all().order_by('-si_Id')
+        serializer = s_InterestSerializer(Interests, many=True)
+        s_Interest_json = serializer.data
+        
+        for index, order_dict in enumerate(s_Interest_json):
+            if order_dict['id'] == user_id:
+                user_interest = [value for key, value in order_dict.items() if key != 'id' and key != 'si_Id']
+    else:
+        user_interest = []
+        for keys, values in interest_list:
+            if keys != "si_Id":
+                user_interest.append(values)
 
     return user_interest
 
@@ -47,6 +53,7 @@ def get_spot_json(play_zone):
             filtered_spot_name.append(spots_name[i])
             filtered_spot_json.append(spot_json[i])
             filtered_spot_topic.append(topic_matrix[i])
+        
 
     #return spot_json, spots_name, topic_matrix
     return filtered_spot_json, filtered_spot_name, filtered_spot_topic
