@@ -7,7 +7,7 @@ from ..utils import Bypopular #import popular_pick
 from ..utils import Byschedule
 from ..utils import travel_list_detail_data
 import json
-# interest_data = {}
+#interest_data = {}
 # playzone_data={}
 # custom = True
 
@@ -55,7 +55,8 @@ class main():
         else:
             self.user_interest = interest_list
 
-
+        print(self.user_interest)
+        
         self.interest_pick_method = Byinterest.interest_pick(self.user_interest, self.spots_name, self.topic_matrix)
         self.popular_pick_method = Bypopular.popular_pick(self.spot_json, self.spots_name)
         self.Schedule = Byschedule.schedule()
