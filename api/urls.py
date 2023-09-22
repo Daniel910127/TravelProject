@@ -78,7 +78,7 @@ urlpatterns = [
     path('itinerary/<int:t_Id>/detail/<int:tl_Id>/delete/',travel_list.DeleteTravelListDetail.as_view(), name="itinerary-detail-delete"),
 
     path('itinerary/<int:t_Id>/starttime/',travel_list.CreateTravelListStartTime, name="itinerary-starttime-create"),
-    path('itinerary/<int:t_Id>/starttime/<int:tls_Id>/',travel_list.UpdateTravelListStartTime, name="itinerary-starttime-update"),
+    path('itinerary/<int:t_Id>/starttime/<int:tls_Day>/',travel_list.UpdateTravelListStartTime, name="itinerary-starttime-update"),
     path('itinerary/<int:t_Id>/starttime/<int:tls_Id>/delete/',travel_list.DeleteTravelListStartTime.as_view(), name="itinerary-starttime-delete"),
 
 

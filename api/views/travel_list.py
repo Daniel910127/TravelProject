@@ -391,7 +391,7 @@ def UpdateTravelListDetail(request,t_Id,tl_Id):
         return Response(response_data, status=status.HTTP_401_UNAUTHORIZED)
     
 @api_view(['PUT'])##行程表開始時間更改
-def UpdateTravelListStartTime(request,t_Id,tls_Id):
+def UpdateTravelListStartTime(request,t_Id,tls_Day):
     permission_classes = (IsAuthenticated,)
     serializer = Travel_List_StartTimeSerializer_o(data=request.data)
     if serializer.is_valid():
@@ -401,7 +401,7 @@ def UpdateTravelListStartTime(request,t_Id,tls_Id):
 
         try:
             # 使用 get() 獲取符合條件的記錄
-            travellist = Travel_List_StartTime.objects.get(tls_Id=tls_Id)
+            travellist = Travel_List_StartTime.objects.get(t_Id=t_Id, tls_Day=tls_Day)
             
             # 更新記錄
             travellist.t_Id = t_Id
