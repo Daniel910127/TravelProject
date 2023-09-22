@@ -4,7 +4,7 @@ from django.shortcuts import render, HttpResponse
 from .. import models
 import re
 
-#能靖改travel list spot輸入
+#能靖改travel list spot輸入+StartTime輸入
 def get_travel_list_detail_data():
     #拿travel_list資料
     url = "https://www.twtainan.net/data/attractions_zh-tw.json"
@@ -36,5 +36,12 @@ def travel_list_detail_data_add(data):
         models.Travel_List_Detail.objects.create(t_Id_id=t_Id, s_Id_id=s_Id, f_Id_id=f_Id, h_Id_id=h_Id,tl_TransportMode=tl_TransportMode, tl_TransportTime=tl_TransportTime, tl_StayTime=tl_StayTime,
                                    tl_Day=tl_Day, tl_Notes=tl_Notes,tl_Order=tl_Order, tl_score=tl_score)
 
+        #tls部分
+        tls_StartTime = 28800
+        tls_count = 0
+        if tl_Day==tls_count:
+            models.Travel_List_StartTime.objects.create(t_Id=t_Id,tls_Day=tl_Day,tls_StartTime=tls_StartTime)
+            tls_count+=1
+            
     return HttpResponse('successfully travel_list_detail_data_add add')
     
