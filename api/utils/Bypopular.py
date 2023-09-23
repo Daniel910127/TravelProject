@@ -15,7 +15,9 @@ class popular_pick():
 
     def pick(self, interest_top, top_n, classification_top, havebeen2):
         if classification_top != None:
-            interest_top = list(set(interest_top).union(set(classification_top)))
+            interest_top = list(set(interest_top+classification_top))
+        
+        interest_top = [x for x in interest_top if x in self.spots_name]
 
         TOPReviews = [self.all_spot_info[self.spots_name.index(spot)]["s_Reviews"] for spot in interest_top]
         TOPStars = [self.all_spot_info[self.spots_name.index(spot)]["s_Stars"] for spot in interest_top]

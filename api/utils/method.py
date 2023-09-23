@@ -1,8 +1,8 @@
 
 # 李誌軒
 
-from ..models import Spot, s_Interest, Hotel, Food, Travel_List, Travel_List_StartTime
-from ..serializers import SpotSerializer, s_InterestSerializer, HotelSerializer, FoodSerializer, Travel_ListSerializer, Travel_List_StartTimeSerializer
+from ..models import Spot, s_Interest, Hotel, Food, Travel_List, Like_Record
+from ..serializers import SpotSerializer, s_InterestSerializer, HotelSerializer, FoodSerializer, Travel_ListSerializer, Like_RecordSerializer
 from django.http import JsonResponse
 import numpy as np
 from datetime import datetime
@@ -42,8 +42,7 @@ def get_spot_json(play_zone):
         result_lists = [1 if topic in input_types else 0 for topic in all_topics]
         topic_matrix.append(result_lists)
 
-    # spots_review  = list(spots.values_list('s_Reviews', flat=True))
-    # spots_review5div = [int(np.percentile(np.array(spots_review), 20 * (i+1))) for i in range(5)]
+
     filtered_spot_name = []
     filtered_spot_json = []
     filtered_spot_topic = []
@@ -128,10 +127,24 @@ def haversine(coord1, coord2):
     return distance
 
 def transporttime(strt_id, des_id):
-    strt_pos = getspotbyid(strt_id, "position")
+    strt_pos = getspotbyid(strt_id, "position") 
     des_pos = getspotbyid(des_id, "position")
     distance = haversine(strt_pos, des_pos)
 
     speed_kph = 40
     time_hours = distance / speed_kph
     return time_hours
+
+
+def getlikedbyid(acc_id):
+    liked = Like_Record.objects.all().order_by('-h_Id')
+    serializer = Like_RecordSerializer(liked, many=True)
+    liked_json = serializer.data
+    likespots = []
+    for i in range(len(liked_json)):
+        if liked_json[i]["id"] == acc_id:
+            likespots.append(liked_json[i]["s_Id"])
+
+    return likespots
+
+# print(getspotbyid(-193, "s_Name"))

@@ -42,6 +42,7 @@ class schedule():
         #print("hello",opening_hours_list)
         filtered_spots = self.filter_opening_hours(opening_hours_list, user_play_time)
         
+       
         morning_only_spots = []
         afternoon_only_spots = []
         allday_opening_spots = []
@@ -158,8 +159,6 @@ class schedule():
 
         pattern = r'\“w\d+\”:\s?\[(.*?)\]'
         matches = re.findall(pattern, opentim)
-        
-
         filtered_hours = []
 
         for day_hours in matches:
@@ -170,7 +169,7 @@ class schedule():
             hours_pattern = r'(\d+:\d+)–(\d+:\d+)'
             hours_matches = re.findall(hours_pattern, day_hours)
 
-            is_open = "openallday"#False
+            is_open = "openallday"
             for start_time, end_time in hours_matches:
                 if start_time <= '12:00' and end_time <= '12:00':
                     is_open = True
@@ -186,6 +185,7 @@ class schedule():
     def filter_opening_hours(self, opening_hours_list, days_to_check):
         filtered_spots = []
         #print(opening_hours_list,days_to_check)
+
         for spot_hours in opening_hours_list:
             spot_opening_days = [i for i, is_open in enumerate(spot_hours) if is_open is not None]
             if any(day in days_to_check for day in spot_opening_days):
@@ -202,7 +202,6 @@ class schedule():
         c = 2 * asin(sqrt(a))
         return R * c
 
-    # 使用 Dijkstra 最短路徑演算法找到最佳景點排程
     def dijkstra(self, graph, start):
         distances = {node: float('inf') for node in graph}
         distances[start] = 0
