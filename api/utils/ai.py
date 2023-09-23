@@ -112,16 +112,15 @@ class main():
         travel_list_detail_data.travel_list_detail_data_add(schedule_dic)
         return "done"
 
-#Data
-t_id = 1
-start_location = (22.9908, 120.2033)
+# #Data
+# t_id = 5
 
-play_zone = ["北門區", "七股區", "鹽水區"]
+# play_zone = ["北門區", "七股區", "鹽水區"]
 
-interest_list = None
+# interest_list = None
 
-schedule_dic = main(t_id, interest_list, play_zone, start_location).schedule_list() # input:  t_id: travel list id
-                                                                                            # interest_list 這是客製化才有的
-                                                                                            # playzone: list of zones
-                                                                                            # start_location: 
-print(schedule_dic)
+# schedule_dic = main(t_id, interest_list, play_zone).schedule_list() # input:  t_id: travel list id
+#                                                                                             # interest_list 這是客製化才有的
+#                                                                                             # playzone: list of zones
+#                                                                                             # start_location: 
+# print(schedule_dic)

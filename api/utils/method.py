@@ -14,6 +14,7 @@ def get_interest_json(user_id, interest_list = None):
         Interests = s_Interest.objects.all().order_by('-si_Id')
         serializer = s_InterestSerializer(Interests, many=True)
         s_Interest_json = serializer.data
+
         for index, order_dict in enumerate(s_Interest_json):
             if order_dict['id'] == user_id:
                 user_interest = [value for key, value in order_dict.items() if key != 'id' and key != 'si_Id']
@@ -104,9 +105,13 @@ def get_tl_INFO(t_id):
     serializer = Travel_ListSerializer(tl, many=True)
     tl = serializer.data
 
-    t_StartDate = int(datetime.strptime(tl[-t_id]["t_StartDate"], '%Y-%m-%d').weekday())
-    t_StayDay = tl[-t_id]["t_StayDay"]
-    user_id = tl[-t_id]["account"]
+    for i in range(len(tl)):
+        if tl[i]["t_Id"] == t_id:
+            break
+
+    t_StartDate = int(datetime.strptime(tl[i]["t_StartDate"], '%Y-%m-%d').weekday())
+    t_StayDay = tl[i]["t_StayDay"]
+    user_id = tl[i]["account"]
     staytime = [9] * t_StayDay #default
 
 
