@@ -110,12 +110,12 @@ class main():
         schedule_dic = json.dumps(schedule_dic, indent=4)
         # print(schedule_dic)
         travel_list_detail_data.travel_list_detail_data_add(schedule_dic)
-        return "done"
+        return "done" 
 
 # #Data
 # t_id = 5
 
-# play_zone = ["北門區", "七股區", "鹽水區"]
+# play_zone = ["山上區"]#["北門區"]#, "七股區", "鹽水區"]
 
 # interest_list = None
 

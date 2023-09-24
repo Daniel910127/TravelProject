@@ -7,6 +7,7 @@ from django.http import JsonResponse
 import numpy as np
 from datetime import datetime
 import math
+import random
 
 def get_interest_json(user_id, interest_list = None):
     user_interest = []
@@ -53,7 +54,13 @@ def get_spot_json(play_zone):
             filtered_spot_name.append(spots_name[i])
             filtered_spot_json.append(spot_json[i])
             filtered_spot_topic.append(topic_matrix[i])
-        
+ 
+    if len(filtered_spot_name) <= 10:
+        random_integers = [random.randint(0, len(spots_name)) for _ in range(20)]
+        for j in range(len(random_integers)):
+            filtered_spot_name.append(spots_name[j])
+            filtered_spot_json.append(spot_json[j])
+            filtered_spot_topic.append(topic_matrix[j])
 
     #return spot_json, spots_name, topic_matrix
     return filtered_spot_json, filtered_spot_name, filtered_spot_topic
@@ -61,7 +68,7 @@ def get_spot_json(play_zone):
 def getspotbyid(spot_id, info):
     spots = Spot.objects.all().order_by('-s_Id')
     serializer = SpotSerializer(spots, many=True)
-    spot_json = serializer.data
+    spot_json = serializer.data 
 
     if info != "position":
         return spot_json[spot_id][info]
