@@ -3,6 +3,7 @@ import json
 from django.shortcuts import render, HttpResponse
 from .. import models
 import re
+from decimal import Decimal, getcontext
 
 #能靖改travel list spot輸入+StartTime輸入
 def get_travel_list_detail_data():
@@ -20,7 +21,8 @@ def travel_list_detail_data_add(data):
     #travel_list_detail_data_list = get_travel_list_detail_data()
     for i in range(len(travel_list_detail_data_list)):
         #print(travel_list_detail_data_list[i])
-        
+
+        getcontext().prec = 10 
         t_Id  = travel_list_detail_data_list[i]['t_id']
         s_Id =  travel_list_detail_data_list[i]['s_id']  
         f_Id =  None#['NULL']
@@ -29,7 +31,7 @@ def travel_list_detail_data_add(data):
         tl_TransportTime = int(travel_list_detail_data_list[i]['tl_TransportTime']  * 60)
         tl_StayTime =  7200#['7200']
         tl_Day = travel_list_detail_data_list[i]['tl_Day']
-        tl_Order = i+1#[i+1]
+        tl_Order = Decimal(i+1)
         tl_Notes = None#['NULL']
         tl_score = 0#[0]
 
