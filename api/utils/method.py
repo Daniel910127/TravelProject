@@ -124,7 +124,10 @@ def get_tl_INFO(t_id):
 
     playtime = {}
     for i in range(t_StayDay):
-        playtime[t_StartDate+i] = staytime[i]
+        if t_StartDate+i > 6:
+            playtime[(t_StartDate+i) % 7] = staytime[i]
+        else:
+            playtime[t_StartDate+i] = staytime[i]
 
     return playtime, user_id
 
