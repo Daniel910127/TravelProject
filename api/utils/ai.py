@@ -26,12 +26,12 @@ class main():
         self.user_interest = method.get_interest_json(self.user_id, interest_list) 
         #print("2",self.user_interest)
 
-        
         self.interest_pick_method = Byinterest.interest_pick(self.user_interest, self.spots_name, self.topic_matrix)
         self.popular_pick_method = Bypopular.popular_pick(self.spot_json, self.spots_name)
         self.Schedule = Byschedule.schedule()
 
         self.playtime_day = list(self.playtime.keys())
+
         self.playtime_hours = [int(x / 2 + 1) for x in list(self.playtime.values())]
         self.play_zone = play_zone
         self.benchmark_pos = benchmark_pos
@@ -113,11 +113,11 @@ class main():
         return "done" 
 
 # #Data
-# t_id = 5
+# t_id = 10
 
-# play_zone = ["山上區"]#["北門區"]#, "七股區", "鹽水區"]
+# play_zone = ["中西區"]#["北門區"]#, "七股區", "鹽水區"]
 
-# interest_list = None
+# interest_list = {"si_Id": 4, "si_hv": 34, "si_sa": 74, "si_os": 35, "si_la": 14, "si_mf": 46, "si_ee": 4, "si_ns": 24, "si_ff": 67, "si_pg": 2, "si_tf": 22, "si_pd": 48, "si_ha": 56, "si_np": 12, "si_tp": 35, "si_se": 23, "si_rt": 24, "si_lb": 2, "si_le": 56}
 
 # schedule_dic = main(t_id, interest_list, play_zone).schedule_list() # input:  t_id: travel list id
 #                                                                                             # interest_list 這是客製化才有的
