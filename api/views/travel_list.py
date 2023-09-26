@@ -332,56 +332,35 @@ def UpdateTravelList(request, t_Id):
         }
         return Response(response_data, status=status.HTTP_401_UNAUTHORIZED)
 
-    
-@api_view(['PUT'])##行程細節更改
-def UpdateTravelListDetail(request,t_Id,tl_Id):
+
+@api_view(['PATCH'])  # 使用PATCH方法进行部分更新
+def UpdateTravelListDetail(request, t_Id, tl_Id):
     permission_classes = (IsAuthenticated,)
-    serializer = Travel_List_DetailSerializer_o(data=request.data)
-    if serializer.is_valid(): 
-        tl_TransportMode = serializer.validated_data.get('tl_TransportMode')
-        tl_TransportTime = serializer.validated_data.get('tl_TransportTime')
-        tl_StayTime = serializer.validated_data.get('tl_StayTime')
-        tl_Day = serializer.validated_data.get('tl_Day')
-        tl_Order = serializer.validated_data.get('tl_Order')
-        tl_Notes = serializer.validated_data.get('tl_Notes')
-        tl_score = serializer.validated_data.get('tl_score')
-        t_Id = serializer.validated_data.get('t_Id')
-        s_Id = serializer.validated_data.get('s_Id')
-        f_Id = serializer.validated_data.get('f_Id')
-        h_Id = serializer.validated_data.get('h_Id')
+    
+    try:
+        # 使用 get() 获取符合条件的记录
+        travellist = Travel_List_Detail.objects.get(tl_Id=tl_Id, t_Id=t_Id)
+    except Travel_List_Detail.DoesNotExist:
+        response_data = {
+            "status": "404",
+            "message": "行程細節不存在",
+            "errors": "指定的tl_Id不存在"
+        }
+        return Response(response_data, status=status.HTTP_404_NOT_FOUND)
 
-        try:
-            # 使用 get() 獲取符合條件的記錄
-            travellist = Travel_List_Detail.objects.get(tl_Id=tl_Id, t_Id=t_Id)
+    # 使用部分序列化器来处理请求数据
+    serializer = Travel_List_DetailSerializer_o(
+        instance=travellist, data=request.data, partial=True)
 
-            
-            # 更新記錄
-            travellist.t_Id = t_Id
-            travellist.tl_TransportMode = tl_TransportMode
-            travellist.tl_TransportTime = tl_TransportTime
-            travellist.tl_StayTime =tl_StayTime
-            travellist.tl_Day=tl_Day
-            travellist.tl_Order=tl_Order
-            travellist.tl_Notes=tl_Notes
-            travellist.tl_score=tl_score
-            travellist.s_Id = s_Id
-            travellist.f_Id = f_Id
-            travellist.h_Id = h_Id
-            travellist.save()  # 儲存更新後的記錄
+    if serializer.is_valid():
+        serializer.save()  # 保存部分更新后的记录
 
-            response_data = {
-                "status": "204",
-                "message": "行程細節更新成功",
-                "data": serializer.data
-            }
-            return Response(response_data, status=status.HTTP_204_NO_CONTENT)
-        except Travel_List_Detail.DoesNotExist:
-            response_data = {
-                "status": "404",
-                "message": "行程細節不存在",
-                "errors": "指定的tl_Id不存在"
-            }
-            return Response(response_data, status=status.HTTP_404_NOT_FOUND)
+        response_data = {
+            "status": "204",
+            "message": "行程細節更新成功",
+            "data": serializer.data
+        }
+        return Response(response_data, status=status.HTTP_204_NO_CONTENT)
     else:
         response_data = {
             "status": "401",
@@ -389,7 +368,7 @@ def UpdateTravelListDetail(request,t_Id,tl_Id):
             "errors": serializer.errors
         }
         return Response(response_data, status=status.HTTP_401_UNAUTHORIZED)
-    
+
 @api_view(['PUT'])##行程表開始時間更改
 def UpdateTravelListStartTime(request,t_Id,tls_Day):
     permission_classes = (IsAuthenticated,)
