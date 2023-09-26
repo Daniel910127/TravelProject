@@ -85,9 +85,8 @@ class Travel_List_Detail(models.Model):
   tl_TransportTime = models.IntegerField(null=True) #交通工具移動時間
   tl_StayTime =  models.IntegerField(max_length=10, null=False,default=2)#停留時間
   tl_Day = models.IntegerField(null=False,default=1)#該景點屬於第幾天
-  tl_Order = models.DecimalField(max_digits=5, decimal_places=5,
-                                      blank=True, null=False,
-                                      default=0)#該景點順序
+  tl_Order = models.DecimalField(max_digits=30, decimal_places=10, blank=True, null=False, default=0)
+
   tl_Notes = models.CharField(max_length=200, null=True)#景點小筆記
   tl_score = models.IntegerField(null=False,default=0)#景點獲得分數
   
