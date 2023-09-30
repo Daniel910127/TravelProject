@@ -37,7 +37,7 @@ class schedule():
             # ifmorning = self.opentime2list(spot["spot_opentime"])
             # opening_hours_list.append(ifmorning)
             # opening_hours_list += [spot["spot_id"]]
-            ifmorning = self.opentime2list(method.getspotbyid(-spot, "s_OpenTime"))
+            ifmorning = self.opentime2list(method.getspotbyid(spot, "s_OpenTime"))
             opening_hours_list.append(ifmorning + [spot])
         #print("hello",opening_hours_list)
         filtered_spots = self.filter_opening_hours(opening_hours_list, user_play_time)
@@ -61,7 +61,7 @@ class schedule():
             morning = {}
             morning["start_position"] = benchmarkpos
             for i in morning_only_spots:
-                morning[i] = (method.getspotbyid(-i, "position"))
+                morning[i] = (method.getspotbyid(i, "position"))
             
             graph = {}
             for location, coords in morning.items():
@@ -86,7 +86,7 @@ class schedule():
             other["start_position"] = benchmarkpos
 
         for i in allday_opening_spots:
-            other[i] = (method.getspotbyid(-i, "position"))
+            other[i] = (method.getspotbyid(i, "position"))
 
         graph = {}
         for location, coords in other.items():
@@ -110,7 +110,7 @@ class schedule():
             lst, _ = other_sorted_locations[-1]
             afternoon["start_position"] = other[lst]
             for i in afternoon_only_spots:
-                afternoon[i] = (method.getspotbyid(-i, "position"))
+                afternoon[i] = (method.getspotbyid(i, "position"))
             
             graph = {}
             for location, coords in afternoon.items():

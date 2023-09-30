@@ -67,9 +67,9 @@ class main():
         all_food = [food["f_Id"] for food in self.food_json]
         all_food_position = [method.getfoodbyid(-food, "position") for food in all_food][::-1]
 
-        breakfast = self.Schedule.food(method.getspotbyid(-first_spot, "position"), all_food_position)
-        lunch = self.Schedule.food(method.getspotbyid(-second_spot, "position"), all_food_position)
-        dinner = self.Schedule.food(method.getspotbyid(-last_spot, "position"), all_food_position)
+        breakfast = self.Schedule.food(method.getspotbyid(first_spot, "position"), all_food_position)
+        lunch = self.Schedule.food(method.getspotbyid(second_spot, "position"), all_food_position)
+        dinner = self.Schedule.food(method.getspotbyid(last_spot, "position"), all_food_position)
 
         for j, i in zip([breakfast, lunch, dinner], [0, 2+1, len(scheduled_spot_id)+2]):
             scheduled_spot_id = scheduled_spot_id[:i] + [j] + scheduled_spot_id[i:]
@@ -79,7 +79,7 @@ class main():
     def recom_hotel(self, sorted_location):
         
         last_spot_id = sorted_location[-2]
-        last_spot_position = method.getspotbyid(-last_spot_id, "position")
+        last_spot_position = method.getspotbyid(last_spot_id, "position")
     
         all_hotel = [hotel["h_Id"] for hotel in self.hotel_json]
         all_hotel_position = [method.gethotelbyid(-hotel, "position") for hotel in all_hotel][::-1]
@@ -113,9 +113,9 @@ class main():
         return "done" 
 
 # #Data
-# t_id = 10
+# t_id = 1
 
-# play_zone = ["中西區"]#["北門區"]#, "七股區", "鹽水區"]
+# play_zone = []#["中西區"]#["北門區"]#, "七股區", "鹽水區"]
 
 # interest_list = {"si_Id": 4, "si_hv": 34, "si_sa": 74, "si_os": 35, "si_la": 14, "si_mf": 46, "si_ee": 4, "si_ns": 24, "si_ff": 67, "si_pg": 2, "si_tf": 22, "si_pd": 48, "si_ha": 56, "si_np": 12, "si_tp": 35, "si_se": 23, "si_rt": 24, "si_lb": 2, "si_le": 56}
 
