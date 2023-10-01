@@ -55,8 +55,8 @@ def get_spot_json(play_zone):
             filtered_spot_json.append(spot_json[i])
             filtered_spot_topic.append(topic_matrix[i])
  
-    if len(filtered_spot_name) <= 30:
-        random_integers = [random.randint(0, len(spots_name)) for _ in range(40 - len(filtered_spot_name))]
+    if len(filtered_spot_name) <= 60:
+        random_integers = [random.randint(0, len(spots_name)) for _ in range(60 - len(filtered_spot_name))]
         for j in range(len(random_integers)):
             filtered_spot_name.append(spots_name[j])
             filtered_spot_json.append(spot_json[j])
@@ -70,10 +70,14 @@ def getspotbyid(spot_id, info):
     serializer = SpotSerializer(spots, many=True)
     spot_json = serializer.data 
 
-    if info != "position":
-        return spot_json[spot_id][info]
-    else:
-        return (spot_json[spot_id]["s_Latitude"], spot_json[spot_id]["s_Longitude"])
+    for index, order_dict in enumerate(spot_json):
+        if order_dict["s_Id"] == spot_id:
+            if info != "position":
+                # return spot_json[spot_id][info]
+                return order_dict[info]
+            else:
+                # return (spot_json[spot_id]["s_Latitude"], spot_json[spot_id]["s_Longitude"])
+                return (order_dict["s_Latitude"], order_dict["s_Longitude"])
 
 def get_hotel_json():
     hotels = Hotel.objects.all().order_by('-h_Id')
@@ -85,7 +89,7 @@ def gethotelbyid(hotel_id, info):
     hotels = Hotel.objects.all().order_by('-h_Id')
     serializer = HotelSerializer(hotels, many=True)
     hotel_json = serializer.data
-
+    
     if info != "position":
         return hotel_json[hotel_id][info]
     else:
