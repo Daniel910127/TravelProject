@@ -56,7 +56,7 @@ def get_spot_json(play_zone):
             filtered_spot_topic.append(topic_matrix[i])
  
     if len(filtered_spot_name) <= 60:
-        random_integers = [random.randint(0, len(spots_name)) for _ in range(60 - len(filtered_spot_name))]
+        random_integers = [random.randint(0, len(spots_name)) for _ in range(60)]
         for j in range(len(random_integers)):
             filtered_spot_name.append(spots_name[j])
             filtered_spot_json.append(spot_json[j])
