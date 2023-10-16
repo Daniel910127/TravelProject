@@ -278,56 +278,33 @@ def CreateTravelListStartTime(request,t_Id):
         return Response(response_data, status=status.HTTP_401_UNAUTHORIZED)
 
     
-@api_view(['PUT'])  ## 主行程更改
+@api_view(['PATCH'])  ## 主行程更改
 def UpdateTravelList(request, t_Id):
     permission_classes = (IsAuthenticated,)
-    serializer = Travel_ListSerializer(data=request.data)
-    if serializer.is_valid():
-        id = serializer.validated_data.get('id')
-        t_Name = serializer.validated_data.get('t_Name')
-        t_Description = serializer.validated_data.get('t_Description')
-        t_StartDate = serializer.validated_data.get('t_StartDate')
-        t_StayDay = serializer.validated_data.get('t_StayDay')
-        t_EndDate = serializer.validated_data.get('t_EndDate')
-        t_Privacy = serializer.validated_data.get('t_Privacy')
-        t_Views = serializer.validated_data.get('t_Views')
-        t_Likes = serializer.validated_data.get('t_Likes')
-        t_score = serializer.validated_data.get('t_score')
-
-        try:
-            # 使用 get() 获取符合条件的记录
-            travellist = Travel_List.objects.get(pk=t_Id)
-
-            # 更新记录
-            travellist.id = id
-            travellist.t_Name = t_Name
-            travellist.t_Description = t_Description
-            travellist.t_StartDate = t_StartDate
-            travellist.t_EndDate = t_EndDate
-            travellist.t_StayDay = t_StayDay
-            travellist.t_Privacy = t_Privacy
-            travellist.t_Views = t_Views
-            travellist.t_Likes = t_Likes
-            travellist.t_score = t_score
-            travellist.save()  # 保存更新后的记录
-
-            response_data = {
-                "status": "201",
-                "message": "主行程表更新成功",
-                "data": serializer.data
-            }
-            return Response(response_data, status=status.HTTP_201_CREATED)
-        except Travel_List.DoesNotExist:
+    try:
+        # 使用 get() 获取符合条件的记录
+        travellist = Travel_List.objects.get(pk=t_Id)
+    except Travel_List.DoesNotExist:
             response_data = {
                 "status": "404",
                 "message": "主行程表不存在",
                 "errors": "指定的t_Id不存在"
             }
             return Response(response_data, status=status.HTTP_404_NOT_FOUND)
+    serializer = Travel_ListSerializer(instance=travellist, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()  # 保存部分更新后的记录
+
+        response_data = {
+            "status": "204",
+            "message": "行程表更新成功",
+            "data": serializer.data
+        }
+        return Response(response_data, status=status.HTTP_204_NO_CONTENT)
     else:
         response_data = {
             "status": "401",
-            "message": "主行程表更新失败",
+            "message": "行程表更新失敗",
             "errors": serializer.errors
         }
         return Response(response_data, status=status.HTTP_401_UNAUTHORIZED)
