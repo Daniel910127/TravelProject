@@ -88,7 +88,8 @@ class main():
         
         return recom_hotel_id, [method.gethotelbyid(-id, "h_Name") for id in recom_hotel_id]
     
-    def schedule_list(self, havebeen2 = []):    
+    def schedule_list(self):    
+        havebeen2 = []
         schedule_dic = []
         for i in range(len(self.playtime_day)):
             popular_pick, popular_id = self.recom_spot(self.playtime_hours[i], havebeen2)
